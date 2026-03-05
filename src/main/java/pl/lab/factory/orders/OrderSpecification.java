@@ -65,7 +65,7 @@ public class OrderSpecification implements Cloneable {
     }
 
     // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
-    // Wzorzec Builder 2
+    // Wzorzec Builder 3
 
     public static Builder builder(){
         return new Builder();
@@ -108,5 +108,5 @@ public class OrderSpecification implements Cloneable {
     }
 
     // Koniec, Tydzień 2
-    // Wzorzec Builder 2
+    // Wzorzec Builder 3
 }

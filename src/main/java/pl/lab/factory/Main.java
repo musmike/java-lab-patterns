@@ -3,6 +3,8 @@ package pl.lab.factory;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
 import pl.lab.factory.manufacturing.BoardPrototypes;
+import pl.lab.factory.manufacturing.ElectronicBoardBuilder;
+import pl.lab.factory.manufacturing.ElectronicBoardFactory;
 import pl.lab.factory.manufacturing.StandardBoardFactory;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.pcbboards.BaseBoard;
@@ -33,11 +35,7 @@ public class Main {
         specElectronic.setQualityStandard("Class 3");
         specElectronic.setVoltageTolerance(2.5);
 
-        StandardBoard baseTemplate = new StandardBoard();
-        BaseElectronicBoard electronicBoardPrototype = new BaseElectronicBoard();
-        electronicBoardPrototype.setBaseBoard(baseTemplate);
-        electronicBoardPrototype.setFirmware("v1.0.0-release");
-        electronicBoardPrototype.setBoardType(ElectronicType.HIGHLY_DEPENDANT);
+        BaseElectronicBoard electronicBoardPrototype = ElectronicBoardFactory.createBoard(ElectronicType.HIGHLY_DEPENDANT, "v1.0.0-release");
 
         BoardPrototypes boardPrototypes = new BoardPrototypes();
         boardPrototypes.registerPrototype("highly-dependant-v1", electronicBoardPrototype);

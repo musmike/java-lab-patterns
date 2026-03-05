@@ -53,10 +53,14 @@ public class Main {
         ProductionOrder orderA = ProductionOrderFactory.createOrder("ORD-001", boardA, 10, specPcb);
         ProductionOrder orderB = ProductionOrderFactory.createOrder("ORD-002", electronicBoardA, 3, specElectronic);
         ProductionOrder orderC = ProductionOrderFactory.createOrder("ORD-003", electronicBoardB, 2, specElectronic);
+        ProductionOrder orderBaseClone = orderA.clone("ORD-004");
+        ProductionOrder orderElectronicClone = orderB.clone("ORD-005");
 
         queue.addOrder(orderA);
         queue.addOrder(orderB);
         queue.addOrder(orderC);
+        queue.addOrder(orderBaseClone);
+        queue.addOrder(orderElectronicClone);
         queue.printQueue();
         TimeUnit.SECONDS.sleep(1);
 

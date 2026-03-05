@@ -13,6 +13,21 @@ public class BaseBoardProductionOrder extends ProductionOrder {
     public BaseBoard getBoard() { return board; }
 
     // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
+    // Wzorzec Prototype 3
+    @Override
+    public ProductionOrder clone(String newId) {
+        return ProductionOrderFactory.createOrder(
+                newId,
+                board,
+                this.quantity,
+                this.specification.clone()
+        );
+    }
+    // Koniec, Tydzień 2
+    // Wzorzec Prototype 3
+
+
+    // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
     // Wzorzec Builder 1
     // Builder konstruuje obiekt BaseBoardProductionOrder etapami przez łańcuch
     // wywołań setterów — oddziela proces budowania od reprezentacji obiektu

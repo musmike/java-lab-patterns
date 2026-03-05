@@ -15,6 +15,21 @@ public class BaseElectronicBoardProductionOrder extends ProductionOrder {
     }
 
     // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
+    // Wzorzec Prototype 3
+    @Override
+    public ProductionOrder clone(String newId) {
+        return ProductionOrderFactory.createOrder(
+                newId,
+                electronicBoard,
+                this.quantity,
+                this.specification.clone()
+        );
+    }
+    // Koniec, Tydzień 2
+    // Wzorzec Prototype 3
+
+
+    // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
     // Wzorzec Builder 2
     // Builder konstruuje obiekt BaseElectronicBoardProductionOrder etapami —
     // umożliwia opcjonalne ustawienie specyfikacji i statusu bez wielu konstruktorów

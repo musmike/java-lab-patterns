@@ -34,4 +34,4 @@ public class ProductionOrderFactory {
     }
 }
 // Koniec, Tydzień 2
-// Wzorzec Factory 2 (Simple Factory)
+// Wzorzec Factory 2

@@ -12,6 +12,11 @@ public class BaseBoardProductionOrder extends ProductionOrder {
 
     public BaseBoard getBoard() { return board; }
 
+    // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
+    // Wzorzec Builder 1
+    // Builder konstruuje obiekt BaseBoardProductionOrder etapami przez łańcuch
+    // wywołań setterów — oddziela proces budowania od reprezentacji obiektu
+
     public static class Builder {
         private BaseBoard board;
         private String id;
@@ -41,4 +46,7 @@ public class BaseBoardProductionOrder extends ProductionOrder {
 
         public BaseBoardProductionOrder build() { return new BaseBoardProductionOrder(this); }
     }
+
+    // Koniec, Tydzień 2
+    // Wzorzec Builder 1
 }

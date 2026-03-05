@@ -27,4 +27,4 @@ public class CircuitPrinter {
     }
 }
 // Koniec, Tydzień 2
-// Wzorzec Singleton 2 (Double-checked locking)
+// Wzorzec Singleton 2

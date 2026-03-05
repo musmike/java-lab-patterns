@@ -14,6 +14,11 @@ public class BaseElectronicBoardProductionOrder extends ProductionOrder {
         return electronicBoard;
     }
 
+    // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
+    // Wzorzec Builder 2
+    // Builder konstruuje obiekt BaseElectronicBoardProductionOrder etapami —
+    // umożliwia opcjonalne ustawienie specyfikacji i statusu bez wielu konstruktorów
+
     public static class Builder {
         private BaseElectronicBoard electronicBoard;
         private String id;
@@ -44,4 +49,7 @@ public class BaseElectronicBoardProductionOrder extends ProductionOrder {
             return new BaseElectronicBoardProductionOrder(this);
         }
     }
+
+    // Koniec, Tydzień 2
+    // Wzorzec Builder 2
 }

@@ -2,7 +2,7 @@ package pl.lab.factory.pcbboards;
 
 import pl.lab.factory.manufacturing.ManufacturableProduct;
 
-public abstract class BaseBoard implements ManufacturableProduct {
+public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
 
     protected double workingVoltage;
     protected BoardMaterials boardMaterial;
@@ -35,5 +35,13 @@ public abstract class BaseBoard implements ManufacturableProduct {
     }
     public void solder(){
         _soldered = true;
+    }
+
+    public BaseBoard deepCopy() {
+        try {
+            return (BaseBoard) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

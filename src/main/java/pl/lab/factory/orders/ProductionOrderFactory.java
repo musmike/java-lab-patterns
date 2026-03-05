@@ -7,9 +7,9 @@ import pl.lab.factory.pcbboards.BaseBoard;
 import java.util.Objects;
 
 // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
-// Wzorzec Factory (Simple Factory)
-//
-//
+// Wzorzec Factory 2 (Simple Factory)
+// Simple Factory – ukrywa logikę tworzenia różnych typów zleceń produkcyjnych.
+// Metoda createOrder() sprawdza typ produktu i tworzy odpowiedni obiekt ProductionOrder.
 public class ProductionOrderFactory {
 
     public static ProductionOrder createOrder(String id, ManufacturableProduct product,
@@ -34,4 +34,4 @@ public class ProductionOrderFactory {
     }
 }
 // Koniec, Tydzień 2
-// Wzorzec Factory (Simple Factory)
+// Wzorzec Factory 2 (Simple Factory)

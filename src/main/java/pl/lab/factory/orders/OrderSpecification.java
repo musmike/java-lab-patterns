@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-// Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
-// Wzorzec Prototype 2
-//
-//
+
 public class OrderSpecification implements Cloneable {
     private double voltageTolerance;   // dopuszczalne odchylenie napięcia [%]
     private double thicknessTolerance; // dopuszczalne odchylenie grubości [mm]
@@ -22,6 +19,11 @@ public class OrderSpecification implements Cloneable {
         this.qualityStandard = qualityStandard;
     }
 
+    // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
+    // Wzorzec Prototype 2
+    // Prototype – umożliwia szybkie tworzenie kopii istniejącej specyfikacji zamówienia.
+    // Metoda clone() tworzy nowy obiekt OrderSpecification z tymi samymi parametrami i kopią listy certyfikatów.
+
     @Override
     public OrderSpecification clone() {
         try {
@@ -33,37 +35,25 @@ public class OrderSpecification implements Cloneable {
         }
     }
 
-    public double getVoltageTolerance() {
-        return voltageTolerance;
-    }
+    // Koniec, Tydzień 2
+    // Wzorzec Prototype 2
 
-    public double getThicknessTolerance() {
-        return thicknessTolerance;
-    }
 
-    public List<String> getCertificates() {
-        return Collections.unmodifiableList(certificates);
-    }
+    public double getVoltageTolerance() { return voltageTolerance; }
 
-    public String getQualityStandard() {
-        return qualityStandard;
-    }
+    public double getThicknessTolerance() { return thicknessTolerance; }
 
-    public void setVoltageTolerance(double voltageTolerance) {
-        this.voltageTolerance = voltageTolerance;
-    }
+    public List<String> getCertificates() { return Collections.unmodifiableList(certificates); }
 
-    public void setThicknessTolerance(double thicknessTolerance) {
-        this.thicknessTolerance = thicknessTolerance;
-    }
+    public String getQualityStandard() { return qualityStandard; }
 
-    public void setQualityStandard(String qualityStandard) {
-        this.qualityStandard = qualityStandard;
-    }
+    public void setVoltageTolerance(double voltageTolerance) { this.voltageTolerance = voltageTolerance; }
 
-    public void addCertificate(String certificate) {
-        this.certificates.add(certificate);
-    }
+    public void setThicknessTolerance(double thicknessTolerance) { this.thicknessTolerance = thicknessTolerance; }
+
+    public void setQualityStandard(String qualityStandard) { this.qualityStandard = qualityStandard; }
+
+    public void addCertificate(String certificate) { this.certificates.add(certificate); }
 
     @Override
     public String toString() {
@@ -74,5 +64,3 @@ public class OrderSpecification implements Cloneable {
                 "qualityStandard='" + qualityStandard + "'}";
     }
 }
-// Koniec, Tydzień 2
-// Wzorzec Prototype 2

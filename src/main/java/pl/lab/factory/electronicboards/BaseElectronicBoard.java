@@ -8,15 +8,26 @@ public class BaseElectronicBoard implements Cloneable, ManufacturableProduct {
     private String firmware;
     private ElectronicType boardType;
 
+    // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
+    // Wzorzec Prototype 1
+    // Klonowanie BaseElectronicBoard — kopia głęboka zapewnia, że sklonowana
+    // płytka elektroniczna posiada własną, niezależną instancję BaseBoard
+
     @Override
     public BaseElectronicBoard clone() {
         try {
             BaseElectronicBoard clone = (BaseElectronicBoard) super.clone();
+            if (this.baseBoard != null) {
+                clone.baseBoard = this.baseBoard.deepCopy();
+            }
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
     }
+
+    // Koniec, Tydzień 2
+    // Wzorzec Prototype 1
 
     public void setBaseBoard(BaseBoard baseBoard) {
         this.baseBoard = baseBoard;

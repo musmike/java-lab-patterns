@@ -13,25 +13,15 @@ public abstract class ProductionOrder {
         this.specification = specification;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
-    public int getQuantity() {
-        return quantity;
-    }
+    public int getQuantity() { return quantity; }
 
-    public OrderStatus getStatus() {
-        return status;
-    }
+    public OrderStatus getStatus() { return status; }
 
-    public OrderSpecification getSpecification() {
-        return specification;
-    }
+    public OrderSpecification getSpecification() { return specification; }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
+    public void setStatus(OrderStatus status) { this.status = status; }
 
     @Override
     public String toString() {

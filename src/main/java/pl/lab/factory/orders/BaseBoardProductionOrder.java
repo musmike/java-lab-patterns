@@ -6,7 +6,7 @@ public class BaseBoardProductionOrder extends ProductionOrder {
     private BaseBoard board;
 
     private BaseBoardProductionOrder(Builder builder) {
-        super(builder.id, builder.quantity, builder.status);
+        super(builder.id, builder.quantity, builder.status, builder.specification);
         this.board = builder.board;
     }
 
@@ -17,13 +17,27 @@ public class BaseBoardProductionOrder extends ProductionOrder {
         private String id;
         private int quantity = 1;
         private OrderStatus status = OrderStatus.PENDING;
+        private OrderSpecification specification;
 
         public Builder(String id, BaseBoard board) {
             this.id = id;
             this.board = board;
         }
 
-        public Builder setQuantity(int quantity) { this.quantity = quantity; return this; }
+        public Builder setQuantity(int quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Builder setStatus(OrderStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder setSpecification(OrderSpecification spec) {
+            this.specification = spec;
+            return this;
+        }
 
         public BaseBoardProductionOrder build() { return new BaseBoardProductionOrder(this); }
     }

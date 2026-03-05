@@ -29,4 +29,10 @@ public class BaseElectronicBoard implements Cloneable, ManufacturableProduct {
     public void setBoardType(ElectronicType boardType) {
         this.boardType = boardType;
     }
+
+    public BaseBoard getBaseBoard() { return baseBoard; }
+
+    public String getFirmware() { return firmware; }
+
+    public ElectronicType getBoardType() { return boardType; }
 }

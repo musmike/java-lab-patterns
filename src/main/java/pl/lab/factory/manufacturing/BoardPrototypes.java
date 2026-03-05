@@ -1,6 +1,6 @@
-package fac.tory.Manufacturing;
+package pl.lab.factory.manufacturing;
 
-import fac.tory.ElectronicBoards.BaseElectronicBoard;
+import pl.lab.factory.electronicboards.BaseElectronicBoard;
 
 import java.util.HashMap;
 import java.util.Map;

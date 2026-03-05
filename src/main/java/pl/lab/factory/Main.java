@@ -1,4 +1,4 @@
-package fac.tory;
+package pl.lab.factory;
 
 import java.util.concurrent.TimeUnit;
 

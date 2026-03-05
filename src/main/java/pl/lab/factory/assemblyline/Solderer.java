@@ -1,6 +1,6 @@
-package fac.tory.AssemblyLine;
+package pl.lab.factory.assemblyline;
 
-import fac.tory.PCBBoards.BaseBoard;
+import pl.lab.factory.pcbboards.BaseBoard;
 
 public class Solderer {
     //lazy init

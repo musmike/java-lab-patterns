@@ -1,4 +1,4 @@
-package fac.tory.PCBBoards;
+package pl.lab.factory.pcbboards;
 
 public abstract class BaseBoard {
 

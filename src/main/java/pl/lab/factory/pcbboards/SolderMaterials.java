@@ -1,4 +1,4 @@
-package fac.tory.PCBBoards;
+package pl.lab.factory.pcbboards;
 
 public enum SolderMaterials {
     SOLDER_ALLOY,

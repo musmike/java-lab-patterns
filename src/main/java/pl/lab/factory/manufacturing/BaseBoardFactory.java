@@ -1,20 +1,24 @@
-package fac.tory.Manufacturing;
+package pl.lab.factory.manufacturing;
 
-import fac.tory.AssemblyLine.Solderer;
-import fac.tory.PCBBoards.BaseBoard;
+import pl.lab.factory.assemblyline.CircuitPrinter;
+import pl.lab.factory.assemblyline.Solderer;
+import pl.lab.factory.pcbboards.BaseBoard;
 
 public abstract class BaseBoardFactory {
     public abstract BaseBoard createBoard();
 
     public BaseBoard produceBoard(){
         BaseBoard board = createBoard();
-        //mozna mount components
-        board.printCircuits();
+
+        CircuitPrinter circuitPrinter = CircuitPrinter.getInstance();
+        circuitPrinter.printCircuits(board);
+
+        // mozna mount component
+
         Solderer solderer = Solderer.getInstance();
         solderer.solderBoard(board);
-        //mozna printer
 
-        if(board.isReady()){
+        if (board.isReady()) {
             return board;
         }
         else {

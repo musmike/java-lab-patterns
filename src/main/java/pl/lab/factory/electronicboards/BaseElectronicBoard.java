@@ -1,10 +1,8 @@
-package fac.tory.ElectronicBoards;
+package pl.lab.factory.electronicboards;
 
-import fac.tory.Manufacturing.BaseBoardFactory;
-import fac.tory.Manufacturing.ElectronicBoardBuilder;
-import fac.tory.PCBBoards.BaseBoard;
+import pl.lab.factory.pcbboards.BaseBoard;
 
-public class BaseElectronicBoard {
+public class BaseElectronicBoard implements Cloneable {
     private BaseBoard baseBoard;
     private String firmware;
     private ElectronicType boardType;

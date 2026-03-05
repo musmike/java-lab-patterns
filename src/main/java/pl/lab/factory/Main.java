@@ -18,11 +18,13 @@ public class Main {
         ProductionQueue queue = ProductionQueue.getInstance();
         StandardBoardFactory boardFactory = new StandardBoardFactory();
 
-        OrderSpecification rohs = new OrderSpecification(
-                5.0, 0.1,
-                List.of("RoHS", "ISO9001"),
-                "Class 2"
-        );
+        OrderSpecification rohs = OrderSpecification.builder()
+                .voltageTolerance(5.0)
+                .thicknessTolerance(0.1)
+                .addCertificate("RoHS")
+                .addCertificate("ISO9001")
+                .qualityStandard("Class 2")
+                .build();
 
         OrderSpecification specPcb = rohs.clone();
         specPcb.addCertificate("IPC-A-610");

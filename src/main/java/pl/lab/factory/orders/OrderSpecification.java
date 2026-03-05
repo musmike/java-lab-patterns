@@ -63,4 +63,50 @@ public class OrderSpecification implements Cloneable {
                 "certificates=" + certificates + ", " +
                 "qualityStandard='" + qualityStandard + "'}";
     }
+
+    // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
+    // Wzorzec Builder 2
+
+    public static Builder builder(){
+        return new Builder();
+    }
+
+    public static class Builder {
+        private double voltageTolerance;
+        private double thicknessTolerance;
+        private List<String> certificates = new ArrayList<>();
+        private String qualityStandard;
+
+        public Builder voltageTolerance(double voltageTolerance){
+            this.voltageTolerance = voltageTolerance;
+            return this;
+        }
+
+        public Builder thicknessTolerance(double thicknessTolerance){
+            this.thicknessTolerance = thicknessTolerance;
+            return this;
+        }
+
+        public Builder addCertificate(String certificate){
+            this.certificates.add(certificate);
+            return this;
+        }
+
+        public Builder qualityStandard(String qualityStandard){
+            this.qualityStandard = qualityStandard;
+            return this;
+        }
+
+        public OrderSpecification build(){
+            return new OrderSpecification(
+                    voltageTolerance,
+                    thicknessTolerance,
+                    certificates,
+                    qualityStandard
+            );
+        }
+    }
+
+    // Koniec, Tydzień 2
+    // Wzorzec Builder 2
 }

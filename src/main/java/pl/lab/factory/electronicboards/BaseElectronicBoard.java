@@ -1,11 +1,13 @@
 package pl.lab.factory.electronicboards;
 
+import pl.lab.factory.manufacturing.ManufacturableProduct;
 import pl.lab.factory.pcbboards.BaseBoard;
 
-public class BaseElectronicBoard implements Cloneable {
+public class BaseElectronicBoard implements Cloneable, ManufacturableProduct {
     private BaseBoard baseBoard;
     private String firmware;
     private ElectronicType boardType;
+
     @Override
     public BaseElectronicBoard clone() {
         try {

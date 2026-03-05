@@ -27,8 +27,8 @@ public class ProductionQueue {
         if (order == null)
             throw new IllegalArgumentException("Order cannot be null");
         queue.offer(order);
-        System.out.println("[ProductionQueue] Dodano: " + order.getInternalRef()
-                + " | typ: " + order.getOrderType()
+        System.out.println("[ProductionQueue] Dodano: " + order.getId()
+                + " | typ: " + order.getClass().getSimpleName()
                 + " | qty: " + order.getQuantity());
     }
 

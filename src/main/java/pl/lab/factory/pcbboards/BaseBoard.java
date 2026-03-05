@@ -1,6 +1,8 @@
 package pl.lab.factory.pcbboards;
 
-public abstract class BaseBoard {
+import pl.lab.factory.manufacturing.ManufacturableProduct;
+
+public abstract class BaseBoard implements ManufacturableProduct {
 
     protected double workingVoltage;
     protected BoardMaterials boardMaterial;

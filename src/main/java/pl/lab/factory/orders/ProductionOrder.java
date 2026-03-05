@@ -1,28 +1,22 @@
 package pl.lab.factory.orders;
 
-public class ProductionOrder {
-    private final String internalRef;
-    private final int quantity;
-    private final OrderType orderType;
-    private OrderStatus status;
+public abstract class ProductionOrder {
+    protected String id;
+    protected int quantity;
+    protected OrderStatus status;
 
-    public ProductionOrder(String internalRef, int quantity, OrderType orderType, OrderStatus status) {
-        this.internalRef = internalRef;
+    public ProductionOrder(String id, int quantity, OrderStatus status) {
+        this.id = id;
         this.quantity = quantity;
-        this.orderType = orderType;
         this.status = status;
     }
 
-    public String getInternalRef() {
-        return internalRef;
+    public String getId() {
+        return id;
     }
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public OrderType getOrderType() {
-        return orderType;
     }
 
     public OrderStatus getStatus() {

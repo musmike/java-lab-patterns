@@ -18,7 +18,7 @@ public class BaseBoardProductionOrder extends ProductionOrder {
     public ProductionOrder clone(String newId) {
         return ProductionOrderFactory.createOrder(
                 newId,
-                board,
+                board.deepCopy(),
                 this.quantity,
                 this.specification.clone()
         );

@@ -20,7 +20,7 @@ public class BaseElectronicBoardProductionOrder extends ProductionOrder {
     public ProductionOrder clone(String newId) {
         return ProductionOrderFactory.createOrder(
                 newId,
-                electronicBoard,
+                electronicBoard.clone(),
                 this.quantity,
                 this.specification.clone()
         );

@@ -3,14 +3,10 @@ package pl.lab.factory;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
 import pl.lab.factory.manufacturing.BoardPrototypes;
-import pl.lab.factory.manufacturing.ElectronicBoardBuilder;
 import pl.lab.factory.manufacturing.ElectronicBoardFactory;
 import pl.lab.factory.manufacturing.StandardBoardFactory;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.pcbboards.BaseBoard;
-import pl.lab.factory.pcbboards.StandardBoard;
-
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Main {

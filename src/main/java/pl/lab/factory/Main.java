@@ -2,13 +2,12 @@ package pl.lab.factory;
 
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
-import pl.lab.factory.manufacturing.BoardProductionService;
-import pl.lab.factory.manufacturing.BoardPrototypes;
-import pl.lab.factory.manufacturing.ElectronicBoardFactory;
-import pl.lab.factory.manufacturing.StandardBoardFactory;
+import pl.lab.factory.manufacturing.*;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.reporting.*;
+import pl.lab.factory.scheduling.ProductionBatch;
+import pl.lab.factory.scheduling.SingleOrderTask;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -17,9 +16,10 @@ public class Main {
         SystemLogger.INSTANCE.logInfo("MAIN", "This is the PCB/Electronic board factory!");
 
         ProductionQueue queue = ProductionQueue.getInstance();
-        StandardBoardFactory boardFactory = new StandardBoardFactory();
 
-        BoardProductionService productionService = new BoardProductionService();
+        StandardBoardFactory boardFactory = new StandardBoardFactory();
+        OrderProcessor pcbProcessor = new BaseBoardOrderProcessor();
+        OrderProcessor electronicBoardProcessor = new ElectronicBoardOrderProcessor();
         BoardReporter boardReporter = new LegacyAuditSystemAdapter(new LegacyAuditSystem());
 
         OrderSpecification rohs = OrderSpecification.builder()
@@ -66,40 +66,24 @@ public class Main {
         queue.printQueue();
         TimeUnit.SECONDS.sleep(1);
 
+        ProductionBatch weeklyPlan = new ProductionBatch("Plan tygodniowy");
+
         while (!queue.isEmpty()) {
-            ProductionOrder current = queue.nextOrder();
-            current.setStatus(OrderStatus.IN_PRODUCTION);
-
-            SystemLogger.INSTANCE.logInfo("PRODUKCJA", "Rozpoczęto zlecenie: " + current.getId()
-                    + " | qty: " + current.getQuantity()
-                    + " | spec: " + current.getSpecification());
-
-            for (int i = 1; i <= current.getQuantity(); i++) {
-                SystemLogger.INSTANCE.logInfo("PRODUKCJA", "  [" + i + "/" + current.getQuantity() + "] "
-                        + current.getId() + " — produkcja jednostki...");
-
-                BaseBoard boardToProduce = null;
-                if (current instanceof BaseBoardProductionOrder bpo) {
-                    boardToProduce = bpo.getBoard();
-                } else if (current instanceof BaseElectronicBoardProductionOrder ebpo) {
-                    boardToProduce = ebpo.getBaseElectronicBoard().getBaseBoard();
-                }
-
-                if (boardToProduce != null) {
-                    productionService.produce(boardToProduce);
-                }
-
-                TimeUnit.MILLISECONDS.sleep(100);
-            }
-
-            current.setStatus(OrderStatus.COMPLETED);
-            SystemLogger.INSTANCE.logInfo("PRODUKCJA", current.getId() + " -> " + current.getStatus());
-            boardReporter.report(current);
-            TimeUnit.MILLISECONDS.sleep(500);
+            ProductionOrder order = queue.nextOrder();
+            boardReporter.report(order);
+            OrderProcessor processor = order instanceof BaseBoardProductionOrder
+                    ? pcbProcessor
+                    : electronicBoardProcessor;
+            weeklyPlan.add(new SingleOrderTask(order, processor));
         }
+
+        System.out.println(weeklyPlan.getDescription(""));
+        weeklyPlan.execute();
 
         ProductionOrder orderD = ProductionOrderFactory.createOrder("ORD-006", boardA, 5, specPcb);
         List<ProductionOrder> allOrders = List.of(orderA, orderB, orderC, orderBaseClone, orderElectronicClone, orderD);
+
+        allOrders.forEach(boardReporter::report);
 
         ProductionReport consoleReport = new SummaryProductionReport(new ConsoleReportFormatter());
         consoleReport.generate(allOrders);

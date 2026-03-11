@@ -2,6 +2,7 @@ package pl.lab.factory;
 
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
+import pl.lab.factory.manufacturing.BoardProductionService;
 import pl.lab.factory.manufacturing.BoardPrototypes;
 import pl.lab.factory.manufacturing.ElectronicBoardFactory;
 import pl.lab.factory.manufacturing.StandardBoardFactory;
@@ -15,6 +16,8 @@ public class Main {
 
         ProductionQueue queue = ProductionQueue.getInstance();
         StandardBoardFactory boardFactory = new StandardBoardFactory();
+
+        BoardProductionService productionService = new BoardProductionService();
 
         OrderSpecification rohs = OrderSpecification.builder()
                 .voltageTolerance(5.0)
@@ -80,7 +83,7 @@ public class Main {
                 }
 
                 if (boardToProduce != null) {
-                    boardFactory.produceBoard(boardToProduce);
+                    productionService.produce(boardToProduce);
                 }
 
                 TimeUnit.MILLISECONDS.sleep(500);

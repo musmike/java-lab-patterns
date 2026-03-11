@@ -8,9 +8,8 @@ import pl.lab.factory.manufacturing.ElectronicBoardFactory;
 import pl.lab.factory.manufacturing.StandardBoardFactory;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.pcbboards.BaseBoard;
-import pl.lab.factory.reporting.BoardReporter;
-import pl.lab.factory.reporting.LegacyAuditSystem;
-import pl.lab.factory.reporting.LegacyAuditSystemAdapter;
+import pl.lab.factory.reporting.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -90,7 +89,7 @@ public class Main {
                     productionService.produce(boardToProduce);
                 }
 
-                TimeUnit.MILLISECONDS.sleep(500);
+                TimeUnit.MILLISECONDS.sleep(100);
             }
 
             current.setStatus(OrderStatus.COMPLETED);
@@ -98,6 +97,21 @@ public class Main {
             boardReporter.report(current);
             TimeUnit.MILLISECONDS.sleep(500);
         }
+
+        ProductionOrder orderD = ProductionOrderFactory.createOrder("ORD-006", boardA, 5, specPcb);
+        List<ProductionOrder> allOrders = List.of(orderA, orderB, orderC, orderBaseClone, orderElectronicClone, orderD);
+
+        ProductionReport consoleReport = new SummaryProductionReport(new ConsoleReportFormatter());
+        consoleReport.generate(allOrders);
+
+        ProductionReport csvReport = new SummaryProductionReport(new CsvReportFormatter());
+        csvReport.generate(allOrders);
+
+        ProductionReport consoleCompleted = new CompletedOnlyProductionReport(new ConsoleReportFormatter());
+        consoleCompleted.generate(allOrders);
+
+        ProductionReport csvCompleted = new CompletedOnlyProductionReport(new CsvReportFormatter());
+        csvCompleted.generate(allOrders);
 
         SystemLogger.INSTANCE.logInfo("MAIN", "Wszystkie zlecenia przetworzone. Koniec.");
     }

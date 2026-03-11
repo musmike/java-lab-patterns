@@ -1,0 +1,31 @@
+package pl.lab.factory.reporting;
+
+import pl.lab.factory.orders.ProductionOrder;
+
+// Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
+// Wzorzec Bridge 1 (Konkretny Implementor — CSV)
+// Formatuje raport jako linie CSV gotowe do zapisu do pliku lub dalszego przetwarzania.
+public class CsvReportFormatter implements ReportFormatter {
+
+    @Override
+    public void writeHeader(String title) {
+        System.out.println("# " + title);
+        System.out.println("orderId,type,quantity,status");
+    }
+
+    @Override
+    public void writeOrder(ProductionOrder order) {
+        System.out.printf("%s,%s,%d,%s%n",
+                order.getId(),
+                order.getClass().getSimpleName(),
+                order.getQuantity(),
+                order.getStatus());
+    }
+
+    @Override
+    public void writeFooter(int totalOrders, long totalUnits) {
+        System.out.printf("# totalOrders=%d totalUnits=%d%n", totalOrders, totalUnits);
+    }
+}
+// Koniec, Tydzień 3
+// Wzorzec Bridge 1

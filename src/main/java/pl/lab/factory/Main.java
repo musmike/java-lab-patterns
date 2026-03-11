@@ -8,6 +8,9 @@ import pl.lab.factory.manufacturing.ElectronicBoardFactory;
 import pl.lab.factory.manufacturing.StandardBoardFactory;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.pcbboards.BaseBoard;
+import pl.lab.factory.reporting.BoardReporter;
+import pl.lab.factory.reporting.LegacyAuditSystem;
+import pl.lab.factory.reporting.LegacyAuditSystemAdapter;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -18,6 +21,7 @@ public class Main {
         StandardBoardFactory boardFactory = new StandardBoardFactory();
 
         BoardProductionService productionService = new BoardProductionService();
+        BoardReporter boardReporter = new LegacyAuditSystemAdapter(new LegacyAuditSystem());
 
         OrderSpecification rohs = OrderSpecification.builder()
                 .voltageTolerance(5.0)
@@ -91,6 +95,7 @@ public class Main {
 
             current.setStatus(OrderStatus.COMPLETED);
             SystemLogger.INSTANCE.logInfo("PRODUKCJA", current.getId() + " -> " + current.getStatus());
+            boardReporter.report(current);
             TimeUnit.MILLISECONDS.sleep(500);
         }
 

@@ -87,11 +87,12 @@ public class Main {
         allOrders.forEach(boardReporter::report);
 
         LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
-        WarehouseService warehouse = new WarehouseAdapter(legacyWarehouse);
+        WarehouseAdapter warehouse = new WarehouseAdapter(legacyWarehouse);
 
         allOrders.forEach(warehouse::storeOrder);
 
         legacyWarehouse.printStorage();
+        warehouse.printWarehouse();
 
         ProductionReport consoleReport = new SummaryProductionReport(new ConsoleReportFormatter());
         consoleReport.generate(allOrders);

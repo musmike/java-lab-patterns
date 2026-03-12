@@ -13,7 +13,7 @@ public class LegacyWarehouseSystem {
         storage.put(itemName, storage.getOrDefault(itemName, 0) + quantity);
 
         SystemLogger.INSTANCE.logInfo(
-                "WAREHOUSE",
+                "[LEGACY WAREHOUSE]",
                 "Stored " + quantity + " units of " + itemName
         );
     }
@@ -23,7 +23,7 @@ public class LegacyWarehouseSystem {
 
         storage.forEach((item, qty)->
                 SystemLogger.INSTANCE.logInfo(
-                        "WAREHOUSE",
+                        "[LEGACY WAREHOUSE]",
                         item+" -> "+qty
                 ));
     }

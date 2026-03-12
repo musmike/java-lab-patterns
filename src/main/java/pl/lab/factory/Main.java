@@ -6,6 +6,7 @@ import pl.lab.factory.manufacturing.*;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.reporting.*;
+import pl.lab.factory.warehouse.*;
 import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
 import java.util.List;
@@ -84,6 +85,13 @@ public class Main {
         List<ProductionOrder> allOrders = List.of(orderA, orderB, orderC, orderBaseClone, orderElectronicClone, orderD);
 
         allOrders.forEach(boardReporter::report);
+
+        LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
+        WarehouseService warehouse = new WarehouseAdapter(legacyWarehouse);
+
+        allOrders.forEach(warehouse::storeOrder);
+
+        legacyWarehouse.printStorage();
 
         ProductionReport consoleReport = new SummaryProductionReport(new ConsoleReportFormatter());
         consoleReport.generate(allOrders);

@@ -96,8 +96,8 @@ public class Main {
         legacyWarehouse.printStorage();
         warehouse.printWarehouse();
 
-        ShippingStrategy standardShipping = new StandardShipping(new BoxPacking());
-        ShippingStrategy priorityShipping = new PriorityShipping(new AntiStaticBagPacking());
+        ShippingStrategy standardShipping = new StandardShipping(new CardboardBoxPacking());
+        ShippingStrategy priorityShipping = new PriorityShipping(new PlacticBoxPacking());
 
         priorityShipping.shipOrder(orderB);
         standardShipping.shipOrder(orderA);

@@ -1,0 +1,14 @@
+package pl.lab.factory.assemblyline.assemblingsteps;
+
+import pl.lab.factory.assemblyline.assemblingstrategiers.AssemblingStrategy;
+import pl.lab.factory.pcbboards.BaseBoard;
+
+public abstract class AssemblyStep {
+    protected AssemblingStrategy strategy;
+
+    public AssemblyStep(AssemblingStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public abstract void perform(BaseBoard board) throws InterruptedException;
+}

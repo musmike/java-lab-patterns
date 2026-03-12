@@ -1,9 +1,13 @@
 package pl.lab.factory.pcbboards;
 
+import pl.lab.factory.components.BaseComponent;
 import pl.lab.factory.manufacturing.ManufacturableProduct;
+
+import java.util.ArrayList;
 
 public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
 
+    protected ArrayList<BaseComponent> components = new ArrayList<>();
     protected double workingVoltage;
     protected BoardMaterials boardMaterial;
     protected SolderMaterials solderType;
@@ -31,6 +35,9 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
         _circuitsPrinted = true;
     }
     public void mountComponents(){
+        for (BaseComponent c : components){
+            c.mount();
+        }
         _componentsMounted = true;
     }
     public void solder(){

@@ -6,11 +6,13 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Wzorzec Singleton 1 (Lazy Initialization)
 // Singleton tworzy instancję leniwie przy pierwszym wywołaniu getInstance().
 // W tej wersji nie ma synchronizacji, więc nie jest bezpieczny dla wielu wątków.
-public class Solderer {
+public class Solderer extends Machine{
     private static Solderer instance;
+    private boolean reflowMode = false;
 
     private Solderer(){}
 
+    public void setReflowMode(boolean set){reflowMode = set;}
     public static Solderer getInstance(){
         if (instance == null) {
             instance = new Solderer();
@@ -18,8 +20,15 @@ public class Solderer {
         return instance;
     }
 
-    public void solderBoard(BaseBoard board){
+
+
+    private void solderBoard(BaseBoard board){
         board.solder();
+    }
+
+    @Override
+    public void perform(BaseBoard board) {
+        solderBoard(board);
     }
 }
 // Koniec, Tydzień 2

@@ -5,5 +5,7 @@ public enum OrderStatus {
     IN_PRODUCTION,
     QUALITY_CHECK,
     COMPLETED,
-    REJECTED
+    REJECTED,
+    PACKED,
+    SHIPPED
 }

@@ -9,6 +9,8 @@ import pl.lab.factory.reporting.*;
 import pl.lab.factory.warehouse.*;
 import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
+import pl.lab.factory.warehouse.shipping.*;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -93,6 +95,13 @@ public class Main {
 
         legacyWarehouse.printStorage();
         warehouse.printWarehouse();
+
+        ShippingStrategy standardShipping = new StandardShipping(new BoxPacking());
+        ShippingStrategy priorityShipping = new PriorityShipping(new AntiStaticBagPacking());
+
+        priorityShipping.shipOrder(orderB);
+        standardShipping.shipOrder(orderA);
+
 
         ProductionReport consoleReport = new SummaryProductionReport(new ConsoleReportFormatter());
         consoleReport.generate(allOrders);

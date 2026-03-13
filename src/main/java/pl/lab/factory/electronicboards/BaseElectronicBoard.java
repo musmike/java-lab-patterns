@@ -7,6 +7,7 @@ import pl.lab.factory.pcbboards.BaseBoard;
 public class BaseElectronicBoard implements Cloneable, ManufacturableProduct {
     private BaseBoard baseBoard;
     private String firmware;
+    private boolean programmed = false;
     private ElectronicType boardType;
 
     // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
@@ -47,4 +48,9 @@ public class BaseElectronicBoard implements Cloneable, ManufacturableProduct {
     public String getFirmware() { return firmware; }
 
     public ElectronicType getBoardType() { return boardType; }
+    public void _programBoard(){
+        if(!firmware.isEmpty())
+        {programmed = true;}
+    }
+    public boolean isProgrammed() { return !firmware.isEmpty() && programmed; }
 }

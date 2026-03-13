@@ -13,7 +13,7 @@ public class MachineAdjusterDecorator<T extends Machine> extends MachineDecorato
         System.out.println("Scanning for board parameters...");
         System.out.println("-=- Board length: " + board.getLength() +"\n-=- Board width: "+board.getWidth()
                 +"\n-=- Board color: " + board.getBoardColor() + "\n-=- Board layers: " + board.getLayers());
-        System.out.println("Machine adjusted to parameters!");
+        System.out.println("Machine readjusted to parameters!");
         super.perform(board);
 
     }

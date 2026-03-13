@@ -2,12 +2,19 @@ package pl.lab.factory.components;
 
 import pl.lab.factory.SystemLogger;
 
-//tydzien 3 - lisc kompoenentu
+// Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
+//lisc kompoenentu 3
 public class Capacitor implements BaseComponent {
 
     private double cost;
     private int capacitance;
     private boolean mounted = false;
+
+    public Capacitor(int capacitance, double cost) {
+        this.cost = cost;
+        this.capacitance = capacitance;
+    }
+
     @Override
     public boolean isMounted() {
         return mounted;
@@ -33,4 +40,5 @@ public class Capacitor implements BaseComponent {
         return cost;
     }
 }
+//koniec component 3
 //koniec tydzien 3

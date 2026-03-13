@@ -1,11 +1,17 @@
 package pl.lab.factory.components;
 
-//tydzien 3 - lisc kompoenentu
+// Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
+//lisc kompoenentu 3
 public class Resistor implements BaseComponent {
 
     private int resistance;
     private double cost;
     private boolean mounted = false;
+
+    public Resistor(int resistance, double cost) {
+        this.resistance = resistance;
+        this.cost = cost;
+    }
 
     @Override
     public boolean isMounted() {
@@ -32,4 +38,5 @@ public class Resistor implements BaseComponent {
         return cost;
     }
 }
+//koniec component 3
 //koniec tydzien 3

@@ -11,10 +11,9 @@ import pl.lab.factory.pcbboards.StandardBoard;
 // Metoda createBoard() sprawdza typ płytki i ustawia firmware oraz bazę
 
 public class ElectronicBoardFactory {
-    public static BaseElectronicBoard createBoard(ElectronicType type, FirmwareAdapter adapter){
+    public static BaseElectronicBoard createBoard(ElectronicType type){
         BaseElectronicBoard board = new BaseElectronicBoard();
         board.setBoardType(type);
-        board.setFirmware(adapter);
         board.setBaseBoard(new StandardBoard());
 
         return board;

@@ -1,5 +1,6 @@
 package pl.lab.factory.electronicboards.firmware;
-//tydzien 3 - firmware to zadaptowania
+// Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
+//firmware to zadaptowania 3
 public class ProprietaryFirmware {
     public String firmwareCode;
 
@@ -7,4 +8,5 @@ public class ProprietaryFirmware {
         this.firmwareCode = firmwareCode;
     }
 }
+//koniec adapter 3
 //koniec tydzien 3

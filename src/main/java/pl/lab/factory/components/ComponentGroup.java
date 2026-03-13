@@ -3,7 +3,8 @@ package pl.lab.factory.components;
 import java.util.ArrayList;
 import java.util.List;
 
-//tydzien 3 - kompozyt componentu
+// Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
+//kompozyt komponentu 3
 public class ComponentGroup implements BaseComponent{
 
     String name;
@@ -69,4 +70,5 @@ public class ComponentGroup implements BaseComponent{
         return cost;
     }
 }
+//koniec component 3
 //koniec tydzien 3

@@ -3,7 +3,8 @@ package pl.lab.factory.assemblyline.machinesubroutines;
 import pl.lab.factory.assemblyline.Machine;
 import pl.lab.factory.pcbboards.BaseBoard;
 
-//tydzien 3 - konkretny dekorator 3
+// Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
+//konkretny dekorator 3
 public class MachineAdjusterDecorator<T extends Machine> extends MachineDecorator<T> {
     public MachineAdjusterDecorator(T decorated) {
         super(decorated);
@@ -19,4 +20,5 @@ public class MachineAdjusterDecorator<T extends Machine> extends MachineDecorato
 
     }
 }
+//koniec decorator 3
 // koniec tydzien 3

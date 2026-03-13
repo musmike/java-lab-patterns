@@ -1,5 +1,9 @@
 package pl.lab.factory.pcbboards;
 
+import pl.lab.factory.components.Capacitor;
+import pl.lab.factory.components.ComponentGroup;
+import pl.lab.factory.components.Resistor;
+
 public class StandardBoard extends BaseBoard {
 
     public StandardBoard() {
@@ -11,6 +15,10 @@ public class StandardBoard extends BaseBoard {
         this.length = 100;
         this.boardColor = 0x007700;
         this.layers = 2;
+        ComponentGroup mainGroup = new ComponentGroup("Main group");
+        mainGroup.add(new Resistor(20, 0.2));
+        mainGroup.add(new Capacitor(5, 0.2));
+        this.components.add(mainGroup);
     }
 
     @Override

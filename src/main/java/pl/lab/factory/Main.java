@@ -3,6 +3,9 @@ package pl.lab.factory;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
 import pl.lab.factory.electronicboards.firmware.*;
+import pl.lab.factory.electronicboards.firmware.programmers.InternalProgrammer;
+import pl.lab.factory.electronicboards.firmware.programmers.STLinkDevice;
+import pl.lab.factory.electronicboards.firmware.programmers.SeggerJLinkDevice;
 import pl.lab.factory.manufacturing.*;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.pcbboards.BaseBoard;
@@ -41,17 +44,23 @@ public class Main {
         specElectronic.setQualityStandard("Class 3");
         specElectronic.setVoltageTolerance(2.5);
 
-        FirmwareAdapter adapter = new HighLevelFirmwareAdapter(new HighLevelFirmware("v1.0.0-release"));
-        BaseElectronicBoard electronicBoardPrototype = ElectronicBoardFactory.createBoard(ElectronicType.HIGHLY_DEPENDANT, adapter);
+        FirmwareAdapter firmwareAdapter;
+
+
+        BaseElectronicBoard electronicBoardPrototype = ElectronicBoardFactory.createBoard(ElectronicType.HIGHLY_DEPENDANT);
 
         BoardPrototypes boardPrototypes = new BoardPrototypes();
         boardPrototypes.registerPrototype("highly-dependant-v1", electronicBoardPrototype);
 
 
         BaseElectronicBoard electronicBoardA = boardPrototypes.createFromPrototype("highly-dependant-v1");
+        firmwareAdapter = new HighLevelFirmwareAdapter(new HighLevelFirmware("v1.0.0-release"));
+        InternalProgrammer internalProgrammer = new InternalProgrammer(new SeggerJLinkDevice());
+        internalProgrammer.program(electronicBoardA, firmwareAdapter);
         BaseElectronicBoard electronicBoardB = boardPrototypes.createFromPrototype("highly-dependant-v1");
-        adapter = new ProprietaryFirmwareAdapter(new ProprietaryFirmware("v1.1.0-hotfix"));
-        electronicBoardB.setFirmware(adapter);
+        firmwareAdapter = new ProprietaryFirmwareAdapter(new ProprietaryFirmware("v1.1.0-hotfix"));
+        internalProgrammer = new InternalProgrammer(new STLinkDevice());
+        internalProgrammer.program(electronicBoardB, firmwareAdapter);
 
         SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Prototyp: firmware=" + electronicBoardPrototype.getFirmware());
         SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Klon A:   firmware=" + electronicBoardA.getFirmware());

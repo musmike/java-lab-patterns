@@ -3,7 +3,8 @@ package pl.lab.factory.electronicboards.firmware.programmers;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
-//tydzien 3 - bridge - uszczegolowiona abstrakcja
+// Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
+//bridge 3 - uszczegolowiona abstrakcja
 public class BootloaderProgrammer extends FirmwareProgrammer{
     public BootloaderProgrammer(ProgrammingDevice device) {
         super(device);
@@ -19,4 +20,5 @@ public class BootloaderProgrammer extends FirmwareProgrammer{
         device.finish();
     }
 }
+//koniec bridge 3
 //koniec tydzien 3

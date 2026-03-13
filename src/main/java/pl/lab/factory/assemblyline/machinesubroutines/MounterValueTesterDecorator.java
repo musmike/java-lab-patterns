@@ -3,7 +3,8 @@ package pl.lab.factory.assemblyline.machinesubroutines;
 import pl.lab.factory.assemblyline.Mounter;
 import pl.lab.factory.pcbboards.BaseBoard;
 
-//tydzien 3 - konkretny dekorator 3
+// Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
+// konkretny dekorator 3
 public class MounterValueTesterDecorator extends MachineDecorator<Mounter> {
     private double value;
 
@@ -23,4 +24,5 @@ public class MounterValueTesterDecorator extends MachineDecorator<Mounter> {
         }
     }
 }
+//koniec decorator 3
 // koniec tydzien 3

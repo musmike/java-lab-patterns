@@ -1,6 +1,6 @@
 package pl.lab.factory.electronicboards.firmware;
-
-//tydzien 3 - implementacja adaptera
+// Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
+//implementacja adaptera 3
 public class HighLevelFirmwareAdapter implements FirmwareAdapter{
     private HighLevelFirmware firmware;
 
@@ -13,4 +13,5 @@ public class HighLevelFirmwareAdapter implements FirmwareAdapter{
         return firmware.getCode();
     }
 }
+//koniec adapter 3
 //koniec tydzien 3

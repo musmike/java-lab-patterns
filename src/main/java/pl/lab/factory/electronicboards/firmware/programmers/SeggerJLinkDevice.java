@@ -3,6 +3,7 @@ package pl.lab.factory.electronicboards.firmware.programmers;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
+//tydzien 3 - bridge - konkretny implementor
 public class SeggerJLinkDevice implements ProgrammingDevice{
     @Override
     public void start() {
@@ -21,3 +22,4 @@ public class SeggerJLinkDevice implements ProgrammingDevice{
         System.out.println("SeggerJLink disengaged!");
     }
 }
+//koniec tydzien 3

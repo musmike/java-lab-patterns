@@ -3,6 +3,7 @@ package pl.lab.factory.assemblyline.machinesubroutines;
 import pl.lab.factory.assemblyline.Machine;
 import pl.lab.factory.pcbboards.BaseBoard;
 
+//tydzien 3 - konkretny dekorator 3
 public class MachineAdjusterDecorator<T extends Machine> extends MachineDecorator<T> {
     public MachineAdjusterDecorator(T decorated) {
         super(decorated);
@@ -18,3 +19,4 @@ public class MachineAdjusterDecorator<T extends Machine> extends MachineDecorato
 
     }
 }
+// koniec tydzien 3

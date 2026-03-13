@@ -1,5 +1,6 @@
 package pl.lab.factory.electronicboards.firmware;
 
+//tydzien 3 - implementacja adaptera
 public class BinaryFirmwareAdapter implements FirmwareAdapter{
     private BinaryFirmware firmware;
 
@@ -12,3 +13,4 @@ public class BinaryFirmwareAdapter implements FirmwareAdapter{
         return firmware.getData().toString();
     }
 }
+//koniec tydzien 3

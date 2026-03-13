@@ -1,5 +1,6 @@
 package pl.lab.factory.components;
 
+//tydzien 3 - lisc kompoenentu
 public class Inductor implements BaseComponent{
 
     private double cost;
@@ -30,3 +31,4 @@ public class Inductor implements BaseComponent{
         return cost;
     }
 }
+//koniec tydzien 3

@@ -3,6 +3,7 @@ package pl.lab.factory.electronicboards.firmware.programmers;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
+//tydzien 3 - bridge - konkretny implementor
 public class STLinkDevice implements ProgrammingDevice{
 
     @Override
@@ -21,3 +22,4 @@ public class STLinkDevice implements ProgrammingDevice{
         System.out.println("Disconnected!");
     }
 }
+//koniec tydzien 3

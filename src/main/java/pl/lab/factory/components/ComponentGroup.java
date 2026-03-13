@@ -3,6 +3,7 @@ package pl.lab.factory.components;
 import java.util.ArrayList;
 import java.util.List;
 
+//tydzien 3 - kompozyt componentu
 public class ComponentGroup implements BaseComponent{
 
     String name;
@@ -68,3 +69,4 @@ public class ComponentGroup implements BaseComponent{
         return cost;
     }
 }
+//koniec tydzien 3

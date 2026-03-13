@@ -2,6 +2,7 @@ package pl.lab.factory.components;
 
 import pl.lab.factory.SystemLogger;
 
+//tydzien 3 - lisc kompoenentu
 public class Capacitor implements BaseComponent {
 
     private double cost;
@@ -32,3 +33,4 @@ public class Capacitor implements BaseComponent {
         return cost;
     }
 }
+//koniec tydzien 3

@@ -3,6 +3,7 @@ package pl.lab.factory.electronicboards.firmware.programmers;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
+//tydzien 3 - bridge - uszczegolowiona abstrakcja
 public class BootloaderProgrammer extends FirmwareProgrammer{
     public BootloaderProgrammer(ProgrammingDevice device) {
         super(device);
@@ -18,3 +19,4 @@ public class BootloaderProgrammer extends FirmwareProgrammer{
         device.finish();
     }
 }
+//koniec tydzien 3

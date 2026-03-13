@@ -1,5 +1,6 @@
 package pl.lab.factory.components;
 
+//tydzien 3 - lisc kompoenentu
 public class Resistor implements BaseComponent {
 
     private int resistance;
@@ -31,3 +32,4 @@ public class Resistor implements BaseComponent {
         return cost;
     }
 }
+//koniec tydzien 3

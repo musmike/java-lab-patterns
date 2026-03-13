@@ -2,6 +2,7 @@ package pl.lab.factory.manufacturing;
 
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
+import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 import pl.lab.factory.pcbboards.StandardBoard;
 
 // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
@@ -10,10 +11,10 @@ import pl.lab.factory.pcbboards.StandardBoard;
 // Metoda createBoard() sprawdza typ płytki i ustawia firmware oraz bazę
 
 public class ElectronicBoardFactory {
-    public static BaseElectronicBoard createBoard(ElectronicType type, String firmware){
+    public static BaseElectronicBoard createBoard(ElectronicType type, FirmwareAdapter adapter){
         BaseElectronicBoard board = new BaseElectronicBoard();
         board.setBoardType(type);
-        board.setFirmware(firmware);
+        board.setFirmware(adapter);
         board.setBaseBoard(new StandardBoard());
 
         return board;

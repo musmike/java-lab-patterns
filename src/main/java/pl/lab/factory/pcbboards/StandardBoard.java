@@ -5,7 +5,7 @@ public class StandardBoard extends BaseBoard {
     public StandardBoard() {
         this.workingVoltage = 3.3;
         this.boardMaterial = BoardMaterials.FR_4;
-        this.solderType = SolderMaterials.LEAD_FREE;
+        this.solderType = SolderMaterials.SOLDER_ALLOY;
         this.thickness = 1.6;
         this.width = 100;
         this.length = 100;

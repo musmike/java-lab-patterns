@@ -1,5 +1,6 @@
 package pl.lab.factory.electronicboards;
 
+import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 import pl.lab.factory.manufacturing.ManufacturableProduct;
 import pl.lab.factory.pcbboards.BaseBoard;
 
@@ -33,8 +34,8 @@ public class BaseElectronicBoard implements Cloneable, ManufacturableProduct {
         this.baseBoard = baseBoard;
     }
 
-    public void setFirmware(String firmware) {
-        this.firmware = firmware;
+    public void setFirmware(FirmwareAdapter adapter) {
+        this.firmware = adapter.getFirmwareString();
     }
 
     public void setBoardType(ElectronicType boardType) {

@@ -2,6 +2,7 @@ package pl.lab.factory;
 
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
+import pl.lab.factory.electronicboards.firmware.*;
 import pl.lab.factory.manufacturing.*;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.pcbboards.BaseBoard;
@@ -40,14 +41,17 @@ public class Main {
         specElectronic.setQualityStandard("Class 3");
         specElectronic.setVoltageTolerance(2.5);
 
-        BaseElectronicBoard electronicBoardPrototype = ElectronicBoardFactory.createBoard(ElectronicType.HIGHLY_DEPENDANT, "v1.0.0-release");
+        FirmwareAdapter adapter = new HighLevelFirmwareAdapter(new HighLevelFirmware("v1.0.0-release"));
+        BaseElectronicBoard electronicBoardPrototype = ElectronicBoardFactory.createBoard(ElectronicType.HIGHLY_DEPENDANT, adapter);
 
         BoardPrototypes boardPrototypes = new BoardPrototypes();
         boardPrototypes.registerPrototype("highly-dependant-v1", electronicBoardPrototype);
 
+
         BaseElectronicBoard electronicBoardA = boardPrototypes.createFromPrototype("highly-dependant-v1");
         BaseElectronicBoard electronicBoardB = boardPrototypes.createFromPrototype("highly-dependant-v1");
-        electronicBoardB.setFirmware("v1.1.0-hotfix");
+        adapter = new ProprietaryFirmwareAdapter(new ProprietaryFirmware("v1.1.0-hotfix"));
+        electronicBoardB.setFirmware(adapter);
 
         SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Prototyp: firmware=" + electronicBoardPrototype.getFirmware());
         SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Klon A:   firmware=" + electronicBoardA.getFirmware());

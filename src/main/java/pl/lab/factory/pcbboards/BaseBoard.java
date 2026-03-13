@@ -40,6 +40,24 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
         }
         _componentsMounted = true;
     }
+    public double getComponentCost(){
+        double cost = 0;
+        for(BaseComponent c : components){
+            cost += c.getCost();
+        }
+        return cost;
+    }
+    public double getValue(double value){
+        for(BaseComponent c : components){
+            value = c.mofifyResult(value);
+        }
+        return value;
+    }
+    public void getComponentInfo(){
+        for(BaseComponent c : components){
+            c.print();
+        }
+    }
     public void solder(){
         _soldered = true;
     }

@@ -2,7 +2,7 @@ package pl.lab.factory.assemblyline;
 
 import pl.lab.factory.pcbboards.BaseBoard;
 
-public class Mounter extends Machine{
+public class Mounter implements Machine{
     private static Mounter instance;
 
     private Mounter(){}

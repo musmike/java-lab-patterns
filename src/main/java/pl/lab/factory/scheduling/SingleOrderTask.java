@@ -26,7 +26,7 @@ public class SingleOrderTask implements ProductionTask {
 
     @Override
     public String getDescription(String indent) {
-        return indent + "- [ZLECENIE] " + order.getId()
+        return indent + "- [ORDER] " + order.getId()
                 + " | qty: " + order.getQuantity()
                 + " | status: " + order.getStatus();
     }

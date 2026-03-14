@@ -10,7 +10,7 @@ public class ConsoleReportFormatter implements ReportFormatter {
     @Override
     public void writeHeader(String title) {
         System.out.println("========================================");
-        System.out.println("  RAPORT: " + title);
+        System.out.println("  REPORT: " + title);
         System.out.println("========================================");
     }
 
@@ -26,7 +26,7 @@ public class ConsoleReportFormatter implements ReportFormatter {
     @Override
     public void writeFooter(int totalOrders, long totalUnits) {
         System.out.println("----------------------------------------");
-        System.out.printf("  Łącznie zleceń: %d  |  Łącznie jednostek: %d%n", totalOrders, totalUnits);
+        System.out.printf("  Total orders: %d  |  Total units: %d%n", totalOrders, totalUnits);
         System.out.println("========================================");
     }
 }

@@ -19,12 +19,12 @@ public class QualityControlDecorator extends BoardProducerDecorator {
 
         if (!board.isReady()) {
             SystemLogger.INSTANCE.logError("QualityControl",
-                    "ODRZUCONO: płytka nie przeszła kontroli jakości | " + board);
+                    "REJECTED: board failed quality control | " + board);
             throw new RuntimeException("Board couldn't be manufactured!");
         }
 
         SystemLogger.INSTANCE.logInfo("QualityControl",
-                "OK: płytka przeszła kontrolę jakości | " + board);
+                "OK: board passed quality control | " + board);
     }
 }
 // Koniec, Tydzień 3

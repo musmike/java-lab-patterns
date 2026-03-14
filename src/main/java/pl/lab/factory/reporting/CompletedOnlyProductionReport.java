@@ -17,7 +17,7 @@ public class CompletedOnlyProductionReport extends ProductionReport {
 
     @Override
     public void generate(List<ProductionOrder> orders) {
-        formatter.writeHeader("Ukończone zlecenia");
+        formatter.writeHeader("Completed orders");
 
         List<ProductionOrder> completed = orders.stream()
                 .filter(o -> o.getStatus() == OrderStatus.COMPLETED)

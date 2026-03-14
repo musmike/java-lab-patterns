@@ -20,7 +20,7 @@ public class BoardPrototypes {
     public BaseElectronicBoard createFromPrototype(String name) {
         BaseElectronicBoard prototype = prototypes.get(name);
         if (prototype == null)
-            throw new IllegalArgumentException("Brak prototypu o nazwie: " + name);
+            throw new IllegalArgumentException("No prototype named: " + name);
         return prototype.clone();
     }
 }

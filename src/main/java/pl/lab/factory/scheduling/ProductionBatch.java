@@ -28,21 +28,21 @@ public class ProductionBatch implements ProductionTask {
     @Override
     public void execute() throws InterruptedException {
         SystemLogger.INSTANCE.logInfo("ProductionBatch",
-                "=== START partii: " + name
-                        + " (" + tasks.size() + " zadań, " + totalUnits() + " jednostek łącznie) ===");
+                "=== START of batch: " + name
+                        + " (" + tasks.size() + " tasks, " + totalUnits() + " total units) ===");
 
         for (ProductionTask task : tasks) {
             task.execute();
         }
 
-        SystemLogger.INSTANCE.logInfo("ProductionBatch", "=== KONIEC partii: " + name + " ===");
+        SystemLogger.INSTANCE.logInfo("ProductionBatch", "=== END of batch: " + name + " ===");
     }
 
     @Override
     public String getDescription(String indent) {
         StringBuilder sb = new StringBuilder();
-        sb.append(indent).append("+ [PARTIA] ").append(name)
-                .append(" (").append(totalUnits()).append(" jednostek)\n");
+        sb.append(indent).append("+ [BATCH] ").append(name)
+                .append(" (").append(totalUnits()).append(" units)\n");
         for (ProductionTask task : tasks) {
             sb.append(task.getDescription(indent + "  ")).append("\n");
         }

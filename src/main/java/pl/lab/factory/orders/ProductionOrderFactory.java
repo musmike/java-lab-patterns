@@ -16,7 +16,7 @@ public class ProductionOrderFactory {
                                               int quantity, OrderSpecification spec) {
         Objects.requireNonNull(product, "product cannot be null");
 
-        SystemLogger.INSTANCE.logInfo("ZAMÓWIENIA", "Tworzenie zlecenia: " + id);
+        SystemLogger.INSTANCE.logInfo("ORDERS", "Creating order: " + id);
 
         if (product instanceof BaseElectronicBoard electronicBoard) {
             return new BaseElectronicBoardProductionOrder.Builder(id, electronicBoard)
@@ -30,7 +30,7 @@ public class ProductionOrderFactory {
                     .build();
         }
 
-        throw new IllegalArgumentException("Nieznany typ produktu: " + product.getClass().getSimpleName());
+        throw new IllegalArgumentException("Unknown product type: " + product.getClass().getSimpleName());
     }
 }
 // Koniec, Tydzień 2

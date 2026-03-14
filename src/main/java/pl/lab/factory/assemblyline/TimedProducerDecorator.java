@@ -22,7 +22,7 @@ public class TimedProducerDecorator extends BoardProducerDecorator {
         TimeUnit.MILLISECONDS.sleep(5);
         long elapsed = System.currentTimeMillis() - start;
         SystemLogger.INSTANCE.logInfo("TimedProducer",
-                "Czas produkcji: " + elapsed + " ms | " + board);
+                "Production time: " + elapsed + " ms | " + board);
     }
 }
 // Koniec, Tydzień 3

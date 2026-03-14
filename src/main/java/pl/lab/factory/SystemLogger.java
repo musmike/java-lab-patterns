@@ -18,19 +18,19 @@ public enum SystemLogger {
     public void log(String context, String message) {
         String c = padRight(context, CONTEXT_WIDTH);
         String t = padRight("", TYPE_WIDTH);
-        System.out.println(c + t + message);
+        System.out.println(t + c + message);
     }
 
     public void logInfo(String context, String message) {
         String c = padRight(context, CONTEXT_WIDTH);
         String t = padRight("[INFO]", TYPE_WIDTH);
-        System.out.println(c + t + message);
+        System.out.println(t + c + message);
     }
 
     public void logError(String context, String message) {
         String c = padRight(context, CONTEXT_WIDTH);
         String t = padRight("[ERROR]", TYPE_WIDTH);
-        System.out.println(c + t + message);
+        System.out.println(t + c + message);
     }
 }
 // Koniec, Tydzień 2

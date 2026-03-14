@@ -62,9 +62,9 @@ public class Main {
         internalProgrammer = new InternalProgrammer(new STLinkDevice());
         internalProgrammer.program(electronicBoardB, firmwareAdapter);
 
-        SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Prototyp: firmware=" + electronicBoardPrototype.getFirmware());
-        SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Klon A:   firmware=" + electronicBoardA.getFirmware());
-        SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Klon B:   firmware=" + electronicBoardB.getFirmware());
+        SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Prototype: firmware=" + electronicBoardPrototype.getFirmware());
+        SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Clone A:   firmware=" + electronicBoardA.getFirmware());
+        SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Clone B:   firmware=" + electronicBoardB.getFirmware());
 
         BaseBoard boardA = boardFactory.createBoard();
 
@@ -82,7 +82,7 @@ public class Main {
         queue.printQueue();
         TimeUnit.SECONDS.sleep(1);
 
-        ProductionBatch weeklyPlan = new ProductionBatch("Plan tygodniowy");
+        ProductionBatch weeklyPlan = new ProductionBatch("Weekly plan");
 
         while (!queue.isEmpty()) {
             ProductionOrder order = queue.nextOrder();
@@ -131,6 +131,6 @@ public class Main {
         ProductionReport csvCompleted = new CompletedOnlyProductionReport(new CsvReportFormatter());
         csvCompleted.generate(allOrders);
 
-        SystemLogger.INSTANCE.logInfo("MAIN", "Wszystkie zlecenia przetworzone. Koniec.");
+        SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
     }
 }

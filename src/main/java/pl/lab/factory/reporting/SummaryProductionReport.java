@@ -16,7 +16,7 @@ public class SummaryProductionReport extends ProductionReport {
 
     @Override
     public void generate(List<ProductionOrder> orders) {
-        formatter.writeHeader("Podsumowanie produkcji");
+        formatter.writeHeader("Production summary");
 
         for (ProductionOrder order : orders) {
             formatter.writeOrder(order);

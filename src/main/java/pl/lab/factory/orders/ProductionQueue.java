@@ -29,7 +29,7 @@ public class ProductionQueue {
         if (order == null)
             throw new IllegalArgumentException("Order cannot be null");
         queue.offer(order);
-        SystemLogger.INSTANCE.logInfo("ProductionQueue", "Dodano: " + order.getId()
+        SystemLogger.INSTANCE.logInfo("ProductionQueue", "Added: " + order.getId()
                 + " | typ: " + order.getClass().getSimpleName()
                 + " | qty: " + order.getQuantity());
     }
@@ -44,10 +44,10 @@ public class ProductionQueue {
 
     public void printQueue() {
         if (queue.isEmpty()) {
-            SystemLogger.INSTANCE.logInfo("ProductionQueue", "Kolejka jest pusta.");
+            SystemLogger.INSTANCE.logInfo("ProductionQueue", "Queue is empty.");
             return;
         }
-        SystemLogger.INSTANCE.logInfo("ProductionQueue", "Zlecenia w kolejce (" + queue.size() + "):");
+        SystemLogger.INSTANCE.logInfo("ProductionQueue", "Orders in queue (" + queue.size() + "):");
         queue.forEach(o -> SystemLogger.INSTANCE.logInfo("ProductionQueue", "  -> " + o));
     }
 }

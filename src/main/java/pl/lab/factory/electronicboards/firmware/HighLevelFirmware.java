@@ -1,6 +1,8 @@
 package pl.lab.factory.electronicboards.firmware;
+
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
-//firmware to zadaptowania 3
+// Wzorzec Adapter 3
+// Firmware do zadaptowania
 public class HighLevelFirmware {
     private String code;
 
@@ -10,5 +12,5 @@ public class HighLevelFirmware {
 
     public String getCode() {return code.trim();}
 }
-//koniec adapter 3
-//koniec tydzien 3
+// Koniec, Tydzień 3
+// Wzorzec Adapter 3

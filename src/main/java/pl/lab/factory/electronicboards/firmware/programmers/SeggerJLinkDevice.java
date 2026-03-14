@@ -4,8 +4,9 @@ import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
-//bridge 3  - konkretny implementor
-public class SeggerJLinkDevice implements ProgrammingDevice{
+// Wzorzec Bridge 3
+// Konkretny implementor
+public class SeggerJLinkDevice implements ProgrammingDevice {
     @Override
     public void start() {
         System.out.println("Engaging with SeggerJLink!");
@@ -23,5 +24,5 @@ public class SeggerJLinkDevice implements ProgrammingDevice{
         System.out.println("SeggerJLink disengaged!");
     }
 }
-//koniec bridge 3
-//koniec tydzien 3
+// Koniec, Tydzień 3
+// Wzorzec Bridge 3

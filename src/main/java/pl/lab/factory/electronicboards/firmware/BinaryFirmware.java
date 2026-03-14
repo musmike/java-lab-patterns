@@ -1,14 +1,16 @@
 package pl.lab.factory.electronicboards.firmware;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
-//firmware to zadaptowania 3
+// Wzorzec Adapter 3
+// Firmware do zadaptowania
 public class BinaryFirmware {
+    private byte[] data;
+
     public BinaryFirmware(byte[] data) {
         this.data = data;
     }
 
-    private byte[] data;
     public byte[] getData() {return data;}
 }
-//koniec adapter 3
-//koniec tydzien 3
+// Koniec, Tydzień 3
+// Wzorzec Adapter 3

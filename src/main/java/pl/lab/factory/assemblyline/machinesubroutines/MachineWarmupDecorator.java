@@ -4,8 +4,9 @@ import pl.lab.factory.assemblyline.Machine;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
-//konkretny dekorator 3
-public class MachineWarmupDecorator<T extends Machine> extends MachineDecorator<T>{
+// Wzorzec Decorator 3
+// Konkretny dekorator
+public class MachineWarmupDecorator<T extends Machine> extends MachineDecorator<T> {
     public MachineWarmupDecorator(T decorated) {
         super(decorated);
     }
@@ -16,5 +17,5 @@ public class MachineWarmupDecorator<T extends Machine> extends MachineDecorator<
         super.perform(board);
     }
 }
-//koniec decorator 3
-// koniec tydzien 3
+// Koniec, Tydzień 3
+// Wzorzec Decorator 3

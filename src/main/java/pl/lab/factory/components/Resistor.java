@@ -1,7 +1,8 @@
 package pl.lab.factory.components;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
-//lisc kompoenentu 3
+// Wzorzec Composite 3
+// Liść komponentu
 public class Resistor implements BaseComponent {
 
     private int resistance;
@@ -30,7 +31,7 @@ public class Resistor implements BaseComponent {
 
     @Override
     public double mofifyResult(double value) {
-        return value/resistance;
+        return value / resistance;
     }
 
     @Override
@@ -38,5 +39,5 @@ public class Resistor implements BaseComponent {
         return cost;
     }
 }
-//koniec component 3
-//koniec tydzien 3
+// Koniec, Tydzień 3
+// Wzorzec Composite 3

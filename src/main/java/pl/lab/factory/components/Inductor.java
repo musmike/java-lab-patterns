@@ -1,14 +1,15 @@
 package pl.lab.factory.components;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
-//lisc kompoenentu 3
-public class Inductor implements BaseComponent{
+// Wzorzec Composite 3
+// Liść komponentu
+public class Inductor implements BaseComponent {
 
     private double cost;
     private int inductance;
     private boolean mounted = false;
 
-    public Inductor( int inductance, double cost) {
+    public Inductor(int inductance, double cost) {
         this.cost = cost;
         this.inductance = inductance;
     }
@@ -38,5 +39,5 @@ public class Inductor implements BaseComponent{
         return cost;
     }
 }
-//koniec component 3
-//koniec tydzien 3
+// Koniec, Tydzień 3
+// Wzorzec Composite 3

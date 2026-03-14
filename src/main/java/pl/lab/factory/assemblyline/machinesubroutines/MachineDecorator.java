@@ -4,8 +4,8 @@ import pl.lab.factory.assemblyline.Machine;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
-// dekorator 3 - abstrakcyjny dekorator maszyn
-
+// Wzorzec Decorator 3
+// Abstrakcyjny dekorator maszyn
 public class MachineDecorator<T extends Machine> implements Machine {
     protected T decorated;
 
@@ -18,5 +18,5 @@ public class MachineDecorator<T extends Machine> implements Machine {
         decorated.perform(board);
     }
 }
-//koniec decorator 3
-//koniec tydzien 3
+// Koniec, Tydzień 3
+// Wzorzec Decorator 3

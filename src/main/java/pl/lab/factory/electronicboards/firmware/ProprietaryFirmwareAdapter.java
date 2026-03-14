@@ -1,8 +1,9 @@
 package pl.lab.factory.electronicboards.firmware;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
-// implementacja adaptera 3
-public class ProprietaryFirmwareAdapter implements FirmwareAdapter{
+// Wzorzec Adapter 3
+// Implementacja adaptera
+public class ProprietaryFirmwareAdapter implements FirmwareAdapter {
     private ProprietaryFirmware firmware;
 
     public ProprietaryFirmwareAdapter(ProprietaryFirmware firmware) {
@@ -14,5 +15,5 @@ public class ProprietaryFirmwareAdapter implements FirmwareAdapter{
         return firmware.firmwareCode;
     }
 }
-//koniec adapter 3
-//koniec tydzien 3
+// Koniec, Tydzień 3
+// Wzorzec Adapter 3

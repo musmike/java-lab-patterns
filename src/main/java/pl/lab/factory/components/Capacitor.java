@@ -1,9 +1,8 @@
 package pl.lab.factory.components;
 
-import pl.lab.factory.SystemLogger;
-
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
-//lisc kompoenentu 3
+// Wzorzec Composite 3
+// Liść komponentu
 public class Capacitor implements BaseComponent {
 
     private double cost;
@@ -40,5 +39,5 @@ public class Capacitor implements BaseComponent {
         return cost;
     }
 }
-//koniec component 3
-//koniec tydzien 3
+// Koniec, Tydzień 3
+// Wzorzec Composite 3

@@ -1,5 +1,7 @@
 package pl.lab.factory.orders;
 
+import pl.lab.factory.orders.certificateflyweight.Certificate;
+import pl.lab.factory.orders.certificateflyweight.CertificateFlyweightFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,11 +10,20 @@ import java.util.List;
 public class OrderSpecification implements Cloneable {
     private double voltageTolerance;   // dopuszczalne odchylenie napięcia [%]
     private double thicknessTolerance; // dopuszczalne odchylenie grubości [mm]
-    private List<String> certificates; // np. "IPC-A-610", "RoHS", "ISO9001"
+
+    // Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
+    // Wzorzec Flyweight 1
+    // Zamiast List<String> przechowujemy List<Certificate> — referencje do
+    // współdzielonych obiektów z puli CertificatePool. Klonowanie listy
+    // kopiuje jedynie referencje (flyweighty są niemutowalne, więc to bezpieczne).
+    private List<Certificate> certificates; // np. "IPC-A-610", "RoHS", "ISO9001"
+    // Koniec, Tydzień 4
+    // Wzorzec Flyweight 1
+
     private String qualityStandard;    // np. "Class 2", "Class 3"
 
     public OrderSpecification(double voltageTolerance, double thicknessTolerance,
-                              List<String> certificates, String qualityStandard) {
+                              List<Certificate> certificates, String qualityStandard) {
         this.voltageTolerance = voltageTolerance;
         this.thicknessTolerance = thicknessTolerance;
         this.certificates = new ArrayList<>(certificates);
@@ -21,9 +32,8 @@ public class OrderSpecification implements Cloneable {
 
     // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
     // Wzorzec Prototype 2
-    // Prototype – umożliwia szybkie tworzenie kopii istniejącej specyfikacji zamówienia.
-    // Metoda clone() tworzy nowy obiekt OrderSpecification z tymi samymi parametrami i kopią listy certyfikatów.
-
+    // Klonowanie listy certyfikatów kopiuje tylko referencje do flyweightów —
+    // nie powstają nowe obiekty Certificate
     @Override
     public OrderSpecification clone() {
         try {
@@ -34,16 +44,14 @@ public class OrderSpecification implements Cloneable {
             throw new AssertionError();
         }
     }
-
     // Koniec, Tydzień 2
     // Wzorzec Prototype 2
-
 
     public double getVoltageTolerance() { return voltageTolerance; }
 
     public double getThicknessTolerance() { return thicknessTolerance; }
 
-    public List<String> getCertificates() { return Collections.unmodifiableList(certificates); }
+    public List<Certificate> getCertificates() { return Collections.unmodifiableList(certificates); }
 
     public String getQualityStandard() { return qualityStandard; }
 
@@ -53,7 +61,19 @@ public class OrderSpecification implements Cloneable {
 
     public void setQualityStandard(String qualityStandard) { this.qualityStandard = qualityStandard; }
 
-    public void addCertificate(String certificate) { this.certificates.add(certificate); }
+    // Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
+    // Wzorzec Flyweight 1
+    // Współdzieli certyfikaty z puli zamiast tworzyć nowe.
+    // Kontekst (orderId) przekazywany z zewnątrz przy użyciu obiektu.
+    public void addCertificate(String name) {
+        this.certificates.add(CertificateFlyweightFactory.getCertificate(name));
+    }
+
+    public void displayCertificates(String orderId) {
+        certificates.forEach(c -> c.display(orderId));
+    }
+    // Koniec, Tydzień 4
+    // Wzorzec Flyweight 1
 
     @Override
     public String toString() {
@@ -74,7 +94,13 @@ public class OrderSpecification implements Cloneable {
     public static class Builder {
         private double voltageTolerance;
         private double thicknessTolerance;
-        private List<String> certificates = new ArrayList<>();
+
+        // Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
+        // Wzorzec Flyweight 1
+        private List<Certificate> certificates = new ArrayList<>();
+        // Koniec, Tydzień 4
+        // Wzorzec Flyweight 1
+
         private String qualityStandard;
 
         public Builder voltageTolerance(double voltageTolerance){
@@ -87,10 +113,15 @@ public class OrderSpecification implements Cloneable {
             return this;
         }
 
-        public Builder addCertificate(String certificate){
-            this.certificates.add(certificate);
+        // Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
+        // Wzorzec Flyweight 1
+        // Builder pobiera Certificate z puli zamiast dodawać surowego Stringa.
+        public Builder addCertificate(String name){
+            this.certificates.add(CertificateFlyweightFactory.getCertificate(name));
             return this;
         }
+        // Koniec, Tydzień 4
+        // Wzorzec Flyweight 1
 
         public Builder qualityStandard(String qualityStandard){
             this.qualityStandard = qualityStandard;

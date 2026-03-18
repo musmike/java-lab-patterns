@@ -45,6 +45,7 @@ public class Main {
 
         OrderSpecification specPcb = rohs.clone();
         specPcb.addCertificate("IPC-A-610");
+        specPcb.displayCertificates("ORD-001");
 
         OrderSpecification specElectronic = rohs.clone();
         specElectronic.setQualityStandard("Class 3");

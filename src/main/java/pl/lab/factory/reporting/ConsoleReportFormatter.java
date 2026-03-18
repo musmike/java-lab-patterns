@@ -9,7 +9,7 @@ public class ConsoleReportFormatter implements ReportFormatter {
 
     @Override
     public void writeHeader(String title) {
-        System.out.println("========================================");
+        System.out.println("\n========================================");
         System.out.println("  REPORT: " + title);
         System.out.println("========================================");
     }

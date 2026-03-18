@@ -30,6 +30,18 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
     public abstract int getBoardColor();
     public abstract int getLayers();
 
+    public boolean is_circuitsPrinted() {
+        return _circuitsPrinted;
+    }
+
+    public boolean is_componentsMounted() {
+        return _componentsMounted;
+    }
+
+    public boolean is_soldered() {
+        return _soldered;
+    }
+
     public abstract boolean isReady();
     public void printCircuits(){
         _circuitsPrinted = true;

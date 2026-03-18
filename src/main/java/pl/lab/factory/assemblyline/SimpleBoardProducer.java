@@ -1,9 +1,6 @@
 package pl.lab.factory.assemblyline;
 
-import pl.lab.factory.assemblyline.assemblingsteps.AssemblyStep;
-import pl.lab.factory.assemblyline.assemblingsteps.MountStep;
-import pl.lab.factory.assemblyline.assemblingsteps.PrintStep;
-import pl.lab.factory.assemblyline.assemblingsteps.SolderStep;
+import pl.lab.factory.assemblyline.assemblingsteps.*;
 import pl.lab.factory.assemblyline.assemblingstrategiers.AutoMount;
 import pl.lab.factory.assemblyline.assemblingstrategiers.LaserPrint;
 import pl.lab.factory.assemblyline.assemblingstrategiers.WaveSolder;
@@ -19,14 +16,13 @@ import java.util.List;
 public class SimpleBoardProducer implements BoardProducer  {
     @Override
     public void produce(BaseBoard board) throws InterruptedException {
-        AssemblyStep printing = new PrintStep(new LaserPrint());
-        AssemblyStep mounting = new MountStep(new AutoMount());
-        AssemblyStep soldering = new SolderStep(new WaveSolder());
 
-
-        printing.perform(board);
-        mounting.perform(board);
-        soldering.perform(board);
+        AssemblyStepFacade assembler = new AssemblyStepFacade(List.of(
+                new MountStep(new AutoMount()),
+                new PrintStep(new LaserPrint()),
+                new SolderStep(new WaveSolder())
+        ));
+        assembler.manufacture(board);
     }
 }
 // Koniec, Tydzień 3

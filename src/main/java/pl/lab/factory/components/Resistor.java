@@ -1,17 +1,25 @@
 package pl.lab.factory.components;
 
+import pl.lab.factory.Pair;
+import pl.lab.factory.components.definitions.ResistorDefinition;
+
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Composite 3
 // Liść komponentu
 public class Resistor implements BaseComponent {
 
-    private int resistance;
-    private double cost;
+    private ResistorDefinition definition;
     private boolean mounted = false;
+    private final Pair<Integer, Integer> position;
 
-    public Resistor(int resistance, double cost) {
-        this.resistance = resistance;
-        this.cost = cost;
+    public Resistor(ResistorDefinition definition, Pair<Integer, Integer> position) {
+        this.definition = definition;
+        this.position = position;
+    }
+
+    @Override
+    public Pair<Integer, Integer> getPos() {
+        return position;
     }
 
     @Override
@@ -26,17 +34,17 @@ public class Resistor implements BaseComponent {
 
     @Override
     public void print() {
-        System.out.println("->[COMPONENT] - Resistor -> " + resistance + "Ω -> Cost: " + cost);
+        System.out.println("->[COMPONENT] - Resistor -> " + definition.getResistance() + "Ω -> Cost: " + definition.getCost());
     }
 
     @Override
     public double mofifyResult(double value) {
-        return value / resistance;
+        return value / definition.getResistance();
     }
 
     @Override
     public double getCost() {
-        return cost;
+        return definition.getCost();
     }
 }
 // Koniec, Tydzień 3

@@ -1,5 +1,7 @@
 package pl.lab.factory.components;
 
+import pl.lab.factory.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +9,14 @@ import java.util.List;
 // Wzorzec Composite 3
 // Kompozyt komponentu
 public class ComponentGroup implements BaseComponent {
+    private String name;
+    private final Pair<Integer, Integer> position;
 
-    String name;
     private List<BaseComponent> components = new ArrayList<>();
 
-    public ComponentGroup(String name) {
+    public ComponentGroup(String name, Pair<Integer, Integer> position) {
         this.name = name;
+        this.position = position;
     }
 
     public void add(BaseComponent component) {
@@ -23,6 +27,11 @@ public class ComponentGroup implements BaseComponent {
     }
     public void remove(int idx) {
         components.remove(idx);
+    }
+
+    @Override
+    public Pair<Integer, Integer> getPos() {
+        return position;
     }
 
     @Override

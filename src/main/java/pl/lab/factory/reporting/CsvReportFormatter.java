@@ -9,7 +9,7 @@ public class CsvReportFormatter implements ReportFormatter {
 
     @Override
     public void writeHeader(String title) {
-        System.out.println("# " + title);
+        System.out.println("\n# " + title);
         System.out.println("orderId,type,quantity,status");
     }
 

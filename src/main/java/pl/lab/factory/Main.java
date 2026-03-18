@@ -10,6 +10,9 @@ import pl.lab.factory.manufacturing.*;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.reporting.*;
+import pl.lab.factory.reporting.reportingfacade.ReportFormat;
+import pl.lab.factory.reporting.reportingfacade.ReportType;
+import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
 import pl.lab.factory.warehouse.*;
 import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
@@ -104,7 +107,9 @@ public class Main {
         LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
         WarehouseAdapter warehouse = new WarehouseAdapter(legacyWarehouse);
 
-        allOrders.forEach(warehouse::storeOrder);
+        allOrders.stream()
+                .filter(order -> order.getStatus() == OrderStatus.COMPLETED)
+                .forEach(warehouse::storeOrder);
 
         legacyWarehouse.printStorage();
         warehouse.printWarehouse();
@@ -118,18 +123,10 @@ public class Main {
         priorityShipping.shipOrder(orderB);
         standardShipping.shipOrder(orderA);
 
-
-        ProductionReport consoleReport = new SummaryProductionReport(new ConsoleReportFormatter());
-        consoleReport.generate(allOrders);
-
-        ProductionReport csvReport = new SummaryProductionReport(new CsvReportFormatter());
-        csvReport.generate(allOrders);
-
-        ProductionReport consoleCompleted = new CompletedOnlyProductionReport(new ConsoleReportFormatter());
-        consoleCompleted.generate(allOrders);
-
-        ProductionReport csvCompleted = new CompletedOnlyProductionReport(new CsvReportFormatter());
-        csvCompleted.generate(allOrders);
+        ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CONSOLE, allOrders);
+        ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CSV, allOrders);
+        ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CONSOLE, allOrders);
+        ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CSV, allOrders);
 
         SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
     }

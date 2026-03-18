@@ -30,7 +30,10 @@ public class Main {
         StandardBoardFactory boardFactory = new StandardBoardFactory();
         OrderProcessor pcbProcessor = new BaseBoardOrderProcessor();
         OrderProcessor electronicBoardProcessor = new ElectronicBoardOrderProcessor();
-        BoardReporter boardReporter = new LegacyAuditSystemAdapter(new LegacyAuditSystem());
+
+        BoardReporter boardReporter = new CachingBoardReporterProxy(
+            new LegacyAuditSystemAdapter(new LegacyAuditSystem())
+        );
 
         OrderSpecification rohs = OrderSpecification.builder()
                 .voltageTolerance(5.0)
@@ -90,6 +93,7 @@ public class Main {
         while (!queue.isEmpty()) {
             ProductionOrder order = queue.nextOrder();
             boardReporter.report(order);
+            boardReporter.report(order); // repeated to test caching
             OrderProcessor processor = order instanceof BaseBoardProductionOrder
                     ? pcbProcessor
                     : electronicBoardProcessor;

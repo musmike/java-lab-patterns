@@ -16,6 +16,10 @@ import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
 import pl.lab.factory.warehouse.*;
 import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
+import pl.lab.factory.warehouse.packing.AntiStaticBagDecorator;
+import pl.lab.factory.warehouse.packing.FoamProtectionDecorator;
+import pl.lab.factory.warehouse.packing.PackageFactory;
+import pl.lab.factory.warehouse.packing.PackageImplementor;
 import pl.lab.factory.warehouse.shipping.*;
 
 import java.util.List;

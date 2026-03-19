@@ -1,4 +1,4 @@
-package pl.lab.factory.warehouse.shipping;
+package pl.lab.factory.warehouse.packing;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -19,6 +19,7 @@ import pl.lab.factory.scheduling.SingleOrderTask;
 import pl.lab.factory.warehouse.shipping.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -110,7 +111,16 @@ public class Main {
         allOrders.forEach(boardReporter::report);
 
         LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
-        WarehouseAdapter warehouse = new WarehouseAdapter(legacyWarehouse);
+
+        Set<String> unapproved = Set.of("ORD-999", "ORD-888");
+        WarehouseService warehouse = new WarehouseAccessProxy(
+                new WarehouseAdapter(legacyWarehouse),
+                unapproved
+        );
+
+        ProductionOrder unapprovedOrder = orderA.clone("ORD-999");
+        warehouse.storeOrder(unapprovedOrder);
+
 
         allOrders.stream()
                 .filter(order -> order.getStatus() == OrderStatus.COMPLETED)

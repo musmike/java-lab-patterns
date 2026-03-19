@@ -5,6 +5,8 @@ import pl.lab.factory.orders.ProductionOrder;
 // Wzorzec Adapter 2 (Interfejs docelowy — Target)
 public interface WarehouseService {
     void storeOrder(ProductionOrder order);
+    void removeOrder(ProductionOrder order);
+    void printWarehouse();
 
 }
 // Koniec, Tydzień 3

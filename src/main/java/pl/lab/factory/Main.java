@@ -125,8 +125,13 @@ public class Main {
         ShippingStrategy standardShipping = new StandardShipping(cardboardBoxPackaging);
         ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);
 
-        priorityShipping.shipOrder(orderB);
-        standardShipping.shipOrder(orderA);
+
+        ShippingFacade shippingFacade = new ShippingFacade(warehouse);
+
+        shippingFacade.ship(priorityShipping, orderB);
+        shippingFacade.ship(standardShipping, orderA);
+
+        warehouse.printWarehouse();
 
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CSV, allOrders);

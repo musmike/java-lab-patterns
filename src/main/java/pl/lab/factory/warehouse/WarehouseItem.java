@@ -7,11 +7,17 @@ import pl.lab.factory.SystemLogger;
 public class WarehouseItem implements WarehouseComponent{
     private final String name;
     private final int quantity;
+    private final String orderId;
 
-    public WarehouseItem(String name, int quantity)
+    public WarehouseItem(String name, int quantity, String orderId)
     {
         this.name = name;
         this.quantity = quantity;
+        this.orderId = orderId;
+    }
+
+    public String getOrderId() {
+        return orderId;
     }
 
     @Override
@@ -21,6 +27,9 @@ public class WarehouseItem implements WarehouseComponent{
                 indent+"- "+name+" | qty: "+quantity
         );
     }
+
+    @Override
+    public void remove(String orderId){}
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 2

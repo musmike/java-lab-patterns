@@ -1,5 +1,7 @@
 package pl.lab.factory.components.definitions;
 
+// Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
+// Wzorzec Flyweight 2 - definicja konkretnego componentu 1/3
 public class CapacitorDefinition implements ComponentDefinition{
 
     private final int capacitance;
@@ -24,3 +26,5 @@ public class CapacitorDefinition implements ComponentDefinition{
         return 0;
     }
 }
+//flyweight 2
+//koniec tydzien 4

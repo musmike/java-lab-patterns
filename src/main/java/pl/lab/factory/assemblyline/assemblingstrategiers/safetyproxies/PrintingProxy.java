@@ -3,6 +3,8 @@ package pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies;
 import pl.lab.factory.assemblyline.assemblingstrategiers.PrintingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
 
+// Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
+// Wzorzec Proxy 2 - 2 z 2 proxy sprawdzajacych poprawnosc dzialania
 public class PrintingProxy implements PrintingStrategy {
 
     private PrintingStrategy strategy;
@@ -20,3 +22,5 @@ public class PrintingProxy implements PrintingStrategy {
         strategy.execute(board);
     }
 }
+//proxy 2
+//koniec tydzien 4

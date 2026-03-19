@@ -8,6 +8,8 @@ import pl.lab.factory.components.definitions.ResistorDefinition;
 import java.util.HashMap;
 import java.util.Map;
 
+// Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
+// Wzorzec Flyweight 2 - Flyweight factory - rejestr uzywanych komponentow podstawowych
 public class ComponentDefinitionFactory {
     private static final Map<String, ComponentDefinition> cache = new HashMap<>();
 
@@ -26,3 +28,5 @@ public class ComponentDefinitionFactory {
         return (InductorDefinition) cache.computeIfAbsent(key, k -> new InductorDefinition(inductance, cost));
     }
 }
+//flyweight 2
+//koniec tydzien 4

@@ -5,6 +5,8 @@ import pl.lab.factory.pcbboards.BaseBoard;
 import java.util.ArrayList;
 import java.util.List;
 
+// Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
+// Wzorzec Facade 2 - fasada upraszczajaca wykonywanie kolejnych kroków składania płytke
 public class AssemblyStepFacade {
     private List<AssemblyStep> steps;
 
@@ -28,3 +30,5 @@ public class AssemblyStepFacade {
         System.out.println("Streamlined manufacturing completed!");
     }
 }
+//facade 2
+//koniec tydzien 4

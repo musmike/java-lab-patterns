@@ -129,8 +129,8 @@ public class Main {
         legacyWarehouse.printStorage();
         warehouse.printWarehouse();
 
-        PackageImplementor cardboardBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(new CardboardBoxPacking()));
-        PackageImplementor plasticBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(new PlacticBoxPacking()));
+        PackageImplementor cardboardBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage("cardboard")));
+        PackageImplementor plasticBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage("plastic")));
 
         ShippingStrategy standardShipping = new StandardShipping(cardboardBoxPackaging);
         ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);

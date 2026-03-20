@@ -16,9 +16,14 @@ import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
 import pl.lab.factory.warehouse.*;
 import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
+import pl.lab.factory.warehouse.packing.AntiStaticBagDecorator;
+import pl.lab.factory.warehouse.packing.FoamProtectionDecorator;
+import pl.lab.factory.warehouse.packing.PackageFactory;
+import pl.lab.factory.warehouse.packing.PackageImplementor;
 import pl.lab.factory.warehouse.shipping.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -110,7 +115,16 @@ public class Main {
         allOrders.forEach(boardReporter::report);
 
         LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
-        WarehouseAdapter warehouse = new WarehouseAdapter(legacyWarehouse);
+
+        Set<String> unapproved = Set.of("ORD-999", "ORD-888");
+        WarehouseService warehouse = new WarehouseAccessProxy(
+                new WarehouseAdapter(legacyWarehouse),
+                unapproved
+        );
+
+        ProductionOrder unapprovedOrder = orderA.clone("ORD-999");
+        warehouse.storeOrder(unapprovedOrder);
+
 
         allOrders.stream()
                 .filter(order -> order.getStatus() == OrderStatus.COMPLETED)
@@ -119,14 +133,19 @@ public class Main {
         legacyWarehouse.printStorage();
         warehouse.printWarehouse();
 
-        PackageImplementor cardboardBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(new CardboardBoxPacking()));
-        PackageImplementor plasticBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(new PlacticBoxPacking()));
+        PackageImplementor cardboardBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage("cardboard")));
+        PackageImplementor plasticBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage("plastic")));
 
         ShippingStrategy standardShipping = new StandardShipping(cardboardBoxPackaging);
         ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);
 
-        priorityShipping.shipOrder(orderB);
-        standardShipping.shipOrder(orderA);
+
+        ShippingFacade shippingFacade = new ShippingFacade(warehouse);
+
+        shippingFacade.ship(priorityShipping, orderB);
+        shippingFacade.ship(standardShipping, orderA);
+
+        warehouse.printWarehouse();
 
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CSV, allOrders);

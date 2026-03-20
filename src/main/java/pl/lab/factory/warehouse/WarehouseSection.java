@@ -18,8 +18,13 @@ public class WarehouseSection implements WarehouseComponent{
         children.add(component);
     }
 
-    public void remove(WarehouseComponent component){
-        children.remove(component);
+    @Override
+    public void remove(String orderId){
+        children.removeIf(component->
+                component instanceof WarehouseItem item && item.getOrderId().equals(orderId));
+        for(WarehouseComponent component : children){
+            component.remove(orderId);
+        }
     }
 
     @Override

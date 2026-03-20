@@ -1,10 +1,8 @@
-package pl.lab.factory.warehouse.shipping;
-
-import pl.lab.factory.orders.ProductionOrder;
+package pl.lab.factory.warehouse.packing;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Decorator 2 (Abstrakcyjny dekorator)
-public abstract class PackingDecorator implements PackageImplementor{
+public abstract class PackingDecorator implements PackageImplementor {
     protected PackageImplementor component;
     public PackingDecorator(PackageImplementor component){
         this.component = component;

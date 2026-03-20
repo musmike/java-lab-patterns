@@ -25,6 +25,15 @@ public class WarehouseAdapter implements WarehouseService {
         mainWarehouse.add(zoneB);
     }
 
+    public void removeOrder(ProductionOrder order){
+
+        SystemLogger.INSTANCE.logInfo(
+                "WAREHOUSE",
+                "Removing order " + order.getId() + " from warehouse"
+        );
+        mainWarehouse.remove(order.getId());
+    }
+
     @Override
     public void storeOrder(ProductionOrder order){
         String itemName = order.getClass().getSimpleName();
@@ -32,7 +41,7 @@ public class WarehouseAdapter implements WarehouseService {
 
         legacyWarehouse.storeItem(itemName, quantity);
 
-        WarehouseItem item = new WarehouseItem(itemName + " (" + order.getId() + ")", quantity);
+        WarehouseItem item = new WarehouseItem(itemName + " (" + order.getId() + ")", quantity, order.getId());
 
         WarehouseSection targetSection;
         if(order instanceof BaseBoardProductionOrder){

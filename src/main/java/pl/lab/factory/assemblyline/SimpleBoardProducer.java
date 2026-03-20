@@ -4,6 +4,8 @@ import pl.lab.factory.assemblyline.assemblingsteps.*;
 import pl.lab.factory.assemblyline.assemblingstrategiers.AutoMount;
 import pl.lab.factory.assemblyline.assemblingstrategiers.LaserPrint;
 import pl.lab.factory.assemblyline.assemblingstrategiers.WaveSolder;
+import pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies.PrintingProxy;
+import pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies.SolderingProxy;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 import java.util.ArrayList;
@@ -19,8 +21,8 @@ public class SimpleBoardProducer implements BoardProducer  {
 
         AssemblyStepFacade assembler = new AssemblyStepFacade(List.of(
                 new MountStep(new AutoMount()),
-                new PrintStep(new LaserPrint()),
-                new SolderStep(new WaveSolder())
+                new PrintStep(new PrintingProxy(new LaserPrint())),
+                new SolderStep(new SolderingProxy(new WaveSolder()))
         ));
         assembler.manufacture(board);
     }

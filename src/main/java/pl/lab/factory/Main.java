@@ -7,6 +7,10 @@ import pl.lab.factory.electronicboards.firmware.programmers.InternalProgrammer;
 import pl.lab.factory.electronicboards.firmware.programmers.STLinkDevice;
 import pl.lab.factory.electronicboards.firmware.programmers.SeggerJLinkDevice;
 import pl.lab.factory.manufacturing.*;
+import pl.lab.factory.mediator.CentralControlMediator;
+import pl.lab.factory.mediator.ProductionDepartment;
+import pl.lab.factory.mediator.ReportingDepartment;
+import pl.lab.factory.mediator.WarehouseDepartment;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.reporting.*;
@@ -22,6 +26,7 @@ import pl.lab.factory.warehouse.packing.PackageFactory;
 import pl.lab.factory.warehouse.packing.PackageImplementor;
 import pl.lab.factory.warehouse.shipping.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -30,15 +35,11 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         SystemLogger.INSTANCE.logInfo("MAIN", "This is the PCB/Electronic board factory!");
 
-        ProductionQueue queue = ProductionQueue.getInstance();
+        // Creating orders
 
         StandardBoardFactory boardFactory = new StandardBoardFactory();
         OrderProcessor pcbProcessor = new BaseBoardOrderProcessor();
         OrderProcessor electronicBoardProcessor = new ElectronicBoardOrderProcessor();
-
-        BoardReporter boardReporter = new CachingBoardReporterProxy(
-            new LegacyAuditSystemAdapter(new LegacyAuditSystem())
-        );
 
         OrderSpecification rohs = OrderSpecification.builder()
                 .voltageTolerance(5.0)
@@ -58,12 +59,10 @@ public class Main {
 
         FirmwareAdapter firmwareAdapter;
 
-
         BaseElectronicBoard electronicBoardPrototype = ElectronicBoardFactory.createBoard(ElectronicType.HIGHLY_DEPENDANT);
 
         BoardPrototypes boardPrototypes = new BoardPrototypes();
         boardPrototypes.registerPrototype("highly-dependant-v1", electronicBoardPrototype);
-
 
         BaseElectronicBoard electronicBoardA = boardPrototypes.createFromPrototype("highly-dependant-v1");
         firmwareAdapter = new HighLevelFirmwareAdapter(new HighLevelFirmware("v1.0.0-release"));
@@ -86,49 +85,58 @@ public class Main {
         ProductionOrder orderBaseClone = orderA.clone("ORD-004");
         ProductionOrder orderElectronicClone = orderB.clone("ORD-005");
 
-        queue.addOrder(orderA);
-        queue.addOrder(orderB);
-        queue.addOrder(orderC);
-        queue.addOrder(orderBaseClone);
-        queue.addOrder(orderElectronicClone);
-        queue.printQueue();
-        TimeUnit.SECONDS.sleep(1);
+        List<ProductionOrder> allOrders = new ArrayList<>(List.of(orderA, orderB, orderC, orderBaseClone, orderElectronicClone));
 
-        ProductionBatch weeklyPlan = new ProductionBatch("Weekly plan");
 
-        while (!queue.isEmpty()) {
-            ProductionOrder order = queue.nextOrder();
-            boardReporter.report(order);
-            boardReporter.report(order); // repeated to test caching
-            OrderProcessor processor = order instanceof BaseBoardProductionOrder
-                    ? pcbProcessor
-                    : electronicBoardProcessor;
-            weeklyPlan.add(new SingleOrderTask(order, processor));
-        }
-
-        System.out.println(weeklyPlan.getDescription(""));
-        weeklyPlan.execute();
-
-        ProductionOrder orderD = ProductionOrderFactory.createOrder("ORD-006", boardA, 5, specPcb);
-        List<ProductionOrder> allOrders = List.of(orderA, orderB, orderC, orderBaseClone, orderElectronicClone, orderD);
-
-        allOrders.forEach(boardReporter::report);
+        // CentralControlMediator
 
         LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
-
         Set<String> unapproved = Set.of("ORD-999", "ORD-888");
         WarehouseService warehouse = new WarehouseAccessProxy(
                 new WarehouseAdapter(legacyWarehouse),
                 unapproved
         );
 
+        BoardReporter boardReporter = new CachingBoardReporterProxy(
+                new LegacyAuditSystemAdapter(new LegacyAuditSystem())
+        );
+
+        CentralControlMediator mediator = new CentralControlMediator();
+
+        ProductionDepartment prodDept = new ProductionDepartment(mediator, pcbProcessor, electronicBoardProcessor);
+        WarehouseDepartment wareDept = new WarehouseDepartment(mediator, warehouse);
+        ReportingDepartment repDept = new ReportingDepartment(mediator, boardReporter);
+
+        mediator.setProductionDepartment(prodDept);
+        mediator.setWarehouseDepartment(wareDept);
+        mediator.setReportingDepartment(repDept);
+
+
+
+        // Order queue
+
+        ProductionBatch weeklyPlan = new ProductionBatch("Weekly plan");
+        ProductionQueue queue = ProductionQueue.getInstance();
+
+        allOrders.forEach(queue::addOrder);
+        queue.printQueue();
+
+        TimeUnit.SECONDS.sleep(1);
+
+        while (!queue.isEmpty()) {
+            ProductionOrder order = queue.nextOrder();
+            weeklyPlan.add(new SingleOrderTask(order, prodDept));
+        }
+
+        System.out.println(weeklyPlan.getDescription(""));
+        weeklyPlan.execute();
+
+
+
+        // Warehouse
+
         ProductionOrder unapprovedOrder = orderA.clone("ORD-999");
         warehouse.storeOrder(unapprovedOrder);
-
-
-        allOrders.stream()
-                .filter(order -> order.getStatus() == OrderStatus.COMPLETED)
-                .forEach(warehouse::storeOrder);
 
         legacyWarehouse.printStorage();
         warehouse.printWarehouse();
@@ -139,7 +147,6 @@ public class Main {
         ShippingStrategy standardShipping = new StandardShipping(cardboardBoxPackaging);
         ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);
 
-
         ShippingFacade shippingFacade = new ShippingFacade(warehouse);
 
         shippingFacade.ship(priorityShipping, orderB);
@@ -147,10 +154,19 @@ public class Main {
 
         warehouse.printWarehouse();
 
+
+
+        // Reports
+
+        ProductionOrder orderD = ProductionOrderFactory.createOrder("ORD-006", boardA, 5, specPcb);
+        orderD.setStatus(OrderStatus.PENDING); // not completed order
+        allOrders.add(orderD);
+
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CSV, allOrders);
         ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CSV, allOrders);
+
 
         SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
     }

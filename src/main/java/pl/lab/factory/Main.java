@@ -12,6 +12,7 @@ import pl.lab.factory.mediator.ProductionDepartment;
 import pl.lab.factory.mediator.ReportingDepartment;
 import pl.lab.factory.mediator.WarehouseDepartment;
 import pl.lab.factory.orders.*;
+import pl.lab.factory.orders.command.*;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.reporting.*;
 import pl.lab.factory.reporting.interpreter.*;
@@ -118,7 +119,38 @@ public class Main {
         ProductionBatch weeklyPlan = new ProductionBatch("Weekly plan");
         ProductionQueue queue = ProductionQueue.getInstance();
 
-        allOrders.forEach(queue::addOrder);
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== COMMAND PATTERN TEST (UNDO/REDO FOR QUEUE) ===");
+
+        // Invoker
+        QueueCommandInvoker commandInvoker = new QueueCommandInvoker();
+
+        // Concrete Commands
+        OrderQueueCommand addA = new AddOrderCommand(orderA);
+        OrderQueueCommand addB = new AddOrderCommand(orderB);
+        OrderQueueCommand clearAll = new ClearQueueCommand();
+
+        commandInvoker.executeCommand(addA);
+        commandInvoker.executeCommand(addB);
+        queue.printQueue(); // State: [ orderA, orderB]
+
+        OrderQueueCommand removeA = new RemoveOrderCommand(orderA);
+        commandInvoker.executeCommand(removeA);
+        queue.printQueue(); // State: [orderB]
+
+        commandInvoker.undo();
+        queue.printQueue(); // State: [orderA, orderB]
+
+        commandInvoker.executeCommand(clearAll);
+        queue.printQueue(); // State: empty
+
+        commandInvoker.undo();
+        queue.printQueue(); // State: [orderA, orderB]
+
+        commandInvoker.executeCommand(clearAll);
+        queue.printQueue(); // State: empty
+
+        OrderQueueCommand addAllOrders = new AddMultipleOrdersCommand(allOrders);
+        commandInvoker.executeCommand(addAllOrders);
         queue.printQueue();
 
         TimeUnit.SECONDS.sleep(1);

@@ -30,7 +30,7 @@ public class ProductionQueue {
             throw new IllegalArgumentException("Order cannot be null");
         queue.offer(order);
         SystemLogger.INSTANCE.logInfo("ProductionQueue", "Added: " + order.getId()
-                + " | typ: " + order.getClass().getSimpleName()
+                + " | type: " + order.getClass().getSimpleName()
                 + " | qty: " + order.getQuantity());
     }
 
@@ -50,4 +50,20 @@ public class ProductionQueue {
         SystemLogger.INSTANCE.logInfo("ProductionQueue", "Orders in queue (" + queue.size() + "):");
         queue.forEach(o -> SystemLogger.INSTANCE.logInfo("ProductionQueue", "  -> " + o));
     }
+
+    // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
+    // Wzorzec Command 1 (Receiver) — metody wywoływane przez komendy
+    // removeOrder() i clear() umożliwiają undo().
+    public void removeOrder(ProductionOrder order) {
+        if (queue.remove(order)) {
+            SystemLogger.INSTANCE.logInfo("ProductionQueue", "Removed manually: " + order.getId());
+        }
+    }
+
+    public void clear() {
+        queue.clear();
+        SystemLogger.INSTANCE.logInfo("ProductionQueue", "Queue cleared!");
+    }
+    // Koniec, Tydzień 5
+    // Wzorzec Command 1
 }

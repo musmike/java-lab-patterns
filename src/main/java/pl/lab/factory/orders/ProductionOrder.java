@@ -59,7 +59,7 @@ public abstract class ProductionOrder implements Originator {
     public void save() {
         orderStatusMemento = new OrderStatusMemento(this, status);
         orderStatusMementoCaretaker.add(orderStatusMemento);
-        SystemLogger.INSTANCE.logInfo("Memento",
+        SystemLogger.INSTANCE.logInfo("Order Status Memento",
                 "Saved status snapshot for " + id + ": " + status);
     }
     // Koniec, Tydzień 5
@@ -72,7 +72,7 @@ public abstract class ProductionOrder implements Originator {
         orderStatusMemento = orderStatusMementoCaretaker.undo();
         if (orderStatusMemento != null) {
             orderStatusMemento.restore();
-            SystemLogger.INSTANCE.logInfo("Memento",
+            SystemLogger.INSTANCE.logInfo("Order Status Memento",
                     "Restored status for " + id + ": " + status);
         }
     }
@@ -124,7 +124,7 @@ public abstract class ProductionOrder implements Originator {
 
         Memento undo() {
             if (orderStatusHistory.isEmpty()) {
-                SystemLogger.INSTANCE.logInfo("Memento", "No history to undo.");
+                SystemLogger.INSTANCE.logInfo("Order Status Memento", "No history to undo.");
                 return null;
             }
             return orderStatusHistory.pop();

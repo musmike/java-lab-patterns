@@ -13,6 +13,8 @@ import pl.lab.factory.mediator.ReportingDepartment;
 import pl.lab.factory.mediator.WarehouseDepartment;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.orders.command.*;
+import pl.lab.factory.orders.iterator.OrderCollection;
+import pl.lab.factory.orders.iterator.OrderIterator;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.reporting.*;
 import pl.lab.factory.reporting.interpreter.*;
@@ -126,36 +128,36 @@ public class Main {
         SystemLogger.INSTANCE.logInfo("MAIN", "=== COMMAND PATTERN TEST (UNDO/REDO FOR QUEUE) ===");
 
         // Invoker
-        QueueCommandInvoker commandInvoker = new QueueCommandInvoker();
+        QueueCommandInvoker queueCommandInvoker = new QueueCommandInvoker();
 
         // Concrete Commands
         OrderQueueCommand addA = new AddOrderCommand(orderA);
         OrderQueueCommand addB = new AddOrderCommand(orderB);
         OrderQueueCommand clearAll = new ClearQueueCommand();
 
-        commandInvoker.executeCommand(addA);
-        commandInvoker.executeCommand(addB);
+        queueCommandInvoker.executeCommand(addA);
+        queueCommandInvoker.executeCommand(addB);
         queue.printQueue(); // State: [ orderA, orderB]
 
         OrderQueueCommand removeA = new RemoveOrderCommand(orderA);
-        commandInvoker.executeCommand(removeA);
+        queueCommandInvoker.executeCommand(removeA);
         queue.printQueue(); // State: [orderB]
 
-        commandInvoker.undo();
+        queueCommandInvoker.undo();
         queue.printQueue(); // State: [orderA, orderB]
 
-        commandInvoker.executeCommand(clearAll);
+        queueCommandInvoker.executeCommand(clearAll);
         queue.printQueue(); // State: empty
 
-        commandInvoker.undo();
+        queueCommandInvoker.undo();
         queue.printQueue(); // State: [orderA, orderB]
 
-        commandInvoker.executeCommand(clearAll);
+        queueCommandInvoker.executeCommand(clearAll);
         queue.printQueue(); // State: empty
 
         OrderQueueCommand addAllOrders = new AddMultipleOrdersCommand(allOrders);
-        commandInvoker.executeCommand(addAllOrders);
-        queue.printQueue();
+        queueCommandInvoker.executeCommand(addAllOrders);
+        queue.printQueue(); // State: allOrders
 
         TimeUnit.SECONDS.sleep(1);
 
@@ -239,6 +241,50 @@ public class Main {
         orderD.restoreStatus();
         orderD.restoreStatus();
         orderD.restoreStatus();
+
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== ORDER ITERATOR PATTERN TEST ===");
+
+        ProductionOrder orderE = ProductionOrderFactory.createOrder("ITER-01", boardA, 2, specPcb);
+        ProductionOrder orderF = ProductionOrderFactory.createOrder("ITER-02", electronicBoardB, 8, specElectronic);
+        ProductionOrder orderG = ProductionOrderFactory.createOrder("ITER-03", boardA, 5, specPcb);
+        ProductionOrder orderH = ProductionOrderFactory.createOrder("ITER-04", electronicBoardB, 9, specElectronic);
+        ProductionOrder orderI = ProductionOrderFactory.createOrder("ITER-05", boardA, 6, specPcb);
+        ProductionOrder orderJ = ProductionOrderFactory.createOrder("ITER-06", electronicBoardB, 7, specElectronic);
+
+        orderE.setStatus(OrderStatus.COMPLETED);
+        orderF.setStatus(OrderStatus.COMPLETED);
+
+        OrderCollection orderCollection = ProductionQueue.getInstance();
+        queueCommandInvoker.executeCommand(clearAll);
+
+        orderCollection.addOrder(orderE);
+        orderCollection.addOrder(orderF);
+        orderCollection.addOrder(orderG);
+        orderCollection.addOrder(orderH);
+        orderCollection.addOrder(orderI);
+        orderCollection.addOrder(orderJ);
+
+        System.out.println("\n--- Searching for all orders with status: COMPLETED ---");
+        OrderIterator completedOrdersIterator = orderCollection.statusIterator(OrderStatus.COMPLETED);
+        while (completedOrdersIterator.hasNext()) {
+            ProductionOrder order = completedOrdersIterator.next();
+            System.out.println(order.toString());
+        }
+
+        System.out.println("\n--- Searching for all orders with status: PENDING ---");
+        OrderIterator pendingsOrderIterator = orderCollection.statusIterator(OrderStatus.PENDING);
+        while (pendingsOrderIterator.hasNext()) {
+            ProductionOrder order = pendingsOrderIterator.next();
+            System.out.println(order.toString());
+        }
+
+        System.out.println("\n--- Searching for PENDING orders with quantity > 6 ---");
+        pendingsOrderIterator.reset();
+        while (pendingsOrderIterator.hasNextByQuantity(">", 6)) {
+            ProductionOrder order = pendingsOrderIterator.nextByQuantity();
+            System.out.println(order.toString());
+        }
 
         SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
     }

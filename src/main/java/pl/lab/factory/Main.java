@@ -24,6 +24,10 @@ import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
 import pl.lab.factory.warehouse.*;
 import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
+import pl.lab.factory.warehouse.interpreter.OrderAndExpression;
+import pl.lab.factory.warehouse.interpreter.OrderExpression;
+import pl.lab.factory.warehouse.interpreter.OrderMinQuantityExpression;
+import pl.lab.factory.warehouse.interpreter.OrderStatusExpression;
 import pl.lab.factory.warehouse.packing.AntiStaticBagDecorator;
 import pl.lab.factory.warehouse.packing.FoamProtectionDecorator;
 import pl.lab.factory.warehouse.packing.PackageFactory;
@@ -198,7 +202,16 @@ public class Main {
 
         warehouse.printWarehouse();
 
+        // Filtering
+        OrderExpression isCompleted = new OrderStatusExpression(OrderStatus.COMPLETED);
+        OrderExpression isLarge = new OrderMinQuantityExpression(5);
 
+        OrderExpression complexRule = new OrderAndExpression(isCompleted, isLarge);
+
+        SystemLogger.INSTANCE.logInfo("INTERPRETER", "Filtering completed orders with quantity >= 5");
+        allOrders.stream()
+                .filter(complexRule::interpret)
+                .forEach(o -> SystemLogger.INSTANCE.logInfo("[FILTERING]", "Match found: " + o.getId()));
 
         // -- Reports --
 

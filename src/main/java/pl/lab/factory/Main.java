@@ -25,7 +25,6 @@ import pl.lab.factory.warehouse.packing.FoamProtectionDecorator;
 import pl.lab.factory.warehouse.packing.PackageFactory;
 import pl.lab.factory.warehouse.packing.PackageImplementor;
 import pl.lab.factory.warehouse.shipping.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -158,8 +157,8 @@ public class Main {
 
         // Reports
 
+        // not completed order
         ProductionOrder orderD = ProductionOrderFactory.createOrder("ORD-006", boardA, 5, specPcb);
-        orderD.setStatus(OrderStatus.PENDING); // not completed order
         allOrders.add(orderD);
 
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CONSOLE, allOrders);
@@ -167,6 +166,14 @@ public class Main {
         ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CSV, allOrders);
 
+        orderD.setStatus(OrderStatus.COMPLETED);
+        orderD.setStatus(OrderStatus.PACKED);
+        orderD.setStatus(OrderStatus.SHIPPED);
+
+        orderD.restoreStatus();
+        orderD.restoreStatus();
+        orderD.restoreStatus();
+        orderD.restoreStatus();
 
         SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
     }

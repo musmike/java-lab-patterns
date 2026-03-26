@@ -24,6 +24,8 @@ import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
 import pl.lab.factory.warehouse.*;
 import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
+import pl.lab.factory.warehouse.equipment.EquipmentIterator;
+import pl.lab.factory.warehouse.equipment.WarehouseEquipment;
 import pl.lab.factory.warehouse.interpreter.OrderAndExpression;
 import pl.lab.factory.warehouse.interpreter.OrderExpression;
 import pl.lab.factory.warehouse.interpreter.OrderMinQuantityExpression;
@@ -37,6 +39,7 @@ import pl.lab.factory.warehouse.shipping.command.ShipOrderCommand;
 import pl.lab.factory.warehouse.shipping.command.ShippingCommand;
 import pl.lab.factory.warehouse.shipping.command.ShippingManager;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -212,6 +215,28 @@ public class Main {
         allOrders.stream()
                 .filter(complexRule::interpret)
                 .forEach(o -> SystemLogger.INSTANCE.logInfo("[FILTERING]", "Match found: " + o.getId()));
+
+        //Equipment
+        WarehouseAssetsManager assetsManager = new WarehouseAssetsManager();
+
+        assetsManager.addEquipment(new WarehouseEquipment(
+                "FORK-001", "Toyota Forklift", LocalDate.now().minusMonths(14), 120));
+        assetsManager.addEquipment(new WarehouseEquipment(
+                "SCAN-052", "Zebra Scanner", LocalDate.now().minusMonths(2), 50));
+        assetsManager.addEquipment(new WarehouseEquipment(
+                "SOLDER-20", "Weller Station", LocalDate.now().minusMonths(1), 650));
+        assetsManager.addEquipment(new WarehouseEquipment(
+                "TERM-03", "Logistics Terminal"));
+
+        EquipmentIterator maintenanceIt = assetsManager.getMaintenanceIterator();
+
+        SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Devices requiring immediate service:");
+        int maintenanceCount = 0;
+        while(maintenanceIt.hasNext()){
+            WarehouseEquipment equipment = maintenanceIt.next();
+            maintenanceCount++;
+            SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Check needed: " + equipment.toString());
+        }
 
         // -- Reports --
 

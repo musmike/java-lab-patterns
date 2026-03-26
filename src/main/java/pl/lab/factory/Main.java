@@ -21,6 +21,8 @@ import pl.lab.factory.reporting.interpreter.*;
 import pl.lab.factory.reporting.reportingfacade.ReportFormat;
 import pl.lab.factory.reporting.reportingfacade.ReportType;
 import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
+import pl.lab.factory.safetymediator.SafetyHistory;
+import pl.lab.factory.safetymediator.SafetySystemMemento;
 import pl.lab.factory.safetymediator.components.AlarmSiren;
 import pl.lab.factory.safetymediator.components.FireGate;
 import pl.lab.factory.safetymediator.components.SmokeDetector;
@@ -244,6 +246,7 @@ public class Main {
         // Fire Alarm
 
         WarehouseSafetyCenter warehouseSafetyCenter = new WarehouseSafetyCenter();
+        SafetyHistory safetyHistory = new SafetyHistory();
 
         SmokeDetector sensor = new SmokeDetector(warehouseSafetyCenter);
         FireGate gate = new FireGate(warehouseSafetyCenter);
@@ -252,9 +255,14 @@ public class Main {
 
         warehouseSafetyCenter.setComponents(sensor, gate, sprinkler, siren);
 
+        safetyHistory.save(warehouseSafetyCenter.save());
+
         sensor.detectFire();
 
-        warehouseSafetyCenter.resetSystem();
+        SafetySystemMemento lastState = safetyHistory.undo();
+        if (lastState != null) {
+            warehouseSafetyCenter.restore(lastState);
+        }
 
         // -- Reports --
 

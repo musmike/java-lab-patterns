@@ -7,6 +7,8 @@ import pl.lab.factory.safetymediator.components.SafetyDevice;
 public interface SafetyMediator {
     void notify(SafetyDevice sender, String event);
     void resetSystem();
+    SafetySystemMemento save();
+    void restore(SafetySystemMemento memento);
 }
 // Koniec, Tydzień 5
 // Wzorzec Mediator 2

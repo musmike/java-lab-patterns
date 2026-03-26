@@ -1,5 +1,7 @@
 package pl.lab.factory.warehouse.shipping;
 
+import pl.lab.factory.SystemLogger;
+import pl.lab.factory.orders.OrderStatus;
 import pl.lab.factory.orders.ProductionOrder;
 import pl.lab.factory.warehouse.WarehouseAdapter;
 import pl.lab.factory.warehouse.WarehouseService;
@@ -17,6 +19,12 @@ public class ShippingFacade {
     public void ship(ShippingStrategy strategy, ProductionOrder order){
         strategy.shipOrder(order);
         warehouse.removeOrder(order);
+    }
+
+    public void cancelShipping(ProductionOrder order){
+        SystemLogger.INSTANCE.logInfo("FACADE", "Cancelling shipping for order " + order.getId());
+        order.setStatus(OrderStatus.COMPLETED);
+        warehouse.storeOrder(order);
     }
 
 

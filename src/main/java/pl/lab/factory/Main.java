@@ -25,6 +25,10 @@ import pl.lab.factory.warehouse.packing.FoamProtectionDecorator;
 import pl.lab.factory.warehouse.packing.PackageFactory;
 import pl.lab.factory.warehouse.packing.PackageImplementor;
 import pl.lab.factory.warehouse.shipping.*;
+import pl.lab.factory.warehouse.shipping.command.ShipOrderCommand;
+import pl.lab.factory.warehouse.shipping.command.ShippingCommand;
+import pl.lab.factory.warehouse.shipping.command.ShippingManager;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -147,9 +151,15 @@ public class Main {
         ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);
 
         ShippingFacade shippingFacade = new ShippingFacade(warehouse);
+        ShippingManager shippingManager = new ShippingManager();
 
-        shippingFacade.ship(priorityShipping, orderB);
-        shippingFacade.ship(standardShipping, orderA);
+        ShippingCommand shipCommandB = new ShipOrderCommand(shippingFacade, priorityShipping, orderB);
+        ShippingCommand shipCommandA = new ShipOrderCommand(shippingFacade, standardShipping, orderA);
+
+        shippingManager.processCommand(shipCommandB);
+        shippingManager.processCommand(shipCommandA);
+
+        shippingManager.undoLastAction();
 
         warehouse.printWarehouse();
 

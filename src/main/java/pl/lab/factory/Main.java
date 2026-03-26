@@ -21,6 +21,10 @@ import pl.lab.factory.reporting.interpreter.*;
 import pl.lab.factory.reporting.reportingfacade.ReportFormat;
 import pl.lab.factory.reporting.reportingfacade.ReportType;
 import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
+import pl.lab.factory.safetymediator.components.AlarmSiren;
+import pl.lab.factory.safetymediator.components.FireGate;
+import pl.lab.factory.safetymediator.components.SmokeDetector;
+import pl.lab.factory.safetymediator.components.SprinklerSystem;
 import pl.lab.factory.warehouse.*;
 import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
@@ -38,7 +42,6 @@ import pl.lab.factory.warehouse.shipping.*;
 import pl.lab.factory.warehouse.shipping.command.ShipOrderCommand;
 import pl.lab.factory.warehouse.shipping.command.ShippingCommand;
 import pl.lab.factory.warehouse.shipping.command.ShippingManager;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -237,6 +240,21 @@ public class Main {
             maintenanceCount++;
             SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Check needed: " + equipment.toString());
         }
+
+        // Fire Alarm
+
+        WarehouseSafetyCenter warehouseSafetyCenter = new WarehouseSafetyCenter();
+
+        SmokeDetector sensor = new SmokeDetector(warehouseSafetyCenter);
+        FireGate gate = new FireGate(warehouseSafetyCenter);
+        SprinklerSystem sprinkler = new SprinklerSystem(warehouseSafetyCenter);
+        AlarmSiren siren = new AlarmSiren(warehouseSafetyCenter);
+
+        warehouseSafetyCenter.setComponents(sensor, gate, sprinkler, siren);
+
+        sensor.detectFire();
+
+        warehouseSafetyCenter.resetSystem();
 
         // -- Reports --
 

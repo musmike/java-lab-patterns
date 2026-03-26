@@ -1,13 +1,17 @@
 package pl.lab.factory.assemblyline.assemblingstrategiers;
 
 import pl.lab.factory.assemblyline.Solderer;
+import pl.lab.factory.assemblyline.coordination.MachineMediator;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 public class WaveSolder implements SolderingStrategy{
+    private final MachineMediator mediator;
+
+    public WaveSolder(MachineMediator mediator) {
+        this.mediator = mediator;
+    }
     @Override
     public void execute(BaseBoard board) throws InterruptedException {
-        System.out.println("Using reflow soldering method!");
-        Solderer.getInstance().setReflowMode(false);
-        Solderer.getInstance().perform(board);
+        mediator.requestSolder(board, this);
     }
 }

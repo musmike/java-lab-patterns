@@ -1,8 +1,10 @@
 package pl.lab.factory.components;
 
 import pl.lab.factory.Pair;
+import pl.lab.factory.components.iteration.CompositeIterator;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
@@ -11,6 +13,10 @@ import java.util.List;
 public class ComponentGroup implements BaseComponent {
     private String name;
     private final Pair<Integer, Integer> position;
+
+    public List<BaseComponent> getComponents() {
+        return components;
+    }
 
     private List<BaseComponent> components = new ArrayList<>();
 
@@ -36,28 +42,31 @@ public class ComponentGroup implements BaseComponent {
 
     @Override
     public boolean isMounted() {
-        boolean mounted = true;
-        for(BaseComponent c : components) {
-            if(!c.isMounted()) {
-                mounted = false;
-                break;
+        Iterator<BaseComponent> it = iterator();
+        while(it.hasNext()){
+            if(!it.next().isMounted()){
+                System.out.println("Iterator found unmounted components!");
+                return false;
             }
         }
-        return mounted;
+        System.out.println("Iterator found no unmounted components. Ready for further production!");
+        return true;
     }
 
     @Override
     public void mount() {
-        for(BaseComponent c : components) {
-            c.mount();
+        Iterator<BaseComponent> it = iterator();
+        while (it.hasNext()){
+            it.next().mount();
         }
     }
 
     @Override
     public void print() {
         System.out.println("[COMPONENT GROUP] - " + name);
-        for(BaseComponent c : components) {
-            c.print();
+        Iterator<BaseComponent> it = iterator();
+        while(it.hasNext()){
+            it.next().print();
         }
         System.out.println("[COMPONENT GROUP] - " + name + " [END]");
     }
@@ -65,8 +74,9 @@ public class ComponentGroup implements BaseComponent {
     @Override
     public double mofifyResult(double value) {
         double result = value;
-        for(BaseComponent c : components) {
-            result = c.mofifyResult(result);
+        Iterator<BaseComponent> it = iterator();
+        while(it.hasNext()){
+            result = it.next().mofifyResult(result);
         }
         return result;
     }
@@ -74,11 +84,29 @@ public class ComponentGroup implements BaseComponent {
     @Override
     public double getCost() {
         double cost = 0;
-        for(BaseComponent c : components) {
-            cost += c.getCost();
+        Iterator<BaseComponent> it = iterator();
+        while (it.hasNext()){
+            cost += it.next().getCost();
         }
         return cost;
     }
+
+    public Iterator<BaseComponent> iterator(){
+        return new CompositeIterator(this);
+    }
+
+    public int countByType(Class<? extends BaseComponent> type){
+        int count = 0;
+        Iterator<BaseComponent> it = iterator();
+        while (it.hasNext()){
+            BaseComponent component = it.next();
+            if(type.isInstance(component)){
+                count++;
+            }
+        }
+        return count;
+    }
+
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 3

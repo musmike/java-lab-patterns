@@ -7,6 +7,7 @@ import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 // Wzorzec Bridge 3
 // Konkretny implementor
 public class SeggerJLinkDevice implements ProgrammingDevice {
+
     @Override
     public void start() {
         System.out.println("Engaging with SeggerJLink!");

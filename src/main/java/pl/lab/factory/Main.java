@@ -12,8 +12,10 @@ import pl.lab.factory.mediator.ProductionDepartment;
 import pl.lab.factory.mediator.ReportingDepartment;
 import pl.lab.factory.mediator.WarehouseDepartment;
 import pl.lab.factory.orders.*;
+import pl.lab.factory.orders.command.*;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.reporting.*;
+import pl.lab.factory.reporting.interpreter.*;
 import pl.lab.factory.reporting.reportingfacade.ReportFormat;
 import pl.lab.factory.reporting.reportingfacade.ReportType;
 import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
@@ -38,7 +40,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         SystemLogger.INSTANCE.logInfo("MAIN", "This is the PCB/Electronic board factory!");
 
-        // Creating orders
+        // -- Creating orders --
 
         StandardBoardFactory boardFactory = new StandardBoardFactory();
         OrderProcessor pcbProcessor = new BaseBoardOrderProcessor();
@@ -91,7 +93,7 @@ public class Main {
         List<ProductionOrder> allOrders = new ArrayList<>(List.of(orderA, orderB, orderC, orderBaseClone, orderElectronicClone));
 
 
-        // CentralControlMediator
+        // -- CentralControlMediator --
 
         LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
         Set<String> unapproved = Set.of("ORD-999", "ORD-888");
@@ -116,12 +118,43 @@ public class Main {
 
 
 
-        // Order queue
+        // -- Order queue --
 
         ProductionBatch weeklyPlan = new ProductionBatch("Weekly plan");
         ProductionQueue queue = ProductionQueue.getInstance();
 
-        allOrders.forEach(queue::addOrder);
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== COMMAND PATTERN TEST (UNDO/REDO FOR QUEUE) ===");
+
+        // Invoker
+        QueueCommandInvoker commandInvoker = new QueueCommandInvoker();
+
+        // Concrete Commands
+        OrderQueueCommand addA = new AddOrderCommand(orderA);
+        OrderQueueCommand addB = new AddOrderCommand(orderB);
+        OrderQueueCommand clearAll = new ClearQueueCommand();
+
+        commandInvoker.executeCommand(addA);
+        commandInvoker.executeCommand(addB);
+        queue.printQueue(); // State: [ orderA, orderB]
+
+        OrderQueueCommand removeA = new RemoveOrderCommand(orderA);
+        commandInvoker.executeCommand(removeA);
+        queue.printQueue(); // State: [orderB]
+
+        commandInvoker.undo();
+        queue.printQueue(); // State: [orderA, orderB]
+
+        commandInvoker.executeCommand(clearAll);
+        queue.printQueue(); // State: empty
+
+        commandInvoker.undo();
+        queue.printQueue(); // State: [orderA, orderB]
+
+        commandInvoker.executeCommand(clearAll);
+        queue.printQueue(); // State: empty
+
+        OrderQueueCommand addAllOrders = new AddMultipleOrdersCommand(allOrders);
+        commandInvoker.executeCommand(addAllOrders);
         queue.printQueue();
 
         TimeUnit.SECONDS.sleep(1);
@@ -136,7 +169,7 @@ public class Main {
 
 
 
-        // Warehouse
+        // -- Warehouse --
 
         ProductionOrder unapprovedOrder = orderA.clone("ORD-999");
         warehouse.storeOrder(unapprovedOrder);
@@ -165,17 +198,39 @@ public class Main {
 
 
 
-        // Reports
+        // -- Reports --
 
-        // not completed order
+        // not completed order example
         ProductionOrder orderD = ProductionOrderFactory.createOrder("ORD-006", boardA, 5, specPcb);
         allOrders.add(orderD);
+
+        // Reporting Facade
 
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CSV, allOrders);
         ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CSV, allOrders);
 
+        // Reporting Interpreter
+
+        AbstractExpression query1 = new StatusExpression(OrderStatus.COMPLETED);
+
+        AbstractExpression query2 = new AndExpression(
+            new StatusExpression(OrderStatus.PENDING),
+            new QuantityExpression("<", 6)
+        );
+
+        AbstractExpression query3 = new OrExpression(
+            new TypeExpression("BaseBoardProductionOrder"),
+            new StatusExpression(OrderStatus.COMPLETED)
+        );
+
+        ReportingFacade.generateDynamic(query1, ReportFormat.CONSOLE, allOrders);
+        ReportingFacade.generateDynamic(query2, ReportFormat.CONSOLE, allOrders);
+        ReportingFacade.generateDynamic(query3, ReportFormat.CSV, allOrders);
+
+
+        // Order Status Memento
         orderD.setStatus(OrderStatus.COMPLETED);
         orderD.setStatus(OrderStatus.PACKED);
         orderD.setStatus(OrderStatus.SHIPPED);

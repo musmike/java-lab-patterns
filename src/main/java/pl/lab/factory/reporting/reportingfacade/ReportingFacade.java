@@ -2,7 +2,8 @@ package pl.lab.factory.reporting.reportingfacade;
 
 import pl.lab.factory.orders.ProductionOrder;
 import pl.lab.factory.reporting.*;
-
+import pl.lab.factory.reporting.DynamicProductionReport;
+import pl.lab.factory.reporting.interpreter.AbstractExpression;
 import java.util.List;
 
 // Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
@@ -24,6 +25,21 @@ public class ReportingFacade {
 
         report.generate(orders);
     }
+
+    // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
+    // Wzorzec Interpreter 1 (integracja z Facade)
+    // Przyjmuje gotowe drzewo wyrażeń i ukrywa tworzenie DynamicProductionReport oraz formattera.
+    public static void generateDynamic(AbstractExpression queryTree, ReportFormat format, List<ProductionOrder> orders) {
+        ReportFormatter formatter = switch (format) {
+            case CONSOLE -> new ConsoleReportFormatter();
+            case CSV     -> new CsvReportFormatter();
+        };
+
+        ProductionReport report = new DynamicProductionReport(formatter, queryTree);
+        report.generate(orders);
+    }
+    // Koniec, Tydzień 5
+    // Wzorzec Interpreter 1
 }
 // Koniec, Tydzień 4
 // Wzorzec Facade 1

@@ -6,6 +6,8 @@ import pl.lab.factory.assemblyline.assemblingstrategiers.LaserPrint;
 import pl.lab.factory.assemblyline.assemblingstrategiers.WaveSolder;
 import pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies.PrintingProxy;
 import pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies.SolderingProxy;
+import pl.lab.factory.assemblyline.coordination.FactoryMachineMediator;
+import pl.lab.factory.assemblyline.coordination.MachineMediator;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 import java.util.ArrayList;
@@ -18,11 +20,11 @@ import java.util.List;
 public class SimpleBoardProducer implements BoardProducer  {
     @Override
     public void produce(BaseBoard board) throws InterruptedException {
-
+        MachineMediator mediator = new FactoryMachineMediator();
         AssemblyStepFacade assembler = new AssemblyStepFacade(List.of(
-                new MountStep(new AutoMount()),
-                new PrintStep(new PrintingProxy(new LaserPrint())),
-                new SolderStep(new SolderingProxy(new WaveSolder()))
+                new MountStep(new AutoMount(mediator)),
+                new PrintStep(new PrintingProxy(new LaserPrint(mediator))),
+                new SolderStep(new SolderingProxy(new WaveSolder(mediator)))
         ));
         assembler.manufacture(board);
     }

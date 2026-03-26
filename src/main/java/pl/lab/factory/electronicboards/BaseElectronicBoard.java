@@ -1,6 +1,8 @@
 package pl.lab.factory.electronicboards;
 
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
+import pl.lab.factory.electronicboards.firmware.memento.FirmwareMemento;
+import pl.lab.factory.electronicboards.firmware.programmers.FirmwareProgrammer;
 import pl.lab.factory.manufacturing.ManufacturableProduct;
 import pl.lab.factory.pcbboards.BaseBoard;
 
@@ -53,4 +55,11 @@ public class BaseElectronicBoard implements Cloneable, ManufacturableProduct {
         {programmed = true;}
     }
     public boolean isProgrammed() { return !firmware.isEmpty() && programmed; }
+    public FirmwareMemento saveFirmware(){
+        return new FirmwareMemento(firmware, programmed);
+    }
+    public void restoreFirmware(FirmwareMemento memento){
+        this.firmware = memento.getFirmware();
+        this.programmed = memento.isProgrammed();
+    }
 }

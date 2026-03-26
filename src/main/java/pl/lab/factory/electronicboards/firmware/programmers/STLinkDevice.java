@@ -8,6 +8,7 @@ import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 // Konkretny implementor
 public class STLinkDevice implements ProgrammingDevice {
 
+
     @Override
     public void start() {
         System.out.println("Connecting using ST-Link");

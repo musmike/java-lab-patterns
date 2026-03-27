@@ -34,6 +34,7 @@ public class SmartBoardProducer implements BoardProducer  {
         SolderStep soldering = new SolderStep(solderStrat);
 
         AssemblyStepFacade assembler = new AssemblyStepFacade(mounting, printing, soldering);
+        System.out.println("[BOARD PRODUCTION] Manufacturing board using smart producer...");
         assembler.manufacture(board);
     }
 }

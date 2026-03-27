@@ -28,6 +28,8 @@ public class CircuitPrinter implements Machine{
 
     @Override
     public void perform(BaseBoard board) {
+
+        System.out.println("[PRINTER] Printing board!");
         printCircuits(board);
     }
 }

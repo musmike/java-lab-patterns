@@ -28,6 +28,8 @@ public class Solderer implements Machine{
 
     @Override
     public void perform(BaseBoard board) {
+
+        System.out.println("[SOLDERER] Soldering board!");
         solderBoard(board);
     }
 }

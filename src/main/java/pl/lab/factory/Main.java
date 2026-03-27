@@ -1,12 +1,12 @@
 package pl.lab.factory;
 
+import pl.lab.factory.assemblyline.BoardProducer;
+import pl.lab.factory.assemblyline.SmartBoardProducer;
 import pl.lab.factory.components.Resistor;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
 import pl.lab.factory.electronicboards.firmware.*;
-import pl.lab.factory.electronicboards.firmware.programmers.InternalProgrammer;
-import pl.lab.factory.electronicboards.firmware.programmers.STLinkDevice;
-import pl.lab.factory.electronicboards.firmware.programmers.SeggerJLinkDevice;
+import pl.lab.factory.electronicboards.firmware.programmers.*;
 import pl.lab.factory.manufacturing.*;
 import pl.lab.factory.mediator.CentralControlMediator;
 import pl.lab.factory.mediator.ProductionDepartment;
@@ -56,10 +56,18 @@ public class Main {
         SystemLogger.INSTANCE.logInfo("MAIN", "This is the PCB/Electronic board factory!");
 
         FirmwareAdapter firmwareAdapter;
-
+        firmwareAdapter = new HighLevelFirmwareAdapter(new HighLevelFirmware("v0.0.1-prototype"));
         BaseElectronicBoard sqcEBoard = SuperElectronicBoardFactory.createBoard(ElectronicType.NORMAL);
 
+        BoardProducer smartProducer = new SmartBoardProducer();
 
+        smartProducer.produce(sqcEBoard.getBaseBoard());
+
+        ProgrammingDevice faultyDevice = new FaultyDevice();
+        FirmwareProgrammer oldProgrammer = new OldFirmwareProgrammer(faultyDevice);
+        oldProgrammer.program(sqcEBoard, firmwareAdapter);
+        sqcEBoard.getBaseBoard().getComponentInfo();
+        System.out.println("[COMPONENT INFO] Board contains " + sqcEBoard.getBaseBoard().componentsByType(Resistor.class) + " resistors.");
 
         // -- Creating orders --
 

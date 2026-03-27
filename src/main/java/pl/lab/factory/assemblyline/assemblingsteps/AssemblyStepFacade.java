@@ -22,13 +22,17 @@ public class AssemblyStepFacade {
     }
 
     public void manufacture(BaseBoard board) throws InterruptedException {
-        short cnt = 1;
+        short cnt = 0;
         for(AssemblyStep step : steps){
 
             cnt++;
             System.out.println("Manufacturing step " + cnt + "/" + steps.size() + " done...");
+            step.perform(board);
         }
         System.out.println("Streamlined manufacturing completed!");
+        if(board.isReady()){
+            System.out.println("Board ready!");
+        } else System.out.println("Board unready!");
     }
 }
 //facade 2

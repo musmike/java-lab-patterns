@@ -20,6 +20,8 @@ public class Mounter implements Machine{
 
     @Override
     public void perform(BaseBoard board) {
+
+        System.out.println("[MOUNTER] Mounting board!");
         mountBoard(board);
     }
 }

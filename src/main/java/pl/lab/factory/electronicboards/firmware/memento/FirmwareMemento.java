@@ -12,6 +12,8 @@ public class FirmwareMemento {
     }
 
     public String getFirmware() {
+
+        System.out.println("Returned to old firmware state.");
         return firmware;
     }
 

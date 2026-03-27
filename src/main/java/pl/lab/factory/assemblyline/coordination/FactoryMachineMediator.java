@@ -38,7 +38,6 @@ public class FactoryMachineMediator implements MachineMediator{
                     );
 
             decorated.perform(board);
-
             System.out.println("Automatically mounting components!");
         }
 
@@ -54,6 +53,7 @@ public class FactoryMachineMediator implements MachineMediator{
 
             System.out.println("Manually mounting components!");
         }
+
     }
 
     @Override

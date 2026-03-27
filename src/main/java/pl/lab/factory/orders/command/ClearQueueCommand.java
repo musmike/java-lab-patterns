@@ -15,7 +15,7 @@ public class ClearQueueCommand implements OrderQueueCommand {
 
     @Override
     public void execute() {
-        backup = new ArrayList<>(queue.peek());
+        backup = new ArrayList<>(queue.getAllOrders());
         queue.clear();
     }
 

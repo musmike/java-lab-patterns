@@ -355,16 +355,16 @@ public class Main {
         }
 
         System.out.println("\n--- Searching for all orders with status: PENDING ---");
-        OrderIterator pendingsOrderIterator = orderCollection.statusIterator(OrderStatus.PENDING);
-        while (pendingsOrderIterator.hasNext()) {
-            ProductionOrder order = pendingsOrderIterator.next();
+        OrderIterator pendingOrdersIterator = orderCollection.statusIterator(OrderStatus.PENDING);
+        while (pendingOrdersIterator.hasNext()) {
+            ProductionOrder order = pendingOrdersIterator.next();
             System.out.println(order.toString());
         }
 
         System.out.println("\n--- Searching for PENDING orders with quantity > 6 ---");
-        pendingsOrderIterator.reset();
-        while (pendingsOrderIterator.hasNextByQuantity(">", 6)) {
-            ProductionOrder order = pendingsOrderIterator.nextByQuantity();
+        pendingOrdersIterator.reset();
+        while (pendingOrdersIterator.hasNextByQuantity(">", 6)) {
+            ProductionOrder order = pendingOrdersIterator.nextByQuantity();
             System.out.println(order.toString());
         }
 

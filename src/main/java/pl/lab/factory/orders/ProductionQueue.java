@@ -56,7 +56,7 @@ public class ProductionQueue implements OrderCollection {
 
     public int size() { return queue.size(); }
 
-    public List<ProductionOrder> peek() { return Collections.unmodifiableList(new ArrayList<>(queue)); }
+    public List<ProductionOrder> getAllOrders() { return Collections.unmodifiableList(new ArrayList<>(queue)); }
 
     public void printQueue() {
         if (queue.isEmpty()) {

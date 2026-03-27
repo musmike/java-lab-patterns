@@ -95,15 +95,16 @@ public class ComponentGroup implements BaseComponent {
         return new CompositeIterator(this);
     }
 
-    public int countByType(Class<? extends BaseComponent> type){
-        int count = 0;
-        Iterator<BaseComponent> it = iterator();
-        while (it.hasNext()){
-            BaseComponent component = it.next();
-            if(type.isInstance(component)){
-                count++;
-            }
+    @Override
+    public int countByType(Class<? extends BaseComponent> type) {
+        int count = type.isInstance(this) ? 1 : 0;
+
+        Iterator<BaseComponent> it = this.iterator();
+
+        while (it.hasNext()) {
+            count += it.next().countByType(type);
         }
+
         return count;
     }
 

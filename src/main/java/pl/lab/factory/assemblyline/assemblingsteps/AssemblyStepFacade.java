@@ -24,7 +24,8 @@ public class AssemblyStepFacade {
     public void manufacture(BaseBoard board) throws InterruptedException {
         short cnt = 1;
         for(AssemblyStep step : steps){
-            step.perform(board);
+
+            cnt++;
             System.out.println("Manufacturing step " + cnt + "/" + steps.size() + " done...");
         }
         System.out.println("Streamlined manufacturing completed!");

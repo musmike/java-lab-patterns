@@ -4,6 +4,7 @@ import pl.lab.factory.components.BaseComponent;
 import pl.lab.factory.manufacturing.ManufacturableProduct;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
 
@@ -80,5 +81,15 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    public int componentsByType(Class<? extends BaseComponent> type) {
+        int count = 0;
+
+        for (BaseComponent component : components) {
+            count += component.countByType(type);
+        }
+
+        return count;
     }
 }

@@ -1,5 +1,6 @@
 package pl.lab.factory;
 
+import pl.lab.factory.components.Resistor;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
 import pl.lab.factory.electronicboards.firmware.*;
@@ -49,6 +50,12 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         SystemLogger.INSTANCE.logInfo("MAIN", "This is the PCB/Electronic board factory!");
 
+        FirmwareAdapter firmwareAdapter;
+
+        BaseElectronicBoard sqcEBoard = SuperElectronicBoardFactory.createBoard(ElectronicType.NORMAL);
+
+
+
         // -- Creating orders --
 
         StandardBoardFactory boardFactory = new StandardBoardFactory();
@@ -71,7 +78,7 @@ public class Main {
         specElectronic.setQualityStandard("Class 3");
         specElectronic.setVoltageTolerance(2.5);
 
-        FirmwareAdapter firmwareAdapter;
+
 
         BaseElectronicBoard electronicBoardPrototype = ElectronicBoardFactory.createBoard(ElectronicType.HIGHLY_DEPENDANT);
 
@@ -83,6 +90,9 @@ public class Main {
         InternalProgrammer internalProgrammer = new InternalProgrammer(new SeggerJLinkDevice());
         internalProgrammer.program(electronicBoardA, firmwareAdapter);
         BaseElectronicBoard electronicBoardB = boardPrototypes.createFromPrototype("highly-dependant-v1");
+        System.out.println("[COMPONENT INFO] Gathering information about boards components!");
+        electronicBoardB.getBaseBoard().getComponentInfo();
+        System.out.println("[COMPONENT INFO] Board contains " + electronicBoardB.getBaseBoard().componentsByType(Resistor.class) + " resistors.");
         firmwareAdapter = new ProprietaryFirmwareAdapter(new ProprietaryFirmware("v1.1.0-hotfix"));
         internalProgrammer = new InternalProgrammer(new STLinkDevice());
         internalProgrammer.program(electronicBoardB, firmwareAdapter);

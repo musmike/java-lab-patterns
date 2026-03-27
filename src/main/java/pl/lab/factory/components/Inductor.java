@@ -46,6 +46,10 @@ public class Inductor implements BaseComponent {
     public double getCost() {
         return definition.getCost();
     }
+    @Override
+    public int countByType(Class<? extends BaseComponent> type) {
+        return type.isInstance(this) ? 1 : 0;
+    }
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 3

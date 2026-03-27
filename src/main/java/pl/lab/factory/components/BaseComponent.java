@@ -12,6 +12,7 @@ public interface BaseComponent {
     void print();
     double mofifyResult(double value);
     double getCost();
+    int countByType(Class<? extends BaseComponent> type);
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 3

@@ -33,6 +33,7 @@ import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
 import pl.lab.factory.warehouse.equipment.EquipmentIterator;
 import pl.lab.factory.warehouse.equipment.WarehouseEquipment;
+import pl.lab.factory.warehouse.equipment.observer.MaintenanceService;
 import pl.lab.factory.warehouse.interpreter.OrderAndExpression;
 import pl.lab.factory.warehouse.interpreter.OrderExpression;
 import pl.lab.factory.warehouse.interpreter.OrderMinQuantityExpression;
@@ -247,7 +248,7 @@ public class Main {
         assetsManager.addEquipment(new WarehouseEquipment(
                 "SCAN-052", "Zebra Scanner", LocalDate.now().minusMonths(2), 50));
         assetsManager.addEquipment(new WarehouseEquipment(
-                "SOLDER-20", "Weller Station", LocalDate.now().minusMonths(1), 650));
+                "SOLDER-20", "Weller Station", LocalDate.now().minusMonths(1), 498));
         assetsManager.addEquipment(new WarehouseEquipment(
                 "TERM-03", "Logistics Terminal"));
 
@@ -259,6 +260,25 @@ public class Main {
             WarehouseEquipment equipment = maintenanceIt.next();
             maintenanceCount++;
             SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Check needed: " + equipment.toString());
+        }
+
+        MaintenanceService serviceDept = new MaintenanceService();
+
+        assetsManager.subscribeAll(serviceDept);
+
+        EquipmentIterator equipmentIt = assetsManager.getEquipmentIterator();
+        WarehouseEquipment solder = null;
+
+        while(equipmentIt.hasNext()){
+            WarehouseEquipment eq = equipmentIt.next();
+            if("SOLDER-20".equals(eq.getId())){
+                solder = eq;
+                break;
+            }
+        }
+
+        if(solder != null) {
+            solder.use(5);
         }
 
         // Fire Alarm

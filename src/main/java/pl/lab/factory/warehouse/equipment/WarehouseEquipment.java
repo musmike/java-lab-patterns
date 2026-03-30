@@ -1,14 +1,50 @@
 package pl.lab.factory.warehouse.equipment;
 
+import pl.lab.factory.warehouse.equipment.observer.MaintenanceObservable;
+import pl.lab.factory.warehouse.equipment.observer.MaintenanceObserver;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
 // Wzorzec Iterator 2 (Element kolekcji)
-public class WarehouseEquipment {
+public class WarehouseEquipment implements MaintenanceObservable {
     private final String  id;
     private final String name;
     private LocalDate lastServiceDate;
     private int operatingHours;
+
+    // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
+    // Wzorzec Observer 2 (Concrete Observable)
+
+    private final List<MaintenanceObserver> observers = new ArrayList<>();
+
+    @Override
+    public void addObserver(MaintenanceObserver obs){
+        observers.add(obs);
+    }
+
+    @Override
+    public void removeObserver(MaintenanceObserver obs){
+        observers.remove(obs);
+    }
+
+    @Override
+    public void notifyObservers(String reason){
+        for(MaintenanceObserver obs : observers){
+            obs.onMaintenanceRequired(this, reason);
+        }
+    }
+
+    public void use(int hours){
+        this.operatingHours += hours;
+        if(this.operatingHours > 500){
+            notifyObservers("Maintenance limit reached: " + operatingHours + "h");
+        }
+    }
+    // Koniec, Tydzień 6
+    // Wzorzec Observer 2
 
     public WarehouseEquipment(String id, String name, LocalDate lastServiceDate, int operatingHours){
         this.id = id;
@@ -23,6 +59,15 @@ public class WarehouseEquipment {
 
     public boolean needsMaintenance(){
         return operatingHours >= 500 || lastServiceDate.isBefore(LocalDate.now().minusYears(1));
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

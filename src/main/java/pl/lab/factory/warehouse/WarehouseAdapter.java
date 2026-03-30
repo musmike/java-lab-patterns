@@ -62,6 +62,14 @@ public class WarehouseAdapter implements WarehouseService {
     public void printWarehouse() {
         mainWarehouse.print("");
     }
+
+    public WarehouseSection getZoneA() {
+        return zoneA;
+    }
+
+    public WarehouseSection getZoneB() {
+        return zoneB;
+    }
 }
 // Koniec, Tydzień 3
 // Wzorzec Adapter 2

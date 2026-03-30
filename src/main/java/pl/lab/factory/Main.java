@@ -46,6 +46,9 @@ import pl.lab.factory.warehouse.shipping.*;
 import pl.lab.factory.warehouse.shipping.command.ShipOrderCommand;
 import pl.lab.factory.warehouse.shipping.command.ShippingCommand;
 import pl.lab.factory.warehouse.shipping.command.ShippingManager;
+import pl.lab.factory.warehouse.state.LockedState;
+import pl.lab.factory.warehouse.state.OpenState;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,8 +133,9 @@ public class Main {
 
         LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
         Set<String> unapproved = Set.of("ORD-999", "ORD-888");
+        WarehouseAdapter warehouseAdapter = new WarehouseAdapter(legacyWarehouse);
         WarehouseService warehouse = new WarehouseAccessProxy(
-                new WarehouseAdapter(legacyWarehouse),
+                warehouseAdapter,
                 unapproved
         );
 
@@ -297,10 +301,19 @@ public class Main {
 
         sensor.detectFire();
 
+        warehouseAdapter.getZoneA().setState(new LockedState());
+
+        ProductionOrder fireOrder = ProductionOrderFactory.createOrder("FIRE-01", boardA, 1, specPcb);
+        warehouse.storeOrder(fireOrder);
+
         SafetySystemMemento lastState = safetyHistory.undo();
         if (lastState != null) {
             warehouseSafetyCenter.restore(lastState);
+            warehouseAdapter.getZoneA().setState(new OpenState());
         }
+
+        warehouse.storeOrder(fireOrder);
+
 
         // -- Reports --
 

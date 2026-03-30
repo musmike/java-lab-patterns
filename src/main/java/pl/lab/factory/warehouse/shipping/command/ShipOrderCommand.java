@@ -4,6 +4,7 @@ import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.ProductionOrder;
 import pl.lab.factory.warehouse.shipping.ShippingFacade;
 import pl.lab.factory.warehouse.shipping.ShippingStrategy;
+import pl.lab.factory.warehouse.shipping.visitor.ShippingVisitor;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
 // Wzorzec Command 2 (Konkretne polecenie)
@@ -36,6 +37,19 @@ public class ShipOrderCommand implements ShippingCommand {
         }else{
             System.out.println("Command was not executed, nothing to undo");
         }
+    }
+
+    // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
+    // Wzorzec Visitor 2 (Concrete Element)
+    @Override
+    public int accept(ShippingVisitor visitor){
+        return visitor.visit(this);
+    }
+    // Koniec, Tydzień 6
+    // Wzorzec Visitor 2
+
+    public ShippingStrategy getStrategy() {
+        return strategy;
     }
 }
 // Koniec, Tydzień 5

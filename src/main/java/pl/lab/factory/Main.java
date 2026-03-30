@@ -46,6 +46,7 @@ import pl.lab.factory.warehouse.shipping.*;
 import pl.lab.factory.warehouse.shipping.command.ShipOrderCommand;
 import pl.lab.factory.warehouse.shipping.command.ShippingCommand;
 import pl.lab.factory.warehouse.shipping.command.ShippingManager;
+import pl.lab.factory.warehouse.shipping.strategy.PriorityFirstDispatcher;
 import pl.lab.factory.warehouse.state.LockedState;
 import pl.lab.factory.warehouse.state.OpenState;
 
@@ -223,11 +224,17 @@ public class Main {
         ShippingFacade shippingFacade = new ShippingFacade(warehouse);
         ShippingManager shippingManager = new ShippingManager();
 
-        ShippingCommand shipCommandB = new ShipOrderCommand(shippingFacade, priorityShipping, orderB);
-        ShippingCommand shipCommandA = new ShipOrderCommand(shippingFacade, standardShipping, orderA);
 
-        shippingManager.processCommand(shipCommandB);
-        shippingManager.processCommand(shipCommandA);
+        ShippingCommand shipCommandA = new ShipOrderCommand(shippingFacade, standardShipping, orderA);
+        ShippingCommand shipCommandB = new ShipOrderCommand(shippingFacade, priorityShipping, orderB);
+        ShippingCommand shipCommandC = new ShipOrderCommand(shippingFacade, standardShipping, orderC);
+
+        shippingManager.addCommand(shipCommandB);
+        shippingManager.addCommand(shipCommandA);
+        shippingManager.addCommand(shipCommandC);
+
+        shippingManager.setDispatcher(new PriorityFirstDispatcher());
+        shippingManager.shipEverything();
 
         shippingManager.undoLastAction();
 

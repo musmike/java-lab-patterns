@@ -5,7 +5,7 @@ import pl.lab.factory.warehouse.shipping.command.ShipOrderCommand;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Visitor 2 (Concrete Visitor)
-public class PriorityCalculator implements ShippingVisitor{
+public class PriorityCalculator implements CommandVisitor {
     @Override
     public int visit(ShipOrderCommand command){
         if(command.getStrategy() instanceof PriorityShipping){

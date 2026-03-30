@@ -4,7 +4,7 @@ import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.ProductionOrder;
 import pl.lab.factory.warehouse.shipping.ShippingFacade;
 import pl.lab.factory.warehouse.shipping.ShippingStrategy;
-import pl.lab.factory.warehouse.shipping.visitor.ShippingVisitor;
+import pl.lab.factory.warehouse.shipping.visitor.CommandVisitor;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
 // Wzorzec Command 2 (Konkretne polecenie)
@@ -42,7 +42,7 @@ public class ShipOrderCommand implements ShippingCommand {
     // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
     // Wzorzec Visitor 2 (Concrete Element)
     @Override
-    public int accept(ShippingVisitor visitor){
+    public int accept(CommandVisitor visitor){
         return visitor.visit(this);
     }
     // Koniec, Tydzień 6

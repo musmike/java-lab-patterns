@@ -1,5 +1,6 @@
 package pl.lab.factory.warehouse.equipment;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.warehouse.equipment.observer.MaintenanceObservable;
 import pl.lab.factory.warehouse.equipment.observer.MaintenanceObserver;
 
@@ -14,6 +15,7 @@ public class WarehouseEquipment implements MaintenanceObservable {
     private final String name;
     private LocalDate lastServiceDate;
     private int operatingHours;
+    private boolean isOperational = true;
 
     // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
     // Wzorzec Observer 2 (Concrete Observable)
@@ -38,6 +40,10 @@ public class WarehouseEquipment implements MaintenanceObservable {
     }
 
     public void use(int hours){
+        if(!isOperational){
+            SystemLogger.INSTANCE.logInfo(this.name.toUpperCase(), "ALERT: Cannot use " + this.id + ". It is under maintenance!");
+            return;
+        }
         this.operatingHours += hours;
         if(this.operatingHours > 500){
             notifyObservers("Maintenance limit reached: " + operatingHours + "h");
@@ -68,6 +74,15 @@ public class WarehouseEquipment implements MaintenanceObservable {
 
     public String getName() {
         return name;
+    }
+
+    public void setOperational(boolean status){this.isOperational = status;}
+
+    public boolean isOperational(){return isOperational;}
+
+    public void resetMaintenance(){
+        this.operatingHours = 0;
+        this.lastServiceDate = LocalDate.now();
     }
 
     @Override

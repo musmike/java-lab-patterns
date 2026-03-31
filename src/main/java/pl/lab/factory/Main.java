@@ -33,6 +33,9 @@ import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
 import pl.lab.factory.warehouse.equipment.EquipmentIterator;
 import pl.lab.factory.warehouse.equipment.WarehouseEquipment;
+import pl.lab.factory.warehouse.equipment.maintenance.ForkliftMaintenance;
+import pl.lab.factory.warehouse.equipment.maintenance.MaintenanceProtocol;
+import pl.lab.factory.warehouse.equipment.maintenance.ScannerMaintenance;
 import pl.lab.factory.warehouse.equipment.observer.MaintenanceService;
 import pl.lab.factory.warehouse.interpreter.OrderAndExpression;
 import pl.lab.factory.warehouse.interpreter.OrderExpression;
@@ -254,22 +257,22 @@ public class Main {
         //Equipment
         WarehouseAssetsManager assetsManager = new WarehouseAssetsManager();
 
-        assetsManager.addEquipment(new WarehouseEquipment(
-                "FORK-001", "Toyota Forklift", LocalDate.now().minusMonths(14), 120));
-        assetsManager.addEquipment(new WarehouseEquipment(
-                "SCAN-052", "Zebra Scanner", LocalDate.now().minusMonths(2), 50));
-        assetsManager.addEquipment(new WarehouseEquipment(
-                "SOLDER-20", "Weller Station", LocalDate.now().minusMonths(1), 498));
-        assetsManager.addEquipment(new WarehouseEquipment(
-                "TERM-03", "Logistics Terminal"));
+        WarehouseEquipment forklift = new WarehouseEquipment("FORK-001", "Toyota Forklift", LocalDate.now().minusMonths(14), 498);
+        WarehouseEquipment scan = new WarehouseEquipment("SCAN-052", "Zebra Scanner", LocalDate.now().minusMonths(2), 540);
+        WarehouseEquipment solderer = new WarehouseEquipment("SOLDER-20", "Weller Station", LocalDate.now().minusMonths(1), 120);
+        WarehouseEquipment terminal = new WarehouseEquipment("TERM-03", "Logistics Terminal");
+
+        assetsManager.addEquipment(forklift);
+        assetsManager.addEquipment(scan);
+        assetsManager.addEquipment(solderer);
+        assetsManager.addEquipment(terminal);
 
         EquipmentIterator maintenanceIt = assetsManager.getMaintenanceIterator();
 
         SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Devices requiring immediate service:");
-        int maintenanceCount = 0;
+
         while(maintenanceIt.hasNext()){
             WarehouseEquipment equipment = maintenanceIt.next();
-            maintenanceCount++;
             SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Check needed: " + equipment.toString());
         }
 
@@ -277,20 +280,13 @@ public class Main {
 
         assetsManager.subscribeAll(serviceDept);
 
-        EquipmentIterator equipmentIt = assetsManager.getEquipmentIterator();
-        WarehouseEquipment solder = null;
+        forklift.use(5);
 
-        while(equipmentIt.hasNext()){
-            WarehouseEquipment eq = equipmentIt.next();
-            if("SOLDER-20".equals(eq.getId())){
-                solder = eq;
-                break;
-            }
-        }
+        MaintenanceProtocol forkliftService = new ForkliftMaintenance();
+        MaintenanceProtocol scannerService = new ScannerMaintenance();
 
-        if(solder != null) {
-            solder.use(5);
-        }
+        forkliftService.executeService(forklift);
+        scannerService.executeService(scan);
 
         // Fire Alarm
 

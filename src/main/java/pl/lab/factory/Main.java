@@ -20,6 +20,10 @@ import pl.lab.factory.orders.iterator.OrderIterator;
 import pl.lab.factory.orders.observer.ClientEmailNotifier;
 import pl.lab.factory.orders.observer.ErpSystemUpdater;
 import pl.lab.factory.orders.observer.OrderObserver;
+import pl.lab.factory.orders.pricing.BulkPricingStrategy;
+import pl.lab.factory.orders.pricing.PricingStrategy;
+import pl.lab.factory.orders.pricing.StandardPricingStrategy;
+import pl.lab.factory.orders.pricing.VipPricingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.reporting.*;
 import pl.lab.factory.reporting.interpreter.*;
@@ -56,7 +60,6 @@ import pl.lab.factory.warehouse.shipping.command.ShippingManager;
 import pl.lab.factory.warehouse.shipping.strategy.PriorityFirstDispatcher;
 import pl.lab.factory.warehouse.state.LockedState;
 import pl.lab.factory.warehouse.state.OpenState;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -139,28 +142,45 @@ public class Main {
 
         // -- Order Invoice --
 
-        SystemLogger.INSTANCE.logInfo("MAIN", "=== STATE PATTERN TEST (INVOICE LIFECYCLE) ===");
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== STATE AND STRATEGY PATTERNS TEST (INVOICE LIFECYCLE) ===");
 
-        OrderInvoice invoiceA = new OrderInvoice(orderA, 1500.00);
+        PricingStrategy standardPricing = new StandardPricingStrategy();
+        PricingStrategy vipPricing = new VipPricingStrategy();
+        PricingStrategy bulkPricing = new BulkPricingStrategy();
+
+        ProductionOrder orderZ = ProductionOrderFactory.createOrder("ORD-Z", boardA, 150, specPcb);
+        OrderInvoice invoiceA = new OrderInvoice(orderZ, standardPricing);
+        SystemLogger.INSTANCE.logInfo("MAIN", "Initial draft amount: $" + String.format("%.2f", invoiceA.getAmount()));
+
+        // Can't pay and generate receipt before confirming
+        invoiceA.pay();
+        invoiceA.generateReceipt();
+
+        invoiceA.setPricingStrategy(vipPricing);
+        invoiceA.recalculatePrice();
+        invoiceA.applyDiscount(10.0);
+
+        invoiceA.confirm();
+
+        // Can't change price or apply discount after confirmation
+        invoiceA.setPricingStrategy(bulkPricing);
+        invoiceA.recalculatePrice();
+        invoiceA.applyDiscount(10.0);
 
         // Can't generate receipt before payment
         invoiceA.generateReceipt();
 
-        invoiceA.applyDiscount(10.0);
         invoiceA.pay();
-
-        // Can't apply discount after payment
-        invoiceA.applyDiscount(5.0);
 
         // Can't cancel after payment
         invoiceA.cancel();
 
         invoiceA.generateReceipt();
 
-        OrderInvoice invoiceB = new OrderInvoice(orderB, 1300.00);
+        OrderInvoice invoiceB = new OrderInvoice(orderB, standardPricing);
         invoiceB.cancel();
 
-        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF STATE PATTERN TEST ===");
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF STATE AND STRATEGY PATTERNS TEST ===");
 
 
         // -- CentralControlMediator --

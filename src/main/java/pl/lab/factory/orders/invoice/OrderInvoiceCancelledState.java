@@ -1,6 +1,7 @@
 package pl.lab.factory.orders.invoice;
 
 import pl.lab.factory.SystemLogger;
+import pl.lab.factory.orders.pricing.PricingStrategy;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec State 1 (Concrete State)
@@ -25,6 +26,16 @@ public class OrderInvoiceCancelledState implements OrderInvoiceState {
     @Override
     public void cancel(OrderInvoice invoice) {
         SystemLogger.INSTANCE.logError("INVOICE", "Invoice is already CANCELLED.");
+    }
+
+    @Override
+    public void recalculatePrice(OrderInvoice invoice, PricingStrategy strategy) {
+        SystemLogger.INSTANCE.logError("INVOICE", "Action denied. Invoice is CANCELLED.");
+    }
+
+    @Override
+    public void confirm(OrderInvoice invoice) {
+        SystemLogger.INSTANCE.logError("INVOICE", "Action denied. Invoice is CANCELLED.");
     }
 }
 // Koniec, Tydzień 6

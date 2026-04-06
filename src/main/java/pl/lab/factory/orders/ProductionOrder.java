@@ -1,18 +1,34 @@
 package pl.lab.factory.orders;
 
 import pl.lab.factory.SystemLogger;
+import pl.lab.factory.orders.observer.OrderObserver;
+import pl.lab.factory.orders.observer.OrderSubject;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
 // Wzorzec Memento 1 (Originator)
 // Źródło stanu. Automatycznie zapisuje migawkę przed każdą zmianą statusu.
-public abstract class ProductionOrder implements Originator {
+// Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
+// Wzorzec Observer 1 (Konkretny podmiot)
+// Powiadamia obserwatorów o zmianie statusu.
+public abstract class ProductionOrder implements Originator, OrderSubject {
     protected String id;
     protected int quantity;
     protected OrderStatus status;
     protected OrderSpecification specification;
     private Memento orderStatusMemento;
     private OrderStatusMementoCaretaker orderStatusMementoCaretaker;
+
+    // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
+    // Wzorzec Observer 1
+    // Lista subskrybentów powiadomień
+    private final List<OrderObserver> observers = new ArrayList<>();
+    // Koniec, Tydzień 6
+    // Wzorzec Observer 1
+
 
     public ProductionOrder(String id, int quantity, OrderStatus status, OrderSpecification specification) {
         this.id = id;
@@ -34,17 +50,58 @@ public abstract class ProductionOrder implements Originator {
     // Wzorzec Memento 1
     // Każda zmiana statusu automatycznie zapisuje poprzedni stan przed nadpisaniem.
     public void setStatus(OrderStatus status) {
-        save();
-        this.status = status;
+        if (this.status != status) {
+            save();
+            this.status = status;
+
+            // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
+            // Wzorzec Observer 1
+            // Powiadamiamy klientów / systemy o zmianie statusu
+            notifyObservers();
+            // Koniec, Tydzień 6
+            // Wzorzec Observer 1
+        }
     }
 
     // Prywatna metoda pomijająca save() — używana wyłącznie przez restore(),
     // żeby nie odkładać migawki podczas przywracania.
     private void setStatusFromMomento(OrderStatus status) {
-        this.status = status;
+        if (this.status != status) {
+            this.status = status;
+
+            // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
+            // Wzorzec Observer 1
+            // Powiadamiamy klientów / systemy o zmianie statusu
+            notifyObservers();
+            // Koniec, Tydzień 6
+            // Wzorzec Observer 1
+        }
     }
     // Koniec, Tydzień 5
     // Wzorzec Memento 1
+
+    // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
+    // Wzorzec Observer 1 (Metody z interfejsu OrderSubject)
+    @Override
+    public void addObserver(OrderObserver observer) {
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
+    @Override
+    public void removeObserver(OrderObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (OrderObserver observer : observers) {
+            observer.update(this);
+        }
+    }
+    // Koniec, Tydzień 6
+    // Wzorzec Observer 1
 
     // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
     // Wzorzec Prototype 3
@@ -135,3 +192,5 @@ public abstract class ProductionOrder implements Originator {
 }
 // Koniec, Tydzień 5
 // Wzorzec Memento 1
+// Koniec, Tydzień 6
+// Wzorzec Observer 1

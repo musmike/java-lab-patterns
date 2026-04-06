@@ -16,6 +16,9 @@ import pl.lab.factory.orders.*;
 import pl.lab.factory.orders.command.*;
 import pl.lab.factory.orders.iterator.OrderCollection;
 import pl.lab.factory.orders.iterator.OrderIterator;
+import pl.lab.factory.orders.observer.ClientEmailNotifier;
+import pl.lab.factory.orders.observer.ErpSystemUpdater;
+import pl.lab.factory.orders.observer.OrderObserver;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.reporting.*;
 import pl.lab.factory.reporting.interpreter.*;
@@ -157,6 +160,15 @@ public class Main {
         mediator.setWarehouseDepartment(wareDept);
         mediator.setReportingDepartment(repDept);
 
+
+        // -- Order Observers --
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== ORDER OBSERVER PATTERN TEST ===");
+        OrderObserver acmeCorpNotifier = new ClientEmailNotifier("contact@acmecorp.com");
+        OrderObserver globalErpSync = new ErpSystemUpdater();
+
+        orderA.addObserver(acmeCorpNotifier);
+        orderA.addObserver(globalErpSync);
 
 
         // -- Order queue --

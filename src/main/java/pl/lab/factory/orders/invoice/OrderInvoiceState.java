@@ -1,0 +1,13 @@
+package pl.lab.factory.orders.invoice;
+
+// Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
+// Wzorzec State 1 (Interface State)
+// Definiuje wszystkie operacje, które zachowują się różnie w zależności od stanu faktury.
+public interface OrderInvoiceState {
+    void pay(OrderInvoice invoice);
+    void applyDiscount(OrderInvoice invoice, double percentage);
+    void generateReceipt(OrderInvoice invoice);
+    void cancel(OrderInvoice invoice);
+}
+// Koniec, Tydzień 6
+// Wzorzec State 1

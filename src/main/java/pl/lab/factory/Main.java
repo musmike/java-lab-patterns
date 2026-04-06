@@ -14,6 +14,7 @@ import pl.lab.factory.mediator.ReportingDepartment;
 import pl.lab.factory.mediator.WarehouseDepartment;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.orders.command.*;
+import pl.lab.factory.orders.invoice.OrderInvoice;
 import pl.lab.factory.orders.iterator.OrderCollection;
 import pl.lab.factory.orders.iterator.OrderIterator;
 import pl.lab.factory.orders.observer.ClientEmailNotifier;
@@ -134,6 +135,32 @@ public class Main {
         ProductionOrder orderElectronicClone = orderB.clone("ORD-005");
 
         List<ProductionOrder> allOrders = new ArrayList<>(List.of(orderA, orderB, orderC, orderBaseClone, orderElectronicClone));
+
+
+        // -- Order Invoice --
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== STATE PATTERN TEST (INVOICE LIFECYCLE) ===");
+
+        OrderInvoice invoiceA = new OrderInvoice(orderA, 1500.00);
+
+        // Can't generate receipt before payment
+        invoiceA.generateReceipt();
+
+        invoiceA.applyDiscount(10.0);
+        invoiceA.pay();
+
+        // Can't apply discount after payment
+        invoiceA.applyDiscount(5.0);
+
+        // Can't cancel after payment
+        invoiceA.cancel();
+
+        invoiceA.generateReceipt();
+
+        OrderInvoice invoiceB = new OrderInvoice(orderB, 1300.00);
+        invoiceB.cancel();
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF STATE PATTERN TEST ===");
 
 
         // -- CentralControlMediator --

@@ -54,6 +54,10 @@ public class OrderInvoice {
         this.state = state;
     }
 
+    public OrderInvoiceState getState() {
+        return state;
+    }
+
     // Delegacja akcji do aktualnego stanu
     public void pay() {
         state.pay(this);

@@ -15,6 +15,9 @@ import pl.lab.factory.mediator.WarehouseDepartment;
 import pl.lab.factory.orders.*;
 import pl.lab.factory.orders.command.*;
 import pl.lab.factory.orders.invoice.OrderInvoice;
+import pl.lab.factory.orders.invoice.dispatch.B2bApiInvoiceDispatcher;
+import pl.lab.factory.orders.invoice.dispatch.EmailInvoiceDispatcher;
+import pl.lab.factory.orders.invoice.dispatch.InvoiceDispatcher;
 import pl.lab.factory.orders.iterator.OrderCollection;
 import pl.lab.factory.orders.iterator.OrderIterator;
 import pl.lab.factory.orders.observer.ClientEmailNotifier;
@@ -142,7 +145,7 @@ public class Main {
 
         // -- Order Invoice --
 
-        SystemLogger.INSTANCE.logInfo("MAIN", "=== STATE AND STRATEGY PATTERNS TEST (INVOICE LIFECYCLE) ===");
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== STATE 1 AND STRATEGY 1 PATTERNS TEST (INVOICE LIFECYCLE) ===");
 
         PricingStrategy standardPricing = new StandardPricingStrategy();
         PricingStrategy vipPricing = new VipPricingStrategy();
@@ -180,8 +183,24 @@ public class Main {
         OrderInvoice invoiceB = new OrderInvoice(orderB, standardPricing);
         invoiceB.cancel();
 
-        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF STATE AND STRATEGY PATTERNS TEST ===");
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF STATE 1 AND STRATEGY 1 PATTERNS TEST ===");
 
+
+
+        // -- Invoice Dispatch --
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== TEMPLATE METHOD 1 PATTERN TEST (INVOICE DISPATCH) ===");
+
+        InvoiceDispatcher emailDispatcher = new EmailInvoiceDispatcher();
+        InvoiceDispatcher b2bApiDispatcher = new B2bApiInvoiceDispatcher();
+
+        b2bApiDispatcher.dispatch(invoiceA);
+        emailDispatcher.dispatch(invoiceA);
+        emailDispatcher.dispatch(invoiceB);
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF TEMPLATE METHOD 1 PATTERN TEST ===");
+
+        
 
         // -- CentralControlMediator --
 

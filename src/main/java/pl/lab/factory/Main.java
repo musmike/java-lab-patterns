@@ -27,6 +27,8 @@ import pl.lab.factory.orders.pricing.BulkPricingStrategy;
 import pl.lab.factory.orders.pricing.PricingStrategy;
 import pl.lab.factory.orders.pricing.StandardPricingStrategy;
 import pl.lab.factory.orders.pricing.VipPricingStrategy;
+import pl.lab.factory.orders.visitor.EuVatVisitor;
+import pl.lab.factory.orders.visitor.UsaCustomsVisitor;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.reporting.*;
 import pl.lab.factory.reporting.interpreter.*;
@@ -200,7 +202,27 @@ public class Main {
 
         SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF TEMPLATE METHOD 1 PATTERN TEST ===");
 
+
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== VISITOR 1 PATTERN TEST (TAX/CUSTOMS CALCULATOR) ===");
         
+        UsaCustomsVisitor usaVisitor = new UsaCustomsVisitor();
+        EuVatVisitor euVisitor = new EuVatVisitor();
+
+        orderA.accept(usaVisitor);
+        orderA.accept(euVisitor);
+
+        orderB.accept(usaVisitor);
+        orderB.accept(euVisitor);
+
+        SystemLogger.INSTANCE.logInfo("TAX-SUMMARY",
+                "Total USA Customs expected: $" + String.format("%.2f", usaVisitor.getTotalCustomsTax()));
+        SystemLogger.INSTANCE.logInfo("TAX-SUMMARY",
+                "Total EU VAT expected: $" + String.format("%.2f", euVisitor.getTotalVat()));
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF VISITOR 1 PATTERN TEST ===");
+
+
 
         // -- CentralControlMediator --
 
@@ -229,7 +251,7 @@ public class Main {
 
         // -- Order Observers --
 
-        SystemLogger.INSTANCE.logInfo("MAIN", "=== ORDER OBSERVER PATTERN TEST ===");
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== ORDER OBSERVER 1 PATTERN TEST ===");
         OrderObserver acmeCorpNotifier = new ClientEmailNotifier("contact@acmecorp.com");
         OrderObserver globalErpSync = new ErpSystemUpdater();
 

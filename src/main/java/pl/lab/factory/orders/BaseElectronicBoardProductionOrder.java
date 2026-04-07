@@ -1,7 +1,11 @@
 package pl.lab.factory.orders;
 
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
+import pl.lab.factory.orders.visitor.OrderVisitor;
 
+
+// Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
+// Wzorzec Visitor 1 (Concrete Element)
 public class BaseElectronicBoardProductionOrder extends ProductionOrder {
     private BaseElectronicBoard electronicBoard;
 
@@ -28,6 +32,11 @@ public class BaseElectronicBoardProductionOrder extends ProductionOrder {
     // Koniec, Tydzień 2
     // Wzorzec Prototype 3
 
+
+    @Override
+    public void accept(OrderVisitor visitor) {
+        visitor.visit(this);
+    }
 
     // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
     // Wzorzec Builder 2
@@ -68,3 +77,5 @@ public class BaseElectronicBoardProductionOrder extends ProductionOrder {
     // Koniec, Tydzień 2
     // Wzorzec Builder 2
 }
+// Koniec, Tydzień 6
+// Wzorzec Visitor 1

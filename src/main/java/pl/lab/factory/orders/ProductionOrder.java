@@ -3,6 +3,8 @@ package pl.lab.factory.orders;
 import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.observer.OrderObserver;
 import pl.lab.factory.orders.observer.OrderSubject;
+import pl.lab.factory.orders.visitor.OrderVisitor;
+import pl.lab.factory.orders.visitor.ProductionOrderElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.Stack;
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Observer 1 (Konkretny podmiot)
 // Powiadamia obserwatorów o zmianie statusu.
-public abstract class ProductionOrder implements Originator, OrderSubject {
+public abstract class ProductionOrder implements Originator, OrderSubject, ProductionOrderElement {
     protected String id;
     protected int quantity;
     protected OrderStatus status;
@@ -45,6 +47,15 @@ public abstract class ProductionOrder implements Originator, OrderSubject {
     public OrderStatus getStatus() { return status; }
 
     public OrderSpecification getSpecification() { return specification; }
+
+    // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
+    // Wzorzec Visitor 1 (Metoda z interfejsu Element)
+    // Wymusza na podklasach (np. BaseBoardProductionOrder) implementację tzw.
+    // "podwójnego dyspozytorowania", czyli przekazania siebie (this) do wizytatora.
+    @Override
+    public abstract void accept(OrderVisitor visitor);
+    // Koniec, Tydzień 6
+    // Wzorzec Visitor 1
 
     // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
     // Wzorzec Memento 1

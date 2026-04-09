@@ -2,6 +2,7 @@ package pl.lab.factory.components;
 
 import pl.lab.factory.Pair;
 import pl.lab.factory.components.definitions.ResistorDefinition;
+import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Composite 3
@@ -49,6 +50,10 @@ public class Resistor implements BaseComponent {
     @Override
     public int countByType(Class<? extends BaseComponent> type) {
         return type.isInstance(this) ? 1 : 0;
+    }
+    @Override
+    public void accept(BoardVisitor v) {
+        v.visit(this);
     }
 }
 // Koniec, Tydzień 3

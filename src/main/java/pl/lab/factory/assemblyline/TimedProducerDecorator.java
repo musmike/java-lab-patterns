@@ -1,9 +1,9 @@
 package pl.lab.factory.assemblyline;
 
+import java.util.concurrent.TimeUnit;
+
 import pl.lab.factory.SystemLogger;
 import pl.lab.factory.pcbboards.BaseBoard;
-
-import java.util.concurrent.TimeUnit;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Decorator 1 (Konkretny dekorator – pomiar czasu)

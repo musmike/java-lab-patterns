@@ -1,13 +1,18 @@
 package pl.lab.factory.pcbboards;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pl.lab.factory.components.BaseComponent;
 import pl.lab.factory.manufacturing.ManufacturableProduct;
+import pl.lab.factory.pcbboards.monitoring.BoardObserver;
+import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
+import pl.lab.factory.pcbboards.monitoring.ObservableBoard;
+import pl.lab.factory.pcbboards.monitoring.VisitableBoard;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
-
+public abstract class BaseBoard implements ManufacturableProduct, Cloneable, ObservableBoard, VisitableBoard {
+    protected List<BoardObserver> observers = new ArrayList<>();
+    protected boolean[] changed = {false, false, false};
     protected ArrayList<BaseComponent> components = new ArrayList<>();
     protected double workingVoltage;
     protected BoardMaterials boardMaterial;
@@ -46,12 +51,16 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
     public abstract boolean isReady();
     public void printCircuits(){
         _circuitsPrinted = true;
+        changed[1] = true;
+        notifyObservers();
     }
     public void mountComponents(){
         for (BaseComponent c : components){
             c.mount();
         }
         _componentsMounted = true;
+        changed[0] = true;
+        notifyObservers();
     }
     public double getComponentCost(){
         double cost = 0;
@@ -73,6 +82,8 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
     }
     public void solder(){
         _soldered = true;
+        changed[2] = true;
+        notifyObservers();
     }
 
     public BaseBoard deepCopy() {
@@ -92,4 +103,52 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable {
 
         return count;
     }
+
+    @Override
+    public void register(BoardObserver o) {
+        if(o == null)
+            System.out.println("Observer not found!");
+
+        if(!observers.contains(o))
+            observers.add(o);
+
+    }
+
+    @Override
+    public void unregister(BoardObserver o) {
+        observers.remove(o);
+    }
+
+    @Override
+    public void notifyObservers() {
+        List<BoardObserver> observersList;
+        if(!changed[0] && !changed[1] && !changed[2])
+            return;
+        observersList = new ArrayList<>(this.observers);
+        observersList.forEach(observer -> {
+            observer.update();
+        });
+        changed = new boolean[]{false, false, false};
+    }
+
+    @Override
+    public String getUpdate(BoardObserver o) {
+        if(!changed[0] && !changed[1] && !changed[2])
+            return "Nothing changed!";
+        
+        return "" + 
+        (changed[0] ? "[OBS] Board was mounted!" : "") + 
+        (changed[1] ? "[OBS] Board was printed!" : "") + 
+        (changed[2] ? "[OBS] Board was soldered!" : "")
+        ;
+    }
+
+    @Override
+    public void accept(BoardVisitor v) {
+        v.visit(this);
+        for(BaseComponent c : components){
+            v.visit(c);
+        }
+    }
+
 }

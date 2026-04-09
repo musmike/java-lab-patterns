@@ -1,11 +1,12 @@
 package pl.lab.factory.components;
 
-import pl.lab.factory.Pair;
-import pl.lab.factory.components.iteration.CompositeIterator;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import pl.lab.factory.Pair;
+import pl.lab.factory.components.iteration.CompositeIterator;
+import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Composite 3
@@ -108,6 +109,14 @@ public class ComponentGroup implements BaseComponent {
         return count;
     }
 
+    @Override
+    public void accept(BoardVisitor v) {
+        v.visit(this);
+        for(BaseComponent c : components){
+            v.visit(c);
+        }
+    }
+    
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 3

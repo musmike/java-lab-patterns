@@ -6,7 +6,7 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Wzorzec Singleton 2 (Double-checked locking)
 // Singleton z double-checked locking zapewnia, że instancja jest tworzona tylko raz, nawet w środowisku wielowątkowym
 // Pierwsze sprawdzenie instancji unika synchronizacji przy każdym wywołaniu getInstance()
-public class CircuitPrinter implements Machine{
+public class CircuitPrinter extends Machine{
     private static volatile CircuitPrinter instance;
 
     private CircuitPrinter() {}
@@ -28,7 +28,7 @@ public class CircuitPrinter implements Machine{
 
     @Override
     public void perform(BaseBoard board) {
-
+        super.perform(board);
         System.out.println("[PRINTER] Printing board!");
         printCircuits(board);
     }

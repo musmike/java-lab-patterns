@@ -1,13 +1,10 @@
 package pl.lab.factory.assemblyline.assemblingstrategiers;
 
-import pl.lab.factory.assemblyline.Machine;
-import pl.lab.factory.assemblyline.Mounter;
 import pl.lab.factory.assemblyline.coordination.MachineMediator;
-import pl.lab.factory.assemblyline.machinesubroutines.MachineAdjusterDecorator;
-import pl.lab.factory.assemblyline.machinesubroutines.MachineWarmupDecorator;
-import pl.lab.factory.assemblyline.machinesubroutines.MounterValueTesterDecorator;
 import pl.lab.factory.pcbboards.BaseBoard;
 
+// Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz.2
+// wzorzec strategy 3 - konkretna strategia typu procesu
 public class AutoMount implements MountingStrategy {
     private final MachineMediator mediator;
 
@@ -20,3 +17,5 @@ public class AutoMount implements MountingStrategy {
         mediator.requestMount(board, this);
     }
 }
+//strategy 3
+//koniec tydzien 6

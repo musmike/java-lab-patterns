@@ -1,6 +1,7 @@
 package pl.lab.factory.components;
 
 import pl.lab.factory.Pair;
+import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Composite 3
@@ -13,6 +14,7 @@ public interface BaseComponent {
     double mofifyResult(double value);
     double getCost();
     int countByType(Class<? extends BaseComponent> type);
+    public abstract void accept(BoardVisitor v);
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 3

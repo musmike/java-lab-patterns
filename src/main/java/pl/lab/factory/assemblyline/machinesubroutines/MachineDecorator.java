@@ -6,7 +6,7 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Decorator 3
 // Abstrakcyjny dekorator maszyn
-public class MachineDecorator<T extends Machine> implements Machine {
+public class MachineDecorator<T extends Machine> extends Machine {
     protected T decorated;
 
     public MachineDecorator(T decorated) {

@@ -1,7 +1,11 @@
 package pl.lab.factory.pcbboards;
 
 import pl.lab.factory.Pair;
-import pl.lab.factory.components.*;
+import pl.lab.factory.components.Capacitor;
+import pl.lab.factory.components.ComponentDefinitionFactory;
+import pl.lab.factory.components.ComponentGroup;
+import pl.lab.factory.components.Inductor;
+import pl.lab.factory.components.Resistor;
 
 public class QXCBoard extends BaseBoard{
 
@@ -15,11 +19,11 @@ public class QXCBoard extends BaseBoard{
         this.boardColor = 0x007700;
         this.layers = 3;
         ComponentGroup mainGroup = new ComponentGroup("SCQ", new Pair<>(1,1));
-        mainGroup.add(new Resistor(ComponentDefinitionFactory.getResistorDefinition(20, 0.2), new Pair<>(1,1)));
-        mainGroup.add(new Capacitor(ComponentDefinitionFactory.getCapacitorDefinition(5, 0.2), new Pair<>(3, 1)));
-        mainGroup.add(new Resistor(ComponentDefinitionFactory.getResistorDefinition(20, 0.2), new Pair<>(1,1)));
+        mainGroup.add(new Resistor(ComponentDefinitionFactory.getResistorDefinition(20, 20.2), new Pair<>(1,1)));
+        mainGroup.add(new Capacitor(ComponentDefinitionFactory.getCapacitorDefinition(5, 12.2), new Pair<>(3, 1)));
+        mainGroup.add(new Resistor(ComponentDefinitionFactory.getResistorDefinition(20, 3.2), new Pair<>(1,1)));
         ComponentGroup subGroup = new ComponentGroup("sub CAWD", new Pair<>(20,20));
-        subGroup.add(new Inductor(ComponentDefinitionFactory.getInductorDefinition(15, 0.5), new Pair<>(21,20)));
+        subGroup.add(new Inductor(ComponentDefinitionFactory.getInductorDefinition(15, 4.5), new Pair<>(21,20)));
         mainGroup.add(subGroup);
         this.components.add(mainGroup);
     }

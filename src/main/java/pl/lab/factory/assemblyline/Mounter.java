@@ -2,7 +2,7 @@ package pl.lab.factory.assemblyline;
 
 import pl.lab.factory.pcbboards.BaseBoard;
 
-public class Mounter implements Machine{
+public class Mounter extends Machine{
     private static Mounter instance;
 
     private Mounter(){}
@@ -20,7 +20,7 @@ public class Mounter implements Machine{
 
     @Override
     public void perform(BaseBoard board) {
-
+        super.perform(board);
         System.out.println("[MOUNTER] Mounting board!");
         mountBoard(board);
     }

@@ -12,6 +12,7 @@ public interface OrderInvoiceState {
     void cancel(OrderInvoice invoice);
     void recalculatePrice(OrderInvoice invoice, PricingStrategy strategy);
     void confirm(OrderInvoice invoice);
+    boolean isRevenueRecognized();
 }
 // Koniec, Tydzień 6
 // Wzorzec State 1

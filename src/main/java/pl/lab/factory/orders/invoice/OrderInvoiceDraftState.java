@@ -49,6 +49,11 @@ public class OrderInvoiceDraftState implements OrderInvoiceState {
                 + invoice.getOrder().getId() + " has been confirmed and is ready for payment.");
         invoice.setState(new OrderInvoiceUnpaidState());
     }
+
+    @Override
+    public boolean isRevenueRecognized() {
+        return false;
+    }
 }
 // Koniec, Tydzień 6
 // Wzorzec State 1

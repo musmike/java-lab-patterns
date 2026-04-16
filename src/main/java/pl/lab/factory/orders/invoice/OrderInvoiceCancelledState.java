@@ -37,6 +37,11 @@ public class OrderInvoiceCancelledState implements OrderInvoiceState {
     public void confirm(OrderInvoice invoice) {
         SystemLogger.INSTANCE.logError("INVOICE", "Action denied. Invoice is CANCELLED.");
     }
+
+    @Override
+    public boolean isRevenueRecognized() {
+        return false;
+    }
 }
 // Koniec, Tydzień 6
 // Wzorzec State 1

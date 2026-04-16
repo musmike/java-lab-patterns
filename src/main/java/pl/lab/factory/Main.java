@@ -73,6 +73,7 @@ import pl.lab.factory.reporting.interpreter.OrExpression;
 import pl.lab.factory.reporting.interpreter.QuantityExpression;
 import pl.lab.factory.reporting.interpreter.StatusExpression;
 import pl.lab.factory.reporting.interpreter.TypeExpression;
+import pl.lab.factory.reporting.invoicereport.*;
 import pl.lab.factory.reporting.reportingfacade.ReportFormat;
 import pl.lab.factory.reporting.reportingfacade.ReportType;
 import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
@@ -128,7 +129,7 @@ public class Main {
         CostReport costSummary = new CostReport();
         costSummary.generate(sqcEBoard.getBaseBoard());
         smartProducer.produce(sqcEBoard.getBaseBoard());
-        
+
         ProgrammingDevice faultyDevice = new FaultyDevice();
         FirmwareProgrammer oldProgrammer = new OldFirmwareProgrammer(faultyDevice);
         oldProgrammer.program(sqcEBoard, firmwareAdapter);
@@ -235,6 +236,30 @@ public class Main {
 
 
 
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== SRP TEST (REVENUE CALCULATION) ===");
+
+        OrderInvoice invoiceC = new OrderInvoice(orderC, standardPricing);
+        OrderInvoice invoiceD = new OrderInvoice(orderBaseClone, standardPricing);
+
+        invoiceC.recalculatePrice(); invoiceC.confirm(); invoiceC.pay();
+        invoiceD.recalculatePrice(); invoiceD.confirm(); invoiceD.pay();
+
+        RevenuePolicy policy = new PaidInvoiceRevenuePolicy();
+        RevenueFilter filter = new RevenueFilter(policy);
+        RevenueCalculator calculator = new RevenueCalculator();
+
+        RevenueService revenueService = new RevenueService(filter, calculator);
+
+        List<OrderInvoice> allInvoices = List.of(invoiceA, invoiceB, invoiceC, invoiceD);
+        double totalRevenue = revenueService.calculateRevenue(allInvoices);
+
+        SystemLogger.INSTANCE.logInfo("REVENUE-REPORT", "Calculated Total Revenue: $" + String.format("%.2f", totalRevenue));
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF SRP TEST ===");
+
+
+
+
         // -- Invoice Dispatch --
 
         SystemLogger.INSTANCE.logInfo("MAIN", "=== TEMPLATE METHOD 1 PATTERN TEST (INVOICE DISPATCH) ===");
@@ -251,7 +276,7 @@ public class Main {
 
 
         SystemLogger.INSTANCE.logInfo("MAIN", "=== VISITOR 1 PATTERN TEST (TAX/CUSTOMS CALCULATOR) ===");
-        
+
         UsaCustomsVisitor usaVisitor = new UsaCustomsVisitor();
         EuVatVisitor euVisitor = new EuVatVisitor();
 

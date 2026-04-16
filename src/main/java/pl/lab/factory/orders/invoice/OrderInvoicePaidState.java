@@ -42,6 +42,11 @@ public class OrderInvoicePaidState implements OrderInvoiceState {
     public void confirm(OrderInvoice invoice) {
         SystemLogger.INSTANCE.logError("INVOICE", "Invoice is already confirmed and paid.");
     }
+
+    @Override
+    public boolean isRevenueRecognized() {
+        return true;
+    }
 }
 // Koniec, Tydzień 6
 // Wzorzec State 1

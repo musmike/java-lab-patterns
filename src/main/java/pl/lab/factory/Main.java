@@ -51,6 +51,8 @@ import pl.lab.factory.orders.invoice.dispatch.EmailInvoiceDispatcher;
 import pl.lab.factory.orders.invoice.dispatch.InvoiceDispatcher;
 import pl.lab.factory.orders.iterator.OrderCollection;
 import pl.lab.factory.orders.iterator.OrderIterator;
+import pl.lab.factory.orders.loyalty.CustomerLoyaltyService;
+import pl.lab.factory.orders.loyalty.VolumeBonusStrategy;
 import pl.lab.factory.orders.observer.ClientEmailNotifier;
 import pl.lab.factory.orders.observer.ErpSystemUpdater;
 import pl.lab.factory.orders.observer.OrderObserver;
@@ -236,7 +238,7 @@ public class Main {
 
 
 
-        SystemLogger.INSTANCE.logInfo("MAIN", "=== SRP TEST (REVENUE CALCULATION) ===");
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== SRP 1 TEST (REVENUE CALCULATION) ===");
 
         OrderInvoice invoiceC = new OrderInvoice(orderC, standardPricing);
         OrderInvoice invoiceD = new OrderInvoice(orderBaseClone, standardPricing);
@@ -255,8 +257,22 @@ public class Main {
 
         SystemLogger.INSTANCE.logInfo("REVENUE-REPORT", "Calculated Total Revenue: $" + String.format("%.2f", totalRevenue));
 
-        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF SRP TEST ===");
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF SRP 1 TEST ===");
 
+
+
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== OCP 1 TEST (CUSTOMER LOYALTY POINTS) ===");
+
+        CustomerLoyaltyService loyaltyService = new CustomerLoyaltyService();
+
+        loyaltyService.calculateByStrategy(orderA, new VolumeBonusStrategy());
+        loyaltyService.calculateByTier(orderB, "GOLD");
+
+        loyaltyService.registerTier("PLATINUM", 500);
+        loyaltyService.calculateByTier(orderC, "PLATINUM");
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF OCP 1 TEST ===");
 
 
 

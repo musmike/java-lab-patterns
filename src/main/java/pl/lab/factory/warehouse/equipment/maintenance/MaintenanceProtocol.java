@@ -3,13 +3,30 @@ package pl.lab.factory.warehouse.equipment.maintenance;
 import pl.lab.factory.SystemLogger;
 import pl.lab.factory.warehouse.equipment.WarehouseEquipment;
 
+import java.util.HashMap;
+import java.util.Map;
+// Tydzień 7 - Stosowanie zasad pojedynczej odpowiedzialności i otwarte-zamknięteZadanie
+// Otwarte - zamknięte (abstrakcja, sterowanie danymi)
+
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Template 2 (Abstract Class)
 public abstract class MaintenanceProtocol {
+
+    private final Map<String, Integer> serviceDurations = new HashMap<>();
+
+    public MaintenanceProtocol(){
+        serviceDurations.put("STANDARD", 60);
+        serviceDurations.put("EXTENDED", 120);
+    }
+
     public final void executeService(WarehouseEquipment equipment){
-        SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Starting maintenance for: " + equipment.getName() + " " + equipment.getId());
+        int duration = serviceDurations.getOrDefault("STANDARD", 30);
+
+        SystemLogger.INSTANCE.logInfo("MAINTENANCE",
+                "Starting maintenance for: " + equipment.getName() + " (Est. time: " + duration + "min)");
 
         equipment.setOperational(false);
+
 
         try{
             performDiagnostics(equipment);
@@ -32,3 +49,6 @@ public abstract class MaintenanceProtocol {
 }
 // Koniec, Tydzień 6
 // Wzorzec Observer 2
+
+// Koniec, Tydzień 7
+// Otwarte - zamknięte (abstrakcja)

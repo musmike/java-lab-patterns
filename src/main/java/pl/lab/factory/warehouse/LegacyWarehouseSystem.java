@@ -3,6 +3,8 @@ package pl.lab.factory.warehouse;
 import java.util.HashMap;
 import java.util.Map;
 import pl.lab.factory.SystemLogger;
+// Tydzień 7 - Stosowanie zasad pojedynczej odpowiedzialności i otwarte-zamknięteZadanie
+// Zasada pojedynczej odpowiedzialności
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Adapter 2 (Adaptee — klasa zewnętrzna/legacy)
@@ -30,3 +32,6 @@ public class LegacyWarehouseSystem {
 }
 // Koniec, Tydzień 3
 // Wzorzec Adapter 2
+
+// Koniec, Tydzień 7
+// Zasada pojedynczej odpowiedzialności

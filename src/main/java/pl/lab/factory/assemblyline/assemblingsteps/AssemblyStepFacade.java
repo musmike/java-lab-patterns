@@ -4,6 +4,8 @@ import pl.lab.factory.pcbboards.BaseBoard;
 
 import java.util.ArrayList;
 import java.util.List;
+// tydzien 7 - stosowanie zasad SRP i OCP
+// zasada SRP - klasa posiadająca jedną odpowiedzialność - wykoanie podanych jej kroków wytworzenia płytki
 
 // Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
 // Wzorzec Facade 2 - fasada upraszczajaca wykonywanie kolejnych kroków składania płytke
@@ -26,14 +28,10 @@ public class AssemblyStepFacade {
         for(AssemblyStep step : steps){
 
             cnt++;
-            System.out.println("Manufacturing step " + cnt + "/" + steps.size() + " done...");
             step.perform(board);
         }
-        System.out.println("Streamlined manufacturing completed!");
-        if(board.isReady()){
-            System.out.println("Board ready!");
-        } else System.out.println("Board unready!");
     }
 }
 //facade 2
 //koniec tydzien 4
+//koniec tydzien 7

@@ -35,6 +35,9 @@ public class WarehouseAccessProxy implements WarehouseService{
     public void printWarehouse(){
         realWarehouse.printWarehouse();
     }
+
+    @Override
+    public void printLegacyWarehouse(){realWarehouse.printLegacyWarehouse();}
 }
 // Koniec, Tydzień 4
 // Wzorzec Proxy 3

@@ -403,7 +403,7 @@ public class Main {
         ProductionOrder unapprovedOrder = orderA.clone("ORD-999");
         warehouse.storeOrder(unapprovedOrder);
 
-        legacyWarehouse.printStorage();
+        warehouse.printLegacyWarehouse();
         warehouse.printWarehouse();
 
         PackageImplementor cardboardBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage("cardboard")));

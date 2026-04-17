@@ -7,6 +7,7 @@ public interface WarehouseService {
     void storeOrder(ProductionOrder order);
     void removeOrder(ProductionOrder order);
     void printWarehouse();
+    void printLegacyWarehouse();
 
 }
 // Koniec, Tydzień 3

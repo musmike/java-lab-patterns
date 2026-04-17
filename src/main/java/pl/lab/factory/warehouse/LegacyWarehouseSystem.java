@@ -1,5 +1,6 @@
 package pl.lab.factory.warehouse;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import pl.lab.factory.SystemLogger;
@@ -28,6 +29,10 @@ public class LegacyWarehouseSystem {
                         "[LEGACY WAREHOUSE]",
                         item+" -> "+qty
                 ));
+    }
+
+    public Map<String, Integer> getStorage() {
+        return Collections.unmodifiableMap(storage);
     }
 }
 // Koniec, Tydzień 3

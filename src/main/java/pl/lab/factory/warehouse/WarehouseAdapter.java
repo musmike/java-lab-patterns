@@ -59,6 +59,17 @@ public class WarehouseAdapter implements WarehouseService {
         targetSection.add(item);
     }
 
+    public void printLegacyWarehouse(){
+        SystemLogger.INSTANCE.logInfo("WAREHOUSE", "Current warehouse state:");
+
+        // Pobieramy dane z klasy Legacy i logujemy je tutaj (Zachowanie SRP dla Legacy)
+        legacyWarehouse.getStorage().forEach((item, qty) ->
+                SystemLogger.INSTANCE.logInfo(
+                        "[LEGACY WAREHOUSE]",
+                        item + " -> " + qty
+                ));
+    }
+
     public void printWarehouse() {
         mainWarehouse.print("");
     }

@@ -52,6 +52,7 @@ import pl.lab.factory.orders.invoice.dispatch.InvoiceDispatcher;
 import pl.lab.factory.orders.iterator.OrderCollection;
 import pl.lab.factory.orders.iterator.OrderIterator;
 import pl.lab.factory.orders.loyalty.CustomerLoyaltyService;
+import pl.lab.factory.orders.loyalty.TierConfig;
 import pl.lab.factory.orders.loyalty.VolumeBonusStrategy;
 import pl.lab.factory.orders.observer.ClientEmailNotifier;
 import pl.lab.factory.orders.observer.ErpSystemUpdater;
@@ -269,7 +270,7 @@ public class Main {
         loyaltyService.calculateByStrategy(orderA, new VolumeBonusStrategy());
         loyaltyService.calculateByTier(orderB, "GOLD");
 
-        loyaltyService.registerTier("PLATINUM", 500);
+        loyaltyService.registerTier("PLATINUM", new TierConfig(500, 5, 1000));
         loyaltyService.calculateByTier(orderC, "PLATINUM");
 
         SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF OCP 1 TEST ===");

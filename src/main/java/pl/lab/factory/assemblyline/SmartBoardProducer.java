@@ -14,6 +14,8 @@ import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.pcbboards.BoardMaterials;
 import pl.lab.factory.pcbboards.SolderMaterials;
 
+import java.util.List;
+
 public class SmartBoardProducer implements BoardProducer  {
     @Override
     public void produce(BaseBoard board) throws InterruptedException {
@@ -33,7 +35,7 @@ public class SmartBoardProducer implements BoardProducer  {
                 ? new ReflowSolder(mediator) : new WaveSolder(mediator);
         SolderStep soldering = new SolderStep(solderStrat);
 
-        AssemblyStepFacade assembler = new AssemblyStepFacade(mounting, printing, soldering);
+        AssemblyStepFacade assembler = new AssemblyStepFacade(List.of(mounting, printing, soldering));
         System.out.println("[BOARD PRODUCTION] Manufacturing board using smart producer...");
         assembler.manufacture(board);
     }

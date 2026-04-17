@@ -19,8 +19,12 @@ public abstract class MaintenanceProtocol {
         serviceDurations.put("EXTENDED", 120);
     }
 
-    public final void executeService(WarehouseEquipment equipment){
-        int duration = serviceDurations.getOrDefault("STANDARD", 30);
+    public void registerServiceDuration(String type, int minutes) {
+        serviceDurations.put(type, minutes);
+    }
+
+    public final void executeService(WarehouseEquipment equipment, String serviceType){
+        int duration = serviceDurations.getOrDefault(serviceType, 30);
 
         SystemLogger.INSTANCE.logInfo("MAINTENANCE",
                 "Starting maintenance for: " + equipment.getName() + " (Est. time: " + duration + "min)");

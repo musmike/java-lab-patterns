@@ -473,8 +473,10 @@ public class Main {
         MaintenanceProtocol forkliftService = new ForkliftMaintenance();
         MaintenanceProtocol scannerService = new ScannerMaintenance();
 
-        forkliftService.executeService(forklift);
-        scannerService.executeService(scan);
+        scannerService.registerServiceDuration("SHORT", 20);
+
+        forkliftService.executeService(forklift, "STANDARD");
+        scannerService.executeService(scan, "SHORT");
 
         // Fire Alarm
 

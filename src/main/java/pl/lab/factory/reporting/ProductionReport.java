@@ -8,6 +8,11 @@ import java.util.List;
 // Wzorzec Bridge 1 (Abstrakcja)
 // Trzyma referencję do ReportFormatter zamiast dziedziczyć po nim.
 // Podklasy definiują CO raportują; formatter decyduje JAK to wygląda
+
+// Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
+// Zasada podstawienia Liskov (LSP) 4
+// Klasa abstrakcyjna ProductionReportm która jest bazowa 
+// dla różnych typów raportów takich jak CompletedOnlyProductionReport czy SummaryProductionReport,
 public abstract class ProductionReport {
 
     protected final ReportFormatter formatter;
@@ -20,3 +25,6 @@ public abstract class ProductionReport {
 }
 // Koniec, Tydzień 3
 // Wzorzec Bridge 1
+
+// Koniec, Tydzień 8
+// Zasada podstawienia Liskov (LSP) 4

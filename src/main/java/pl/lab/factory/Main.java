@@ -58,7 +58,9 @@ import pl.lab.factory.orders.observer.ClientEmailNotifier;
 import pl.lab.factory.orders.observer.ErpSystemUpdater;
 import pl.lab.factory.orders.observer.OrderObserver;
 import pl.lab.factory.orders.pricing.BulkPricingStrategy;
+import pl.lab.factory.orders.pricing.HolidayPricingStrategy;
 import pl.lab.factory.orders.pricing.PricingStrategy;
+import pl.lab.factory.orders.pricing.RushOrderPricingStrategy;
 import pl.lab.factory.orders.pricing.StandardPricingStrategy;
 import pl.lab.factory.orders.pricing.VipPricingStrategy;
 import pl.lab.factory.orders.visitor.EuVatVisitor;
@@ -68,8 +70,12 @@ import pl.lab.factory.pcbboards.monitoring.ProcessObserver;
 import pl.lab.factory.pcbboards.monitoring.reporting.CostReport;
 import pl.lab.factory.reporting.BoardReporter;
 import pl.lab.factory.reporting.CachingBoardReporterProxy;
+import pl.lab.factory.reporting.CompletedOnlyProductionReport;
+import pl.lab.factory.reporting.ConsoleReportFormatter;
 import pl.lab.factory.reporting.LegacyAuditSystem;
 import pl.lab.factory.reporting.LegacyAuditSystemAdapter;
+import pl.lab.factory.reporting.ProductionReport;
+import pl.lab.factory.reporting.SummaryProductionReport;
 import pl.lab.factory.reporting.interpreter.AbstractExpression;
 import pl.lab.factory.reporting.interpreter.AndExpression;
 import pl.lab.factory.reporting.interpreter.OrExpression;
@@ -595,5 +601,51 @@ public class Main {
         }
 
         SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
+
+
+
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "--- LSP 1 AND LSP 4 TEST ---");
+
+        // Klasa bazowa (konkretna)
+        StandardPricingStrategy standardPricing1 = new StandardPricingStrategy();
+
+        // Klasy pochodne z typem klasy pochodnej
+        HolidayPricingStrategy holidayPricing1 = new HolidayPricingStrategy();
+        RushOrderPricingStrategy rushPricing1 = new RushOrderPricingStrategy();
+
+        // Klasa pochodna z typem klasy bazowej (konkretnej)
+        StandardPricingStrategy rushPricing2 = new RushOrderPricingStrategy();
+
+        testPriceCalculation(standardPricing1, orderA);
+        testPriceCalculation(holidayPricing1, orderA);
+        testPriceCalculation(rushPricing1, orderA);
+        testPriceCalculation(rushPricing2, orderA);
+
+
+        // Klasy pochodne z typem klasy pochodnej
+        CompletedOnlyProductionReport reportCompletedDerived = new CompletedOnlyProductionReport(new ConsoleReportFormatter());
+        SummaryProductionReport reportAllDerived = new SummaryProductionReport(new ConsoleReportFormatter());
+        reportCompletedDerived.generate(allOrders);
+        reportAllDerived.generate(allOrders);
+
+        // Klasy pochodne z typem klasy bazowej (abstrakcyjnej)
+        ProductionReport reportCompletedBase = new CompletedOnlyProductionReport(new ConsoleReportFormatter());
+        ProductionReport reportAllBase = new SummaryProductionReport(new ConsoleReportFormatter());
+        reportCompletedBase.generate(allOrders);
+        reportAllBase.generate(allOrders);
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "--- END OF LSP 1 AND LSP 4 TEST ---");
+
+
+
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
+    }
+
+    public static void testPriceCalculation(StandardPricingStrategy strategy, ProductionOrder order) {
+        double price = strategy.calculatePrice(order);
+        SystemLogger.INSTANCE.logInfo("MAIN", "Calculated price for " + order.getId()
+                + " using the base (or derived) class. Result: $" + price);
     }
 }

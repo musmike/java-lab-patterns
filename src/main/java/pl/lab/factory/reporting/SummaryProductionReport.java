@@ -8,6 +8,10 @@ import java.util.List;
 // Wzorzec Bridge 1 (Uszczegółowiona Abstrakcja — raport skrócony)
 // Wypisuje każde zlecenie i stopkę z podsumowaniem.
 // Może działać z dowolnym ReportFormatter bez żadnych zmian.
+
+// Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
+// Zasada podstawienia Liskov (LSP) 4
+// Klasa pochodna SummaryProductionReport dziedzicząca po ProductionReport (abstrakcyjnej)
 public class SummaryProductionReport extends ProductionReport {
 
     public SummaryProductionReport(ReportFormatter formatter) {
@@ -31,3 +35,6 @@ public class SummaryProductionReport extends ProductionReport {
 }
 // Koniec, Tydzień 3
 // Wzorzec Bridge 1
+
+// Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
+// Zasada podstawienia Liskov (LSP) 4

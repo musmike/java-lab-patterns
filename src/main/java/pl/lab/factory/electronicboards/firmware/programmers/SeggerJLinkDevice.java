@@ -6,6 +6,8 @@ import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Bridge 3
 // Konkretny implementor
+//Tydzien 8 - Odwrocenie zaleznosci
+//konkretna klasa pozwalająca bedąca jedną z opcji dla programatorów
 public class SeggerJLinkDevice implements ProgrammingDevice {
 
     @Override
@@ -27,3 +29,5 @@ public class SeggerJLinkDevice implements ProgrammingDevice {
 }
 // Koniec, Tydzień 3
 // Wzorzec Bridge 3
+//koniec DIP 3
+//koniec tydzien 8

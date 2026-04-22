@@ -3,6 +3,8 @@ package pl.lab.factory.electronicboards.firmware.programmers;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
+//Tydzien 8 - Odwrocenie zaleznosci
+//konkretna klasa pozwalająca bedąca jedną z opcji dla programatorów
 public class FaultyDevice implements ProgrammingDevice{
     private boolean first = true;
 
@@ -34,3 +36,5 @@ public class FaultyDevice implements ProgrammingDevice{
         System.out.println("--->Device stopped<---");
     }
 }
+//koniec DIP 3
+//koniec tydzien 8

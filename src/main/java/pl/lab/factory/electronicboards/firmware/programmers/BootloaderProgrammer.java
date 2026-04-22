@@ -5,6 +5,8 @@ import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 //bridge 3 - uszczegolowiona abstrakcja
+//Tydzien 8 - Odwrocenie zaleznosci
+//implementacja klasy abstrakcyjnej możliwa do wywoływania przez odwołanie do klasy bazowej oraz wykonująca oczekiwane działania
 public class BootloaderProgrammer extends FirmwareProgrammer{
     public BootloaderProgrammer(ProgrammingDevice device) {
         super(device);
@@ -22,3 +24,5 @@ public class BootloaderProgrammer extends FirmwareProgrammer{
 }
 //koniec bridge 3
 //koniec tydzien 3
+//koniec DIP 3
+//koniec tydzien 8

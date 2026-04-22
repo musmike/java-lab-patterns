@@ -7,6 +7,8 @@ import pl.lab.factory.electronicboards.firmware.commands.FirmwareCommandInvoker;
 import pl.lab.factory.electronicboards.firmware.commands.StartProgrammingCommand;
 import pl.lab.factory.electronicboards.firmware.commands.WriteFirmwareCommand;
 
+//Tydzien 8 - Odwrocenie zaleznosci
+//implementacja klasy abstrakcyjnej możliwa do wywoływania przez odwołanie do klasy bazowej oraz wykonująca oczekiwane działania
 public class OldFirmwareProgrammer extends FirmwareProgrammer{
     public OldFirmwareProgrammer(ProgrammingDevice device) {
         super(device);
@@ -22,3 +24,5 @@ public class OldFirmwareProgrammer extends FirmwareProgrammer{
         invoker.executeAll();
     }
 }
+//koniec DIP 3
+//koniec tydzien 8

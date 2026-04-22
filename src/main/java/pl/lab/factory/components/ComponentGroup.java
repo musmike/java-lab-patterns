@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import pl.lab.factory.Pair;
 import pl.lab.factory.components.iteration.CompositeIterator;
 import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Composite 3
 // Kompozyt komponentu
-public class ComponentGroup implements BaseComponent {
+//Tydzien 8 - Segregacja interfejsów
+//klasa korzystajaca z wielu interfejsow rozbitego interfejsu
+public class ComponentGroup implements BaseComponent, SignalProcessorComponent, VisitableComponent {
     private String name;
-    private final Pair<Integer, Integer> position;
 
     public List<BaseComponent> getComponents() {
         return components;
@@ -21,9 +21,8 @@ public class ComponentGroup implements BaseComponent {
 
     private List<BaseComponent> components = new ArrayList<>();
 
-    public ComponentGroup(String name, Pair<Integer, Integer> position) {
+    public ComponentGroup(String name) {
         this.name = name;
-        this.position = position;
     }
 
     public void add(BaseComponent component) {
@@ -34,11 +33,6 @@ public class ComponentGroup implements BaseComponent {
     }
     public void remove(int idx) {
         components.remove(idx);
-    }
-
-    @Override
-    public Pair<Integer, Integer> getPos() {
-        return position;
     }
 
     @Override
@@ -77,7 +71,10 @@ public class ComponentGroup implements BaseComponent {
         double result = value;
         Iterator<BaseComponent> it = iterator();
         while(it.hasNext()){
-            result = it.next().mofifyResult(result);
+            if(it.next() instanceof SignalProcessorComponent spc){
+                result = spc.mofifyResult(result);
+            }
+
         }
         return result;
     }
@@ -102,10 +99,14 @@ public class ComponentGroup implements BaseComponent {
     public void accept(BoardVisitor v) {
         v.visit(this);
         for(BaseComponent c : components){
-            c.accept(v);
+            if(c instanceof VisitableComponent vc){
+                vc.accept(v);
+            }
         }
     }
     
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 3
+// Koniec, Tydzień 8
+// Wzorzec ISP 3

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.lab.factory.components.BaseComponent;
+import pl.lab.factory.components.SignalProcessorComponent;
+import pl.lab.factory.components.VisitableComponent;
 import pl.lab.factory.manufacturing.ManufacturableProduct;
 import pl.lab.factory.pcbboards.monitoring.BoardObserver;
 import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
@@ -71,7 +73,9 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     }
     public double getValue(double value){
         for(BaseComponent c : components){
-            value = c.mofifyResult(value);
+            if(c instanceof SignalProcessorComponent spc){
+                value = spc.mofifyResult(value);
+            }
         }
         return value;
     }
@@ -137,7 +141,9 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     public void accept(BoardVisitor v) {
         v.visit(this);
         for(BaseComponent c : components){
-            c.accept(v);
+            if(c instanceof VisitableComponent vc){
+                vc.accept(v);
+            }
         }
     }
 

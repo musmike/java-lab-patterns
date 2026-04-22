@@ -17,7 +17,7 @@ public class StandardBoard extends BaseBoard {
         this.length = 100;
         this.boardColor = 0x007700;
         this.layers = 2;
-        ComponentGroup mainGroup = new ComponentGroup("Main group", new Pair<>(1,1));
+        ComponentGroup mainGroup = new ComponentGroup("Main group");
         mainGroup.add(new Resistor(ComponentDefinitionFactory.getResistorDefinition(20, 0.2), new Pair<>(1,1)));
         mainGroup.add(new Capacitor(ComponentDefinitionFactory.getCapacitorDefinition(5, 0.2), new Pair<>(3, 1)));
         this.components.add(mainGroup);

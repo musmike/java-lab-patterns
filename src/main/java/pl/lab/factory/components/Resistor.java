@@ -7,7 +7,9 @@ import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Composite 3
 // Liść komponentu
-public class Resistor implements BaseComponent {
+//Tydzien 8 - Segregacja interfejsów
+//klasa korzystajaca z wielu interfejsow rozbitego interfejsu
+public class Resistor implements BaseComponent, PositionableComponent, SignalProcessorComponent, VisitableComponent {
 
     private ResistorDefinition definition;
     private boolean mounted = false;
@@ -54,3 +56,5 @@ public class Resistor implements BaseComponent {
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 3
+// Koniec, Tydzień 8
+// Wzorzec ISP 3

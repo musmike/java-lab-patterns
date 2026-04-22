@@ -12,6 +12,10 @@ import pl.lab.factory.orders.ProductionOrder;
 // Zasada podstawienia Liskov (LSP) 1
 // Konkretna klasa StandardPricingStrategy, która jest bazowa bezpośrednio
 // dla strategii cenowych takich jak RushOrderPricingStrategy czy HolidayPricingStrategy
+
+// Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
+// Zasada odwracania zależności (DIP) 1 - wersja z interfejsem (Klasa pochodna)
+// StandardPricingStrategy jest klasą pochodną, która implementuje abstrakcyjną metodę z interfejsu PricingStrategy
 public class StandardPricingStrategy implements PricingStrategy {
 
     private static final double BASE_BOARD_UNIT_PRICE = 50.0;
@@ -36,3 +40,6 @@ public class StandardPricingStrategy implements PricingStrategy {
 
 // Koniec, Tydzień 8
 // Zasada podstawienia Liskov (LSP) 1
+
+// Koniec, Tydzień 8
+// Zasada odwracania zależności (DIP) 1 - wersja z interfejsem

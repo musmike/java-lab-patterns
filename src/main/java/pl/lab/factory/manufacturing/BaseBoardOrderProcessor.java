@@ -7,6 +7,10 @@ import pl.lab.factory.assemblyline.TimedProducerDecorator;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.ProductionOrder;
 
+
+// Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
+// Zasada odwracania zależności (DIP) - wersja z klasą abstrakcyjną 1 (Klasa pochodna)
+// BaseBoardOrderProcessor jest klasą pochodną, która implementuje abstrakcyjną metodę z OrderProcessor.
 public class BaseBoardOrderProcessor extends OrderProcessor {
 
     private final BoardProducer producer;
@@ -30,4 +34,6 @@ public class BaseBoardOrderProcessor extends OrderProcessor {
         producer.produce(bpo.getBoard());
     }
 }
+// Koniec, Tydzień 8
+// Zasada odwracania zależności (DIP) - wersja z klasą abstrakcyjną 1
 

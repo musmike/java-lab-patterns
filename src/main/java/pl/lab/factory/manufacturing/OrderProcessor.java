@@ -6,6 +6,10 @@ import pl.lab.factory.orders.ProductionOrder;
 
 import java.util.concurrent.TimeUnit;
 
+// Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
+// Zasada odwracania zależności (DIP) - wersja z klasą abstrakcyjną 1 (Klasa abstrakcyjna)
+// Klasa abstrakcyjna OrderProcessor jest abstrakcją, od której zależy moduł wysokopoziomowy (ProductionDepartment), 
+// a nie od konkretnej implementacji
 public abstract class OrderProcessor {
     public void process(ProductionOrder order) throws InterruptedException {
         order.setStatus(OrderStatus.IN_PRODUCTION);
@@ -26,3 +30,5 @@ public abstract class OrderProcessor {
 
     protected abstract void produceUnit(ProductionOrder order) throws InterruptedException;
 }
+// Koniec, Tydzień 8
+// Zasada odwracania zależności (DIP) - wersja z klasą abstrakcyjną 1

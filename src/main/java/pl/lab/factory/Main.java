@@ -86,6 +86,7 @@ import pl.lab.factory.reporting.invoicereport.*;
 import pl.lab.factory.reporting.reportingfacade.ReportFormat;
 import pl.lab.factory.reporting.reportingfacade.ReportType;
 import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
+import pl.lab.factory.reporting.reportingsystem.*;
 import pl.lab.factory.safetymediator.SafetyHistory;
 import pl.lab.factory.safetymediator.SafetySystemMemento;
 import pl.lab.factory.safetymediator.components.AlarmSiren;
@@ -605,6 +606,27 @@ public class Main {
         }
 
         SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
+
+
+
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "--- ISP 1 TEST ---");
+
+
+        ReportGenerator generator = new SimpleReportGenerator();
+        ReportFormatter formatter = new SimpleReportFormatter();
+        ReportDispatcher dispatcher = new SimpleReportDispatcher();
+
+        generator.generateReport(orderA);
+
+        String csvData = formatter.formatAsCsv(orderA);
+        SystemLogger.INSTANCE.logInfo("MAIN", "Formatted data: " + csvData);
+
+        dispatcher.archiveReport(orderA);
+        dispatcher.sendReportByEmail(orderA);
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "--- END OF ISP 1 TEST ---");
+
 
 
 

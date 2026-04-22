@@ -11,7 +11,7 @@ import pl.lab.factory.orders.ProductionOrder;
 // eventem ORDER_COMPLETED. Nie wie, co się potem z tym zamówieniem stanie.
 
 // Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
-// Zasada odwracania zależności (DIP) 1 - wersja z klasą abstrakcyjną (Moduł wysokopoziomowy)
+// Zasada odwracania zależności (DIP) - wersja z klasą abstrakcyjną 1 (Moduł wysokopoziomowy)
 // Moduł wysokopoziomowy (ProductionDepartment) zależy od abstrakcji (klasy abstrakcyjnej OrderProcessor), 
 // a nie od konkretnej implementacji
 public class ProductionDepartment extends Department {
@@ -41,4 +41,4 @@ public class ProductionDepartment extends Department {
 // Wzorzec Mediator 1
 
 // Koniec, Tydzień 8
-// Zasada odwracania zależności (DIP) 1 - wersja z klasą abstrakcyjną
+// Zasada odwracania zależności (DIP) - wersja z klasą abstrakcyjną 1

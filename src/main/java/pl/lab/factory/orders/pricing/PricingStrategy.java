@@ -7,7 +7,7 @@ import pl.lab.factory.orders.ProductionOrder;
 // Definiuje wspólny kontrakt dla wszystkich algorytmów wyceny zamówień.
 
 // Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
-// Zasada odwracania zależności (DIP) 1 - wersja z interfejsem (Interfejs) 
+// Zasada odwracania zależności (DIP) - wersja z interfejsem 1 (Interfejs) 
 // Interfejs PricingStrategy jest abstrakcją, od której zależy moduł wysokopoziomowy (OrderInvoice),
 // a nie od konkretnej implementacji.
 public interface PricingStrategy {
@@ -17,4 +17,4 @@ public interface PricingStrategy {
 // Wzorzec Strategy 1
 
 // Koniec, Tydzień 8
-// Zasada odwracania zależności (DIP) 1 - wersja z interfejsem
+// Zasada odwracania zależności (DIP) - wersja z interfejsem 1

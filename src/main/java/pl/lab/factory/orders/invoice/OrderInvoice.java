@@ -14,7 +14,7 @@ import pl.lab.factory.orders.pricing.PricingStrategy;
 // do obiektu strategii i używa go do obliczenia swojej wartości zamówienia.
 
 // Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
-// Zasada odwracania zależności (DIP) 1 - wersja z interfejsem (Moduł wysokopoziomowy)
+// Zasada odwracania zależności (DIP) - wersja z interfejsem 1 (Moduł wysokopoziomowy)
 // Moduł wysokopoziomowy (OrderInvoice) zależy od abstrakcji (interfejsu PricingStrategy),
 // a nie od konkretnej implementacji.
 public class OrderInvoice {
@@ -108,4 +108,4 @@ public class OrderInvoice {
 // Wzorzec Strategy 1
 
 // Koniec, Tydzień 8
-// Zasada odwracania zależności (DIP) 1 - wersja z interfejsem
+// Zasada odwracania zależności (DIP) - wersja z interfejsem 1

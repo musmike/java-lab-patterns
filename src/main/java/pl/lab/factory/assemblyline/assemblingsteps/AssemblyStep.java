@@ -3,6 +3,8 @@ package pl.lab.factory.assemblyline.assemblingsteps;
 import pl.lab.factory.assemblyline.assemblingstrategiers.AssemblingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
 
+//Tydzien 8 - Podstawienie Liskov
+//klasa abstrakcyjna ktorej klasy pochodne sa uzywalne w dowolnym miejscu gdzie jest ona wymagana
 public abstract class AssemblyStep {
     protected AssemblingStrategy strategy;
 
@@ -12,3 +14,5 @@ public abstract class AssemblyStep {
 
     public abstract void perform(BaseBoard board) throws InterruptedException;
 }
+//LSP 3
+//koniec tydzien 8

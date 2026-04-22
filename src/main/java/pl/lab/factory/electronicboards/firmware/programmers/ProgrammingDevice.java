@@ -8,7 +8,7 @@ import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 // Implementor
 public interface ProgrammingDevice {
     void start();
-    void writeFirmware(BaseElectronicBoard board, FirmwareAdapter firmwareAdapter);
+    void writeFirmware(BaseElectronicBoard board, FirmwareAdapter firmwareAdapter) throws RuntimeException;
     void finish();
 }
 // Koniec, Tydzień 3

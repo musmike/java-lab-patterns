@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import pl.lab.factory.assemblyline.BoardProducer;
 import pl.lab.factory.assemblyline.SmartBoardProducer;
-import pl.lab.factory.components.Resistor;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
@@ -64,6 +63,7 @@ import pl.lab.factory.orders.pricing.VipPricingStrategy;
 import pl.lab.factory.orders.visitor.EuVatVisitor;
 import pl.lab.factory.orders.visitor.UsaCustomsVisitor;
 import pl.lab.factory.pcbboards.BaseBoard;
+import pl.lab.factory.pcbboards.monitoring.CountingVisitor;
 import pl.lab.factory.pcbboards.monitoring.ProcessObserver;
 import pl.lab.factory.pcbboards.monitoring.reporting.CostReport;
 import pl.lab.factory.reporting.BoardReporter;
@@ -137,7 +137,9 @@ public class Main {
         FirmwareProgrammer oldProgrammer = new OldFirmwareProgrammer(faultyDevice);
         oldProgrammer.program(sqcEBoard, firmwareAdapter);
         sqcEBoard.getBaseBoard().getComponentInfo();
-        System.out.println("[COMPONENT INFO] Board contains " + sqcEBoard.getBaseBoard().componentsByType(Resistor.class) + " resistors.");
+        CountingVisitor counter = new CountingVisitor();
+        sqcEBoard.getBaseBoard().accept(counter);
+        System.out.println("[COMPONENT INFO] Board contains " + counter.getResistors() + " resistors.");
 
         // -- Creating orders --
 
@@ -175,7 +177,9 @@ public class Main {
         BaseElectronicBoard electronicBoardB = boardPrototypes.createFromPrototype("highly-dependant-v1");
         System.out.println("[COMPONENT INFO] Gathering information about boards components!");
         electronicBoardB.getBaseBoard().getComponentInfo();
-        System.out.println("[COMPONENT INFO] Board contains " + electronicBoardB.getBaseBoard().componentsByType(Resistor.class) + " resistors.");
+        counter = new CountingVisitor();
+        electronicBoardB.getBaseBoard().accept(counter);
+        System.out.println("[COMPONENT INFO] Board contains " + counter.getResistors() + " resistors.");
         firmwareAdapter = new ProprietaryFirmwareAdapter(new ProprietaryFirmware("v1.1.0-hotfix"));
         internalProgrammer = new InternalProgrammer(new STLinkDevice());
         internalProgrammer.program(electronicBoardB, firmwareAdapter);

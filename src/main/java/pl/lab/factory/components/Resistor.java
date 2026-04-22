@@ -48,10 +48,6 @@ public class Resistor implements BaseComponent {
         return definition.getCost();
     }
     @Override
-    public int countByType(Class<? extends BaseComponent> type) {
-        return type.isInstance(this) ? 1 : 0;
-    }
-    @Override
     public void accept(BoardVisitor v) {
         v.visit(this);
     }

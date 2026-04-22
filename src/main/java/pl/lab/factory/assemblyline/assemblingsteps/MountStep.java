@@ -3,7 +3,8 @@ package pl.lab.factory.assemblyline.assemblingsteps;
 import pl.lab.factory.assemblyline.assemblingstrategiers.AssemblingStrategy;
 import pl.lab.factory.assemblyline.assemblingstrategiers.MountingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
-
+//Tydzien 8 - Podstawienie Liskov
+//klasa którą można podstawić pod klasę dziedziczoną w dowolnym miejscu
 public class MountStep extends AssemblyStep{
     public MountStep(MountingStrategy strategy) {
         super(strategy);
@@ -15,3 +16,5 @@ public class MountStep extends AssemblyStep{
         strategy.execute(board);
     }
 }
+//LSP 3
+//koniec tydzien 8

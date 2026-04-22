@@ -96,24 +96,13 @@ public class ComponentGroup implements BaseComponent {
         return new CompositeIterator(this);
     }
 
-    @Override
-    public int countByType(Class<? extends BaseComponent> type) {
-        int count = type.isInstance(this) ? 1 : 0;
 
-        Iterator<BaseComponent> it = this.iterator();
-
-        while (it.hasNext()) {
-            count += it.next().countByType(type);
-        }
-
-        return count;
-    }
 
     @Override
     public void accept(BoardVisitor v) {
         v.visit(this);
         for(BaseComponent c : components){
-            v.visit(c);
+            c.accept(v);
         }
     }
     

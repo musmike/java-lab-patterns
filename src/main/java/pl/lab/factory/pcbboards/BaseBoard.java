@@ -94,16 +94,6 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
         }
     }
 
-    public int componentsByType(Class<? extends BaseComponent> type) {
-        int count = 0;
-
-        for (BaseComponent component : components) {
-            count += component.countByType(type);
-        }
-
-        return count;
-    }
-
     @Override
     public void register(BoardObserver o) {
         if(o == null)
@@ -147,7 +137,7 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     public void accept(BoardVisitor v) {
         v.visit(this);
         for(BaseComponent c : components){
-            v.visit(c);
+            c.accept(v);
         }
     }
 

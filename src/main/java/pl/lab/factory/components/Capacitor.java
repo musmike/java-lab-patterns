@@ -49,11 +49,6 @@ public class Capacitor implements BaseComponent {
     }
 
     @Override
-    public int countByType(Class<? extends BaseComponent> type) {
-        return type.isInstance(this) ? 1 : 0;
-    }
-
-    @Override
     public void accept(BoardVisitor v) {
         v.visit(this);
     }

@@ -13,7 +13,7 @@ public interface BaseComponent {
     void print();
     double mofifyResult(double value);
     double getCost();
-    int countByType(Class<? extends BaseComponent> type);
+
     public abstract void accept(BoardVisitor v);
 }
 // Koniec, Tydzień 3

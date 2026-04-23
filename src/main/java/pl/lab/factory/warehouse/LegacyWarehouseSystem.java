@@ -21,16 +21,6 @@ public class LegacyWarehouseSystem {
         );
     }
 
-    public void printStorage(){
-        SystemLogger.INSTANCE.logInfo("WAREHOUSE", "Current warehouse state:");
-
-        storage.forEach((item, qty)->
-                SystemLogger.INSTANCE.logInfo(
-                        "[LEGACY WAREHOUSE]",
-                        item+" -> "+qty
-                ));
-    }
-
     public Map<String, Integer> getStorage() {
         return Collections.unmodifiableMap(storage);
     }

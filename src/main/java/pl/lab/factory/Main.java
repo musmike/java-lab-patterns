@@ -435,6 +435,7 @@ public class Main {
         shippingManager.addCommand(shipCommandA);
         shippingManager.addCommand(shipCommandC);
 
+        //Liskov
         shippingManager.setDispatcher(new PriorityFirstDispatcher());
         shippingManager.shipEverything();
 

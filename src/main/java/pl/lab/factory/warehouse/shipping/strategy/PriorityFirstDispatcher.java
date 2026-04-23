@@ -9,6 +9,9 @@ import java.util.List;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Strategy 2 (Concrete Strategy)
+
+// Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
+// Zasada podstawienia Liskov (LSP)
 public class PriorityFirstDispatcher implements ShippingDispatcher{
     private final CommandVisitor priorityVisitor = new PriorityCalculator();
     @Override
@@ -23,5 +26,8 @@ public class PriorityFirstDispatcher implements ShippingDispatcher{
         return pending;
     }
 }
+// Koniec, Tydzień 8
+// Zasada podstawienia Liskov (LSP)
+
 // Koniec, Tydzień 6
 // Wzorzec Strategy 2

@@ -4,15 +4,15 @@ import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.OrderStatus;
 import pl.lab.factory.orders.ProductionOrder;
 import pl.lab.factory.warehouse.WarehouseAdapter;
-import pl.lab.factory.warehouse.WarehouseService;
+import pl.lab.factory.warehouse.WarehouseManagementService;
 
 // Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2
 // Wzorzec Facade 3
 // Fasada ukrywa wywołania metod odpowiedzialnych za dostawę i aktualizację magazynu podczas wysyłki zamówienia.
 public class ShippingFacade {
-    private final WarehouseService warehouse;
+    private final WarehouseManagementService warehouse;
 
-    public ShippingFacade(WarehouseService warehouse){
+    public ShippingFacade(WarehouseManagementService warehouse){
         this.warehouse = warehouse;
     }
 

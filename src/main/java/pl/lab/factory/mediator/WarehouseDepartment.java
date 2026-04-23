@@ -1,16 +1,16 @@
 package pl.lab.factory.mediator;
 
 import pl.lab.factory.orders.ProductionOrder;
-import pl.lab.factory.warehouse.WarehouseService;
+import pl.lab.factory.warehouse.WarehouseManagementService;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
 // Wzorzec Mediator 1 (Konkretny Colleague — magazyn)
 // Wywołuje logikę magazynu, a następnie powiadamia mediatora
 // o zapisaniu zamówienia eventem ORDER_STORED.
 public class WarehouseDepartment extends Department {
-    private final WarehouseService warehouseService;
+    private final WarehouseManagementService warehouseService;
 
-    public WarehouseDepartment(FactoryMediator mediator, WarehouseService warehouseService) {
+    public WarehouseDepartment(FactoryMediator mediator, WarehouseManagementService warehouseService) {
         super(mediator);
         this.warehouseService = warehouseService;
     }

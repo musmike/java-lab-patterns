@@ -9,11 +9,13 @@ public enum SystemLogger {
 
     private static final int CONTEXT_WIDTH = 25;
     private static final int TYPE_WIDTH = 10;
+    private static final int ELLIPSIS_LENGTH = 3;
+    private static final String ELLIPSIS = "...";
 
     private String padRight(String text, int length) {
         if (text.length() > length) {
-            if (length > 3) {
-                return text.substring(0, length - 3) + "...";
+            if (length > ELLIPSIS_LENGTH) {
+                return text.substring(0, length - ELLIPSIS_LENGTH) + ELLIPSIS;
             } else {
                 return text.substring(0, length);
             }

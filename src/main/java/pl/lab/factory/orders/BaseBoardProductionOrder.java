@@ -42,9 +42,11 @@ public class BaseBoardProductionOrder extends ProductionOrder {
     // wywołań setterów — oddziela proces budowania od reprezentacji obiektu
 
     public static class Builder {
+        private static final int DEFAULT_QUANTITY = 1;
+
         private BaseBoard board;
         private String id;
-        private int quantity = 1;
+        private int quantity = DEFAULT_QUANTITY;
         private OrderStatus status = OrderStatus.PENDING;
         private OrderSpecification specification;
 

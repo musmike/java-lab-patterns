@@ -44,9 +44,11 @@ public class BaseElectronicBoardProductionOrder extends ProductionOrder {
     // umożliwia opcjonalne ustawienie specyfikacji i statusu bez wielu konstruktorów
 
     public static class Builder {
+        private static final int DEFAULT_QUANTITY = 1;
+
         private BaseElectronicBoard electronicBoard;
         private String id;
-        private int quantity = 1;
+        private int quantity = DEFAULT_QUANTITY;
         private OrderStatus status = OrderStatus.PENDING;
         private OrderSpecification specification;
 

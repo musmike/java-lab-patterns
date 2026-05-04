@@ -11,12 +11,16 @@ import java.util.Map;
 // ale zamknięta na modyfikacje (nie musimy zmieniać istniejącego kodu, aby dodać nowe funkcjonalności).
 public class CustomerLoyaltyService {
 
+    private static final TierConfig BRONZE_TIER_CONFIG = new TierConfig(10, 100, 20);
+    private static final TierConfig SILVER_TIER_CONFIG = new TierConfig(50, 100, 20);
+    private static final TierConfig GOLD_TIER_CONFIG = new TierConfig(150, 50, 50);
+
     private final Map<String, TierConfig> tiers = new HashMap<>();
 
     public CustomerLoyaltyService() {
-        tiers.put("BRONZE", new TierConfig(10, 100, 20));
-        tiers.put("SILVER", new TierConfig(50, 100, 20));
-        tiers.put("GOLD", new TierConfig(150, 50, 50));
+        tiers.put("BRONZE", BRONZE_TIER_CONFIG);
+        tiers.put("SILVER", SILVER_TIER_CONFIG);
+        tiers.put("GOLD", GOLD_TIER_CONFIG);
     }
 
     public void registerTier(String tierName, TierConfig config) {

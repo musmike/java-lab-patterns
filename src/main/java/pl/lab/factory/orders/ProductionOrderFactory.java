@@ -12,21 +12,19 @@ import java.util.Objects;
 // Metoda createOrder() sprawdza typ produktu i tworzy odpowiedni obiekt ProductionOrder.
 public class ProductionOrderFactory {
 
-    public static ProductionOrder createOrder(String id, ManufacturableProduct product,
-                                              int quantity, OrderSpecification spec) {
+    public static ProductionOrder createOrder(ManufacturableProduct product, OrderContext context) {
         Objects.requireNonNull(product, "product cannot be null");
-
-        SystemLogger.INSTANCE.logInfo("ORDERS", "Creating order: " + id);
+        SystemLogger.INSTANCE.logInfo("ORDERS", "Creating order: " + context.id());
 
         if (product instanceof BaseElectronicBoard electronicBoard) {
-            return new BaseElectronicBoardProductionOrder.Builder(id, electronicBoard)
-                    .setQuantity(quantity)
-                    .setSpecification(spec)
+            return new BaseElectronicBoardProductionOrder.Builder(context.id(), electronicBoard)
+                    .setQuantity(context.quantity())
+                    .setSpecification(context.spec())
                     .build();
         } else if (product instanceof BaseBoard baseBoard) {
-            return new BaseBoardProductionOrder.Builder(id, baseBoard)
-                    .setQuantity(quantity)
-                    .setSpecification(spec)
+            return new BaseBoardProductionOrder.Builder(context.id(), baseBoard)
+                    .setQuantity(context.quantity())
+                    .setSpecification(context.spec())
                     .build();
         }
 

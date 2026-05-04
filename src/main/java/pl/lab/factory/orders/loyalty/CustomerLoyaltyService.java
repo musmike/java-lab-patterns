@@ -41,8 +41,7 @@ public class CustomerLoyaltyService {
         TierConfig config = tiers.get(tierName);
 
         if (config == null) {
-            SystemLogger.INSTANCE.logError("LOYALTY-SERVICE", "Unknown tier: " + tierName);
-            return 0;
+            throw new IllegalArgumentException("Unknown tier: " + tierName);
         }
 
         int total = config.basePoints();

@@ -33,11 +33,7 @@ import pl.lab.factory.mediator.CentralControlMediator;
 import pl.lab.factory.mediator.ProductionDepartment;
 import pl.lab.factory.mediator.ReportingDepartment;
 import pl.lab.factory.mediator.WarehouseDepartment;
-import pl.lab.factory.orders.OrderSpecification;
-import pl.lab.factory.orders.OrderStatus;
-import pl.lab.factory.orders.ProductionOrder;
-import pl.lab.factory.orders.ProductionOrderFactory;
-import pl.lab.factory.orders.ProductionQueue;
+import pl.lab.factory.orders.*;
 import pl.lab.factory.orders.command.AddMultipleOrdersCommand;
 import pl.lab.factory.orders.command.AddOrderCommand;
 import pl.lab.factory.orders.command.ClearQueueCommand;
@@ -197,9 +193,9 @@ public class Main {
 
         BaseBoard boardA = boardFactory.createBoard();
 
-        ProductionOrder orderA = ProductionOrderFactory.createOrder("ORD-001", boardA, 10, specPcb);
-        ProductionOrder orderB = ProductionOrderFactory.createOrder("ORD-002", electronicBoardA, 3, specElectronic);
-        ProductionOrder orderC = ProductionOrderFactory.createOrder("ORD-003", electronicBoardB, 2, specElectronic);
+        ProductionOrder orderA = ProductionOrderFactory.createOrder(boardA, new OrderContext("ORD-001", 10, specPcb));
+        ProductionOrder orderB = ProductionOrderFactory.createOrder(electronicBoardA, new OrderContext("ORD-002", 3, specElectronic));
+        ProductionOrder orderC = ProductionOrderFactory.createOrder(electronicBoardB, new OrderContext("ORD-003", 2, specElectronic));
         ProductionOrder orderBaseClone = orderA.clone("ORD-004");
         ProductionOrder orderElectronicClone = orderB.clone("ORD-005");
 
@@ -214,7 +210,7 @@ public class Main {
         PricingStrategy vipPricing = new VipPricingStrategy();
         PricingStrategy bulkPricing = new BulkPricingStrategy();
 
-        ProductionOrder orderZ = ProductionOrderFactory.createOrder("ORD-Z", boardA, 150, specPcb);
+        ProductionOrder orderZ = ProductionOrderFactory.createOrder(boardA, new OrderContext("ORD-Z", 150, specPcb));
         OrderInvoice invoiceA = new OrderInvoice(orderZ, standardPricing);
         SystemLogger.INSTANCE.logInfo("MAIN", "Initial draft amount: $" + String.format("%.2f", invoiceA.getAmount()));
 
@@ -508,7 +504,7 @@ public class Main {
 
         warehouseAdapter.getZoneA().setState(new LockedState());
 
-        ProductionOrder fireOrder = ProductionOrderFactory.createOrder("FIRE-01", boardA, 1, specPcb);
+        ProductionOrder fireOrder = ProductionOrderFactory.createOrder(boardA, new OrderContext("FIRE-01", 1, specPcb));
         warehouse.storeOrder(fireOrder);
 
         SafetySystemMemento lastState = safetyHistory.undo();
@@ -523,7 +519,7 @@ public class Main {
         // -- Reports --
 
         // not completed order example
-        ProductionOrder orderD = ProductionOrderFactory.createOrder("ORD-006", boardA, 5, specPcb);
+        ProductionOrder orderD = ProductionOrderFactory.createOrder(boardA, new OrderContext("ORD-006", 5, specPcb));
         allOrders.add(orderD);
 
         // Reporting Facade
@@ -565,12 +561,12 @@ public class Main {
 
         SystemLogger.INSTANCE.logInfo("MAIN", "=== ORDER ITERATOR PATTERN TEST ===");
 
-        ProductionOrder orderE = ProductionOrderFactory.createOrder("ITER-01", boardA, 2, specPcb);
-        ProductionOrder orderF = ProductionOrderFactory.createOrder("ITER-02", electronicBoardB, 8, specElectronic);
-        ProductionOrder orderG = ProductionOrderFactory.createOrder("ITER-03", boardA, 5, specPcb);
-        ProductionOrder orderH = ProductionOrderFactory.createOrder("ITER-04", electronicBoardB, 9, specElectronic);
-        ProductionOrder orderI = ProductionOrderFactory.createOrder("ITER-05", boardA, 6, specPcb);
-        ProductionOrder orderJ = ProductionOrderFactory.createOrder("ITER-06", electronicBoardB, 7, specElectronic);
+        ProductionOrder orderE = ProductionOrderFactory.createOrder(boardA, new OrderContext("ITER-01", 2, specPcb));
+        ProductionOrder orderF = ProductionOrderFactory.createOrder(electronicBoardB, new OrderContext("ITER-02", 8, specElectronic));
+        ProductionOrder orderG = ProductionOrderFactory.createOrder(boardA, new OrderContext("ITER-03", 5, specPcb));
+        ProductionOrder orderH = ProductionOrderFactory.createOrder(electronicBoardB, new OrderContext("ITER-04", 9, specElectronic));
+        ProductionOrder orderI = ProductionOrderFactory.createOrder(boardA, new OrderContext("ITER-05", 6, specPcb));
+        ProductionOrder orderJ = ProductionOrderFactory.createOrder(electronicBoardB, new OrderContext("ITER-06", 7, specElectronic));
 
         orderE.setStatus(OrderStatus.COMPLETED);
         orderF.setStatus(OrderStatus.COMPLETED);

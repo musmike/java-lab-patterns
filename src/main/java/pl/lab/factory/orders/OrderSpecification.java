@@ -22,12 +22,11 @@ public class OrderSpecification implements Cloneable {
 
     private String qualityStandard;    // np. "Class 2", "Class 3"
 
-    public OrderSpecification(double voltageTolerance, double thicknessTolerance,
-                              List<Certificate> certificates, String qualityStandard) {
-        this.voltageTolerance = voltageTolerance;
-        this.thicknessTolerance = thicknessTolerance;
-        this.certificates = new ArrayList<>(certificates);
-        this.qualityStandard = qualityStandard;
+    private OrderSpecification(Builder builder) {
+        this.voltageTolerance = builder.voltageTolerance;
+        this.thicknessTolerance = builder.thicknessTolerance;
+        this.certificates = new ArrayList<>(builder.certificates);
+        this.qualityStandard = builder.qualityStandard;
     }
 
     // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
@@ -129,12 +128,7 @@ public class OrderSpecification implements Cloneable {
         }
 
         public OrderSpecification build(){
-            return new OrderSpecification(
-                    voltageTolerance,
-                    thicknessTolerance,
-                    certificates,
-                    qualityStandard
-            );
+            return new OrderSpecification(this);
         }
     }
 

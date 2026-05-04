@@ -9,10 +9,11 @@ package pl.lab.factory.reporting;
 // Zasada pojedynczej odpowiedzalności (SRP) 5
 // Klasa LegacyAuditSystem jest odpowiedzialna tylko za logowanie informacji o zamówieniu
 public class LegacyAuditSystem {
-    public void logProduction(String orderId, String boardType, int quantity, String statusCode) {
+    public void logProduction(AuditData data) {
         System.out.printf("[LEGACY AUDIT] orderId=%-10s type=%-40s qty=%d status=%s%n",
-                orderId, boardType, quantity, statusCode);
+                data.orderId(), data.boardType(), data.quantity(), data.statusCode());
     }
+
 }
 // Koniec, Tydzień 3
 // Wzorzec Adapter 1

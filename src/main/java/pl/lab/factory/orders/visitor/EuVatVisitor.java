@@ -3,6 +3,7 @@ package pl.lab.factory.orders.visitor;
 import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.BaseElectronicBoardProductionOrder;
+import pl.lab.factory.orders.ProductionOrder;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Visitor 1 (Concrete Visitor)
@@ -19,26 +20,26 @@ public class EuVatVisitor implements OrderVisitor {
 
     @Override
     public void visit(BaseBoardProductionOrder order) {
-        calculateVat(order.getId(), "BaseBoard", order.getQuantity(), BASE_BOARD_UNIT_PRICE);
+        calculateVat(order, "BaseBoard", BASE_BOARD_UNIT_PRICE);
     }
 
     @Override
     public void visit(BaseElectronicBoardProductionOrder order) {
-        calculateVat(order.getId(), "ElectronicBoard", order.getQuantity(), ELECTRONIC_BOARD_UNIT_PRICE);
+        calculateVat(order, "ElectronicBoard", ELECTRONIC_BOARD_UNIT_PRICE);
     }
 
-    private void calculateVat(String orderId, String type, int quantity, double unitPrice) {
-        double estimatedValue = quantity * unitPrice;
+    private void calculateVat(ProductionOrder order, String type, double unitPrice) {
+        double estimatedValue = order.getQuantity() * unitPrice;
         double tax = estimatedValue * VAT_RATE;
 
-        if (quantity < SMALL_ORDER_THRESHOLD) {
+        if (order.getQuantity() < SMALL_ORDER_THRESHOLD) {
             tax += SMALL_ORDER_FEE;
-            SystemLogger.INSTANCE.logInfo("EU-VAT", "Order " + orderId
+            SystemLogger.INSTANCE.logInfo("EU-VAT", "Order " + order.getId()
                     + " (" + type + ") -> Small order fee applied (+ $" + SMALL_ORDER_FEE + ").");
         }
 
         totalVat += tax;
-        SystemLogger.INSTANCE.logInfo("EU-VAT", "Order " + orderId
+        SystemLogger.INSTANCE.logInfo("EU-VAT", "Order " + order.getId()
                 + " (" + type + ") -> " + (VAT_RATE * 100) + "% VAT. Tax: $" + String.format("%.2f", tax));
     }
 

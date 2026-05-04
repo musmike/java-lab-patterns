@@ -32,11 +32,11 @@ public abstract class ProductionOrder implements Originator, OrderSubject, Produ
     // Wzorzec Observer 1
 
 
-    public ProductionOrder(String id, int quantity, OrderStatus status, OrderSpecification specification) {
-        this.id = id;
-        this.quantity = quantity;
+    public ProductionOrder(OrderContext context, OrderStatus status) {
+        this.id = context.id();
+        this.quantity = context.quantity();
+        this.specification = context.spec();
         this.status = status;
-        this.specification = specification;
         this.orderStatusMementoCaretaker = new OrderStatusMementoCaretaker();
     }
 

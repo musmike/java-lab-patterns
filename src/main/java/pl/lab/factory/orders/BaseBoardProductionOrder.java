@@ -9,7 +9,7 @@ public class BaseBoardProductionOrder extends ProductionOrder {
     private BaseBoard board;
 
     private BaseBoardProductionOrder(Builder builder) {
-        super(builder.id, builder.quantity, builder.status, builder.specification);
+        super(new OrderContext(builder.id, builder.quantity, builder.specification), builder.status);
         this.board = builder.board;
     }
 
@@ -19,12 +19,8 @@ public class BaseBoardProductionOrder extends ProductionOrder {
     // Wzorzec Prototype 3
     @Override
     public ProductionOrder clone(String newId) {
-        return ProductionOrderFactory.createOrder(
-                newId,
-                board.deepCopy(),
-                this.quantity,
-                this.specification.clone()
-        );
+        OrderContext context = new OrderContext(newId, this.quantity, this.specification.clone());
+        return ProductionOrderFactory.createOrder(board.deepCopy(), context);
     }
     // Koniec, Tydzień 2
     // Wzorzec Prototype 3

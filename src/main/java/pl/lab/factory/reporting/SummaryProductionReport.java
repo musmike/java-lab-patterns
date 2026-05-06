@@ -19,18 +19,8 @@ public class SummaryProductionReport extends ProductionReport {
     }
 
     @Override
-    public void generate(List<ProductionOrder> orders) {
+    protected void writeReportHeader() {
         formatter.writeHeader("Production summary");
-
-        for (ProductionOrder order : orders) {
-            formatter.writeOrder(order);
-        }
-
-        long totalUnits = orders.stream()
-                .mapToLong(ProductionOrder::getQuantity)
-                .sum();
-
-        formatter.writeFooter(orders.size(), totalUnits);
     }
 }
 // Koniec, Tydzień 3

@@ -4,6 +4,7 @@ import pl.lab.factory.SystemLogger;
 import pl.lab.factory.electronicboards.ElectronicType;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.BaseElectronicBoardProductionOrder;
+import pl.lab.factory.orders.ProductionOrder;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Visitor 1 (Concrete Visitor)
@@ -20,30 +21,38 @@ public class UsaCustomsVisitor implements OrderVisitor {
 
     @Override
     public void visit(BaseBoardProductionOrder order) {
-        double estimatedValue = order.getQuantity() * BASE_BOARD_UNIT_PRICE;
-        double tax = estimatedValue * STANDARD_TARIFF_RATE;
-        totalCustomsTax += tax;
-
-        SystemLogger.INSTANCE.logInfo("USA-CUSTOMS", "Order " + order.getId()
-                + " (BaseBoard) -> " + (STANDARD_TARIFF_RATE * 100) + "% tariff. Tax: $" + String.format("%.2f", tax));
+        processCustomsTax(order, "BaseBoard", BASE_BOARD_UNIT_PRICE, STANDARD_TARIFF_RATE);
     }
 
     @Override
     public void visit(BaseElectronicBoardProductionOrder order) {
-        double estimatedValue = order.getQuantity() * ELECTRONIC_BOARD_UNIT_PRICE;
-        double taxRate = ELECTRONIC_TARIFF_RATE;
+        double taxRate = determineElectronicTaxRate(order);
+        processCustomsTax(order, "ElectronicBoard", ELECTRONIC_BOARD_UNIT_PRICE, taxRate);
+    }
 
+    private double determineElectronicTaxRate(BaseElectronicBoardProductionOrder order) {
         if (order.getBaseElectronicBoard().getBoardType() == ElectronicType.HIGHLY_DEPENDANT) {
-            taxRate = RESTRICTED_TECH_TARIFF_RATE;
             SystemLogger.INSTANCE.logInfo("USA-CUSTOMS", "WARNING: Order " + order.getId()
                     + " contains restricted tech. Applying " + (RESTRICTED_TECH_TARIFF_RATE * 100) + "% tariff.");
+            return RESTRICTED_TECH_TARIFF_RATE;
         }
+        return ELECTRONIC_TARIFF_RATE;
+    }
 
-        double tax = estimatedValue * taxRate;
+    private void processCustomsTax(ProductionOrder order, String typeName, double unitPrice, double taxRate) {
+        double tax = calculateTax(order.getQuantity(), unitPrice, taxRate);
         totalCustomsTax += tax;
+        logFinalTax(order.getId(), typeName, taxRate, tax);
+    }
 
-        SystemLogger.INSTANCE.logInfo("USA-CUSTOMS", "Order " + order.getId()
-                + " (ElectronicBoard) -> " + (taxRate * 100) + "% tariff. Tax: $" + String.format("%.2f", tax));
+    private double calculateTax(int quantity, double unitPrice, double taxRate) {
+        double estimatedValue = quantity * unitPrice;
+        return estimatedValue * taxRate;
+    }
+
+    private void logFinalTax(String orderId, String typeName, double taxRate, double tax) {
+        SystemLogger.INSTANCE.logInfo("USA-CUSTOMS", "Order " + orderId
+                + " (" + typeName + ") -> " + (taxRate * 100) + "% tariff. Tax: $" + String.format("%.2f", tax));
     }
 
     public double getTotalCustomsTax() {

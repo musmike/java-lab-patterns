@@ -132,20 +132,20 @@ public class ProductionQueue implements OrderCollection {
             while (quantityPosition < orderList.size()) {
                 ProductionOrder order = orderList.get(quantityPosition);
 
-                if (order.getStatus() == statusToFilter) {
-                    boolean quantityMatch = switch (operator) {
-                        case ">" -> order.getQuantity() > value;
-                        case "<" -> order.getQuantity() < value;
-                        default -> order.getQuantity() == value;
-                    };
-
-                    if (quantityMatch) {
-                        return true;
-                    }
+                if (order.getStatus() == statusToFilter && isQuantityMatch(order.getQuantity(), operator, value)) {
+                    return true;
                 }
                 quantityPosition++;
             }
             return false;
+        }
+
+        private boolean isQuantityMatch(int orderQuantity, String operator, int value) {
+            return switch (operator) {
+                case ">" -> orderQuantity > value;
+                case "<" -> orderQuantity < value;
+                default -> orderQuantity == value;
+            };
         }
 
         @Override

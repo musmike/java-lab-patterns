@@ -20,27 +20,39 @@ public class EuVatVisitor implements OrderVisitor {
 
     @Override
     public void visit(BaseBoardProductionOrder order) {
-        calculateVat(order, "BaseBoard", BASE_BOARD_UNIT_PRICE);
+        processOrderVat(order, "BaseBoard", BASE_BOARD_UNIT_PRICE);
     }
 
     @Override
     public void visit(BaseElectronicBoardProductionOrder order) {
-        calculateVat(order, "ElectronicBoard", ELECTRONIC_BOARD_UNIT_PRICE);
+        processOrderVat(order, "ElectronicBoard", ELECTRONIC_BOARD_UNIT_PRICE);
     }
 
-    private void calculateVat(ProductionOrder order, String type, double unitPrice) {
-        double estimatedValue = order.getQuantity() * unitPrice;
-        double tax = estimatedValue * VAT_RATE;
-
-        if (order.getQuantity() < SMALL_ORDER_THRESHOLD) {
-            tax += SMALL_ORDER_FEE;
-            SystemLogger.INSTANCE.logInfo("EU-VAT", "Order " + order.getId()
-                    + " (" + type + ") -> Small order fee applied (+ $" + SMALL_ORDER_FEE + ").");
-        }
+    private void processOrderVat(ProductionOrder order, String typeName, double unitPrice) {
+        double tax = calculateBaseTax(order.getQuantity(), unitPrice);
+        tax += calculateSmallOrderFee(order.getQuantity(), order.getId(), typeName);
 
         totalVat += tax;
-        SystemLogger.INSTANCE.logInfo("EU-VAT", "Order " + order.getId()
-                + " (" + type + ") -> " + (VAT_RATE * 100) + "% VAT. Tax: $" + String.format("%.2f", tax));
+        logFinalTax(order.getId(), typeName, tax);
+    }
+
+    private double calculateBaseTax(int quantity, double unitPrice) {
+        double estimatedValue = quantity * unitPrice;
+        return estimatedValue * VAT_RATE;
+    }
+
+    private double calculateSmallOrderFee(int quantity, String orderId, String typeName) {
+        if (quantity < SMALL_ORDER_THRESHOLD) {
+            SystemLogger.INSTANCE.logInfo("EU-VAT", "Order " + orderId
+                    + " (" + typeName + ") -> Small order fee applied (+ $" + SMALL_ORDER_FEE + ").");
+            return SMALL_ORDER_FEE;
+        }
+        return 0.0;
+    }
+
+    private void logFinalTax(String orderId, String typeName, double tax) {
+        SystemLogger.INSTANCE.logInfo("EU-VAT", "Order " + orderId
+                + " (" + typeName + ") -> " + (VAT_RATE * 100) + "% VAT. Tax: $" + String.format("%.2f", tax));
     }
 
     public double getTotalVat() {

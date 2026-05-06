@@ -25,22 +25,15 @@ public class CompletedOnlyProductionReport extends ProductionReport {
     }
 
     @Override
-    public void generate(List<ProductionOrder> orders) {
+    protected void writeReportHeader() {
         formatter.writeHeader("Completed orders");
+    }
 
-        List<ProductionOrder> completed = orders.stream()
-                .filter(o -> o.getStatus() == OrderStatus.COMPLETED)
+    @Override
+    protected List<ProductionOrder> filterOrders(List<ProductionOrder> orders) {
+        return orders.stream()
+                .filter(order -> order.getStatus() == OrderStatus.COMPLETED)
                 .toList();
-
-        for (ProductionOrder order : completed) {
-            formatter.writeOrder(order);
-        }
-
-        long totalUnits = completed.stream()
-                .mapToLong(ProductionOrder::getQuantity)
-                .sum();
-
-        formatter.writeFooter(completed.size(), totalUnits);
     }
 }
 // Koniec, Tydzień 3

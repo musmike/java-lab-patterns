@@ -19,19 +19,15 @@ public class DynamicProductionReport extends ProductionReport {
     }
 
     @Override
-    public void generate(List<ProductionOrder> orders) {
+    protected void writeReportHeader() {
         formatter.writeHeader("Custom Query Report");
+    }
 
+    @Override
+    protected List<ProductionOrder> filterOrders(List<ProductionOrder> orders) {
         // Kontekst przekazywany do drzewa. Wynik to przefiltrowana lista zamówień.
-        ReportContext ctx = new ReportContext(orders);
-        List<ProductionOrder> filteredOrders = queryTree.interpret(ctx);
-
-        for (ProductionOrder order : filteredOrders) {
-            formatter.writeOrder(order);
-        }
-
-        long totalUnits = filteredOrders.stream().mapToLong(ProductionOrder::getQuantity).sum();
-        formatter.writeFooter(filteredOrders.size(), totalUnits);
+        ReportContext context = new ReportContext(orders);
+        return queryTree.interpret(context);
     }
 }
 // Koniec, Tydzień 5

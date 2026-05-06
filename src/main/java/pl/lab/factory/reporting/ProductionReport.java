@@ -21,7 +21,31 @@ public abstract class ProductionReport {
         this.formatter = formatter;
     }
 
-    public abstract void generate(List<ProductionOrder> orders);
+    public final void generate(List<ProductionOrder> orders) {
+        writeReportHeader();
+        List<ProductionOrder> filteredOrders = filterOrders(orders);
+        writeOrderDetails(filteredOrders);
+        writeReportFooter(filteredOrders);
+    }
+
+    protected abstract void writeReportHeader();
+
+    protected List<ProductionOrder> filterOrders(List<ProductionOrder> orders) {
+        return orders;
+    }
+
+    private void writeOrderDetails(List<ProductionOrder> orders) {
+        for (ProductionOrder order : orders) {
+            formatter.writeOrder(order);
+        }
+    }
+
+    private void writeReportFooter(List<ProductionOrder> orders) {
+        long totalUnits = orders.stream()
+                .mapToLong(ProductionOrder::getQuantity)
+                .sum();
+        formatter.writeFooter(orders.size(), totalUnits);
+    }
 }
 // Koniec, Tydzień 3
 // Wzorzec Bridge 1

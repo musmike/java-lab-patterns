@@ -23,7 +23,7 @@ public class CapacitorDefinition implements ComponentDefinition{
 
     @Override
     public double getCost() {
-        return 0;
+        return cost;
     }
 }
 //flyweight 2

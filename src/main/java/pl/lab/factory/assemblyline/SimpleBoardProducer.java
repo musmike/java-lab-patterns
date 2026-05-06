@@ -10,7 +10,6 @@ import pl.lab.factory.assemblyline.coordination.FactoryMachineMediator;
 import pl.lab.factory.assemblyline.coordination.MachineMediator;
 import pl.lab.factory.pcbboards.BaseBoard;
 
-import java.util.ArrayList;
 import java.util.List;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
@@ -21,7 +20,7 @@ public class SimpleBoardProducer implements BoardProducer  {
     @Override
     public void produce(BaseBoard board) throws InterruptedException {
         MachineMediator mediator = new FactoryMachineMediator();
-        AssemblyStepFacade assembler = new AssemblyStepFacade(List.of(
+        AssemblyStepManufacturingFacade assembler = new AssemblyStepManufacturingFacade(List.of(
                 new MountStep(new AutoMount(mediator)),
                 new PrintStep(new PrintingProxy(new LaserPrint(mediator))),
                 new SolderStep(new SolderingProxy(new WaveSolder(mediator)))

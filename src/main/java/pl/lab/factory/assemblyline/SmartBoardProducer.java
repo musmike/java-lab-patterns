@@ -3,7 +3,6 @@ package pl.lab.factory.assemblyline;
 import pl.lab.factory.assemblyline.assemblingsteps.*;
 import pl.lab.factory.assemblyline.assemblingstrategiers.*;
 import pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies.PrintingProxy;
-import pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies.SolderingProxy;
 import pl.lab.factory.assemblyline.coordination.FactoryMachineMediator;
 import pl.lab.factory.assemblyline.coordination.MachineMediator;
 import pl.lab.factory.assemblyline.smartinterpreter.BaseProducerExpression;
@@ -35,7 +34,7 @@ public class SmartBoardProducer implements BoardProducer  {
                 ? new ReflowSolder(mediator) : new WaveSolder(mediator);
         SolderStep soldering = new SolderStep(solderStrat);
 
-        AssemblyStepFacade assembler = new AssemblyStepFacade(List.of(mounting, printing, soldering));
+        AssemblyStepManufacturingFacade assembler = new AssemblyStepManufacturingFacade(List.of(mounting, printing, soldering));
         System.out.println("[BOARD PRODUCTION] Manufacturing board using smart producer...");
         assembler.manufacture(board);
     }

@@ -29,31 +29,24 @@ public class FactoryMachineMediator implements MachineMediator{
     @Override
     public void requestMount(BaseBoard board, MountingStrategy strategy) {
         if (strategy instanceof AutoMount) {
-
             Machine decorated =
                     new MachineWarmupDecorator<>(
                             new MachineAdjusterDecorator<>(
                                     new MounterValueTesterDecorator(mounter, 1)
                             )
                     );
-
             decorated.perform(board);
             System.out.println("Automatically mounting components!");
         }
-
         else if (strategy instanceof ManualMount) {
-
             board.mountComponents();
-
             try {
                 TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-
             System.out.println("Manually mounting components!");
         }
-
     }
 
     @Override

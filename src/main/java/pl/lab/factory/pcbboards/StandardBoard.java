@@ -8,15 +8,23 @@ import pl.lab.factory.components.Resistor;
 
 public class StandardBoard extends BaseBoard {
 
+    private final double DEFAULT_VOLTAGE = 3.3;
+    private final BoardMaterials DEFAULT_BOARD_MATERIAL = BoardMaterials.FR_4;
+    private final SolderMaterials DEFAULT_SOLDER_MATERIAL = SolderMaterials.SOLDER_ALLOY;
+    private final double DEFAULT_THICKNESS = 1.6;
+    private final Pair<Integer, Integer> DEFAULT_SIZE = new Pair<>(100, 100);
+    private final int DEFAULT_COLOR = 0x007700;
+    private final int DEFAULT_LAYERS = 2;
+
     public StandardBoard() {
-        this.workingVoltage = 3.3;
-        this.boardMaterial = BoardMaterials.FR_4;
-        this.solderType = SolderMaterials.SOLDER_ALLOY;
-        this.thickness = 1.6;
-        this.width = 100;
-        this.length = 100;
-        this.boardColor = 0x007700;
-        this.layers = 2;
+        this.workingVoltage = DEFAULT_VOLTAGE;
+        this.boardMaterial = DEFAULT_BOARD_MATERIAL;
+        this.solderType = DEFAULT_SOLDER_MATERIAL;
+        this.thickness = DEFAULT_THICKNESS;
+        this.width = DEFAULT_SIZE.first();
+        this.length = DEFAULT_SIZE.second();
+        this.boardColor = DEFAULT_COLOR;
+        this.layers = DEFAULT_LAYERS;
         ComponentGroup mainGroup = new ComponentGroup("Main group");
         mainGroup.add(new Resistor(ComponentDefinitionFactory.getResistorDefinition(20, 0.2), new Pair<>(1,1)));
         mainGroup.add(new Capacitor(ComponentDefinitionFactory.getCapacitorDefinition(5, 0.2), new Pair<>(3, 1)));

@@ -7,12 +7,12 @@ import pl.lab.factory.pcbboards.monitoring.reporting.ProcessingReport;
 // wzorzec observer 3 - konkretny obserwator
 // obserwator otrzymujący zmiany przy każdym etapie produkcji płytki
 public class ProcessObserver implements BoardObserver {
-    ProcessingReport reportGen = new ProcessingReport();
+    ProcessingReport reportGenerator = new ProcessingReport();
     BaseBoard b;
 
     @Override
     public void update() {
-        reportGen.generate(b);
+        reportGenerator.generate(b);
     }
 
     @Override

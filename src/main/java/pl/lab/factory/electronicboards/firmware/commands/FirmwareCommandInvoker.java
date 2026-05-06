@@ -9,6 +9,7 @@ import java.util.List;
 // Wzorzec Command 3 (Invoker)
 public class FirmwareCommandInvoker {
     private List<FirmwareCommand> commandList = new ArrayList<>();
+    private final short MAX_ATTEMPTS = 3;
 
     public void add(FirmwareCommand command){
         commandList.add(command);
@@ -19,15 +20,14 @@ public class FirmwareCommandInvoker {
         for(FirmwareCommand command : commandList){
             boolean success = false;
             int attempts = 0;
-
-            while(!success && attempts < 3){
+            while(!success && attempts < MAX_ATTEMPTS){
                 try {
                     command.execute();
                     success=true;
                 } catch (RuntimeException e){
                     attempts++;
                     System.out.println("[Firmware Invoker] Command failed, retrying... (" + attempts + ")");
-                    if(attempts >= 3){
+                    if(attempts >= MAX_ATTEMPTS){
                         System.out.println("[Firmware Invoker] Command failed completely after 3 tries!!!");
                     }
                 }

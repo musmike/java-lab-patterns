@@ -30,6 +30,7 @@ public class Solderer extends Machine{
     public void perform(BaseBoard board) {
         super.perform(board);
         System.out.println("[SOLDERER] Soldering board!");
+        System.out.println("[SOLDERER] Using " + (reflowMode ? "reflow " : "wave ") + "mode");
         solderBoard(board);
     }
 }

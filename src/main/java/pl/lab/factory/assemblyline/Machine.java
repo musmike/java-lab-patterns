@@ -32,5 +32,5 @@ public abstract class Machine {
                 System.out.println("Machine state: error!");
             }
         }
-    };
+    }
 }

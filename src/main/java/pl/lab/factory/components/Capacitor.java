@@ -10,6 +10,8 @@ import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
 //Tydzien 8 - Segregacja interfejsów
 //klasa korzystajaca z wielu interfejsow rozbitego interfejsu
 public class Capacitor implements BaseComponent, PositionableComponent, SignalProcessorComponent, VisitableComponent {
+    private final short VOLTAGE_COMPARATOR = 5;
+
 
     private CapacitorDefinition definition;
     private boolean mounted = false;
@@ -42,7 +44,7 @@ public class Capacitor implements BaseComponent, PositionableComponent, SignalPr
 
     @Override
     public double mofifyResult(double value) {
-        return value + 5 > definition.getCapacitance() ? value - definition.getCapacitance() : value + definition.getCapacitance();
+        return value + VOLTAGE_COMPARATOR > definition.getCapacitance() ? value - definition.getCapacitance() : value + definition.getCapacitance();
     }
 
     @Override

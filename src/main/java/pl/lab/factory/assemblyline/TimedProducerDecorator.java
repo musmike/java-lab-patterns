@@ -10,6 +10,8 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Rozszerza produkcję o mierzenie i logowanie czasu wykonania,
 // nie zmieniając klasy SimpleBoardProducer ani żadnego innego producenta.
 public class TimedProducerDecorator extends BoardProducerDecorator {
+    private final short DEFAULT_TIMEOUT = 5;
+
 
     public TimedProducerDecorator(BoardProducer boardProducer) {
         super(boardProducer);
@@ -19,7 +21,7 @@ public class TimedProducerDecorator extends BoardProducerDecorator {
     public void produce(BaseBoard board) throws InterruptedException {
         long start = System.currentTimeMillis();
         boardProducer.produce(board);
-        TimeUnit.MILLISECONDS.sleep(5);
+        TimeUnit.MILLISECONDS.sleep(DEFAULT_TIMEOUT);
         long elapsed = System.currentTimeMillis() - start;
         SystemLogger.INSTANCE.logInfo("TimedProducer",
                 "Production time: " + elapsed + " ms | " + board);

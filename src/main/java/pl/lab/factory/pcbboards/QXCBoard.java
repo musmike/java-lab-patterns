@@ -9,15 +9,23 @@ import pl.lab.factory.components.Resistor;
 
 public class QXCBoard extends BaseBoard{
 
+    private final double DEFAULT_VOLTAGE = 5;
+    private final BoardMaterials DEFAULT_BOARD_MATERIAL = BoardMaterials.COPPER;
+    private final SolderMaterials DEFAULT_SOLDER_MATERIAL = SolderMaterials.WITH_GOLD;
+    private final double DEFAULT_THICKNESS = 2.3;
+    private final Pair<Integer, Integer> DEFAULT_SIZE = new Pair<>(120, 120);
+    private final int DEFAULT_COLOR = 0x007700;
+    private final int DEFAULT_LAYERS = 3;
+
     public QXCBoard() {
-        this.workingVoltage = 5;
-        this.boardMaterial = BoardMaterials.COPPER;
-        this.solderType = SolderMaterials.WITH_GOLD;
-        this.thickness = 2.3;
-        this.width = 120;
-        this.length = 120;
-        this.boardColor = 0x007700;
-        this.layers = 3;
+        this.workingVoltage = DEFAULT_VOLTAGE;
+        this.boardMaterial = DEFAULT_BOARD_MATERIAL;
+        this.solderType = DEFAULT_SOLDER_MATERIAL;
+        this.thickness = DEFAULT_THICKNESS;
+        this.width = DEFAULT_SIZE.first();
+        this.length = DEFAULT_SIZE.second();
+        this.boardColor = DEFAULT_COLOR;
+        this.layers = DEFAULT_LAYERS;
         ComponentGroup mainGroup = new ComponentGroup("SCQ");
         mainGroup.add(new Resistor(ComponentDefinitionFactory.getResistorDefinition(20, 20.2), new Pair<>(1,1)));
         mainGroup.add(new Capacitor(ComponentDefinitionFactory.getCapacitorDefinition(5, 12.2), new Pair<>(3, 1)));

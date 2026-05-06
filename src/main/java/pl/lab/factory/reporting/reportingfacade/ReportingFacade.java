@@ -2,7 +2,6 @@ package pl.lab.factory.reporting.reportingfacade;
 
 import pl.lab.factory.orders.ProductionOrder;
 import pl.lab.factory.reporting.*;
-import pl.lab.factory.reporting.DynamicProductionReport;
 import pl.lab.factory.reporting.interpreter.AbstractExpression;
 import java.util.List;
 
@@ -13,10 +12,7 @@ import java.util.List;
 public class ReportingFacade {
 
     public static void generate(ReportType type, ReportFormat format, List<ProductionOrder> orders) {
-        ReportFormatter formatter = switch (format) {
-            case CONSOLE -> new ConsoleReportFormatter();
-            case CSV     -> new CsvReportFormatter();
-        };
+        ReportFormatter formatter = createFormatter(format);
 
         ProductionReport report = switch (type) {
             case SUMMARY        -> new SummaryProductionReport(formatter);
@@ -30,13 +26,17 @@ public class ReportingFacade {
     // Wzorzec Interpreter 1 (integracja z Facade)
     // Przyjmuje gotowe drzewo wyrażeń i ukrywa tworzenie DynamicProductionReport oraz formattera.
     public static void generateDynamic(AbstractExpression queryTree, ReportFormat format, List<ProductionOrder> orders) {
-        ReportFormatter formatter = switch (format) {
-            case CONSOLE -> new ConsoleReportFormatter();
-            case CSV     -> new CsvReportFormatter();
-        };
+        ReportFormatter formatter = createFormatter(format);
 
         ProductionReport report = new DynamicProductionReport(formatter, queryTree);
         report.generate(orders);
+    }
+
+    private static ReportFormatter createFormatter(ReportFormat format) {
+        return switch (format) {
+            case CONSOLE -> new ConsoleReportFormatter();
+            case CSV     -> new CsvReportFormatter();
+        };
     }
     // Koniec, Tydzień 5
     // Wzorzec Interpreter 1

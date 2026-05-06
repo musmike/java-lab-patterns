@@ -24,20 +24,20 @@ public enum SystemLogger {
     }
 
     public void log(String context, String message) {
-        String c = padRight(context, CONTEXT_WIDTH);
-        String t = padRight("", TYPE_WIDTH);
-        System.out.println(t + c + "\t" + message);
+        printLogLine(context, "", message);
     }
 
     public void logInfo(String context, String message) {
-        String c = padRight(context, CONTEXT_WIDTH);
-        String t = padRight("[INFO]", TYPE_WIDTH);
-        System.out.println(t + c + "\t" + message);
+        printLogLine(context, "[INFO]", message);
     }
 
     public void logError(String context, String message) {
+        printLogLine(context, "[ERROR]", message);
+    }
+
+    private void printLogLine(String context, String prefix, String message) {
         String c = padRight(context, CONTEXT_WIDTH);
-        String t = padRight("[ERROR]", TYPE_WIDTH);
+        String t = padRight(prefix, TYPE_WIDTH);
         System.out.println(t + c + "\t" + message);
     }
 }

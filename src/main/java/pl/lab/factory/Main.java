@@ -5,132 +5,118 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import pl.lab.factory.assemblyline.BoardProducer;
 import pl.lab.factory.assemblyline.SmartBoardProducer;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
-import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
-import pl.lab.factory.electronicboards.firmware.HighLevelFirmware;
-import pl.lab.factory.electronicboards.firmware.HighLevelFirmwareAdapter;
-import pl.lab.factory.electronicboards.firmware.ProprietaryFirmware;
-import pl.lab.factory.electronicboards.firmware.ProprietaryFirmwareAdapter;
-import pl.lab.factory.electronicboards.firmware.programmers.FaultyDevice;
-import pl.lab.factory.electronicboards.firmware.programmers.FirmwareProgrammer;
-import pl.lab.factory.electronicboards.firmware.programmers.InternalProgrammer;
-import pl.lab.factory.electronicboards.firmware.programmers.OldFirmwareProgrammer;
-import pl.lab.factory.electronicboards.firmware.programmers.ProgrammingDevice;
-import pl.lab.factory.electronicboards.firmware.programmers.STLinkDevice;
-import pl.lab.factory.electronicboards.firmware.programmers.SeggerJLinkDevice;
-import pl.lab.factory.manufacturing.BaseBoardOrderProcessor;
-import pl.lab.factory.manufacturing.BoardPrototypes;
-import pl.lab.factory.manufacturing.ElectronicBoardFactory;
-import pl.lab.factory.manufacturing.ElectronicBoardOrderProcessor;
-import pl.lab.factory.manufacturing.OrderProcessor;
-import pl.lab.factory.manufacturing.StandardBoardFactory;
-import pl.lab.factory.manufacturing.SuperElectronicBoardFactory;
-import pl.lab.factory.mediator.CentralControlMediator;
-import pl.lab.factory.mediator.ProductionDepartment;
-import pl.lab.factory.mediator.ReportingDepartment;
-import pl.lab.factory.mediator.WarehouseDepartment;
+import pl.lab.factory.electronicboards.firmware.*;
+import pl.lab.factory.electronicboards.firmware.programmers.*;
+import pl.lab.factory.manufacturing.*;
+import pl.lab.factory.mediator.*;
 import pl.lab.factory.orders.*;
-import pl.lab.factory.orders.command.AddMultipleOrdersCommand;
-import pl.lab.factory.orders.command.AddOrderCommand;
-import pl.lab.factory.orders.command.ClearQueueCommand;
-import pl.lab.factory.orders.command.OrderQueueCommand;
-import pl.lab.factory.orders.command.QueueCommandInvoker;
-import pl.lab.factory.orders.command.RemoveOrderCommand;
+import pl.lab.factory.orders.command.*;
 import pl.lab.factory.orders.invoice.OrderInvoice;
-import pl.lab.factory.orders.invoice.dispatch.B2bApiInvoiceDispatcher;
-import pl.lab.factory.orders.invoice.dispatch.EmailInvoiceDispatcher;
-import pl.lab.factory.orders.invoice.dispatch.InvoiceDispatcher;
-import pl.lab.factory.orders.iterator.OrderCollection;
-import pl.lab.factory.orders.iterator.OrderIterator;
-import pl.lab.factory.orders.loyalty.CustomerLoyaltyService;
-import pl.lab.factory.orders.loyalty.TierConfig;
-import pl.lab.factory.orders.loyalty.VolumeBonusStrategy;
-import pl.lab.factory.orders.observer.ClientEmailNotifier;
-import pl.lab.factory.orders.observer.ErpSystemUpdater;
-import pl.lab.factory.orders.observer.OrderObserver;
-import pl.lab.factory.orders.pricing.BulkPricingStrategy;
-import pl.lab.factory.orders.pricing.HolidayPricingStrategy;
-import pl.lab.factory.orders.pricing.PricingStrategy;
-import pl.lab.factory.orders.pricing.RushOrderPricingStrategy;
-import pl.lab.factory.orders.pricing.StandardPricingStrategy;
-import pl.lab.factory.orders.pricing.VipPricingStrategy;
-import pl.lab.factory.orders.visitor.EuVatVisitor;
-import pl.lab.factory.orders.visitor.UsaCustomsVisitor;
+import pl.lab.factory.orders.invoice.dispatch.*;
+import pl.lab.factory.orders.iterator.*;
+import pl.lab.factory.orders.loyalty.*;
+import pl.lab.factory.orders.observer.*;
+import pl.lab.factory.orders.pricing.*;
+import pl.lab.factory.orders.visitor.*;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.pcbboards.monitoring.CountingVisitor;
 import pl.lab.factory.pcbboards.monitoring.ProcessObserver;
 import pl.lab.factory.pcbboards.monitoring.reporting.CostReport;
-import pl.lab.factory.reporting.BoardReporter;
-import pl.lab.factory.reporting.CachingBoardReporterProxy;
-import pl.lab.factory.reporting.CompletedOnlyProductionReport;
-import pl.lab.factory.reporting.ConsoleReportFormatter;
-import pl.lab.factory.reporting.LegacyAuditSystem;
-import pl.lab.factory.reporting.LegacyAuditSystemAdapter;
-import pl.lab.factory.reporting.ProductionReport;
-import pl.lab.factory.reporting.SummaryProductionReport;
-import pl.lab.factory.reporting.interpreter.AbstractExpression;
-import pl.lab.factory.reporting.interpreter.AndExpression;
-import pl.lab.factory.reporting.interpreter.OrExpression;
-import pl.lab.factory.reporting.interpreter.QuantityExpression;
-import pl.lab.factory.reporting.interpreter.StatusExpression;
-import pl.lab.factory.reporting.interpreter.TypeExpression;
+import pl.lab.factory.reporting.*;
+import pl.lab.factory.reporting.interpreter.*;
 import pl.lab.factory.reporting.invoicereport.*;
-import pl.lab.factory.reporting.reportingfacade.ReportFormat;
-import pl.lab.factory.reporting.reportingfacade.ReportType;
-import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
+import pl.lab.factory.reporting.reportingfacade.*;
 import pl.lab.factory.reporting.reportingsystem.*;
+import pl.lab.factory.reporting.reportingsystem.ReportFormatter;
 import pl.lab.factory.safetymediator.SafetyHistory;
 import pl.lab.factory.safetymediator.SafetySystemMemento;
-import pl.lab.factory.safetymediator.components.AlarmSiren;
-import pl.lab.factory.safetymediator.components.FireGate;
-import pl.lab.factory.safetymediator.components.SmokeDetector;
-import pl.lab.factory.safetymediator.components.SprinklerSystem;
+import pl.lab.factory.safetymediator.components.*;
 import pl.lab.factory.scheduling.ProductionBatch;
 import pl.lab.factory.scheduling.SingleOrderTask;
-import pl.lab.factory.warehouse.LegacyWarehouseSystem;
-import pl.lab.factory.warehouse.WarehouseAccessProxy;
-import pl.lab.factory.warehouse.WarehouseAdapter;
-import pl.lab.factory.warehouse.WarehouseAssetsManager;
-import pl.lab.factory.warehouse.WarehouseSafetyCenter;
-import pl.lab.factory.warehouse.WarehouseService;
-import pl.lab.factory.warehouse.equipment.EquipmentIterator;
-import pl.lab.factory.warehouse.equipment.WarehouseEquipment;
-import pl.lab.factory.warehouse.equipment.maintenance.ForkliftMaintenance;
-import pl.lab.factory.warehouse.equipment.maintenance.MaintenanceProtocol;
-import pl.lab.factory.warehouse.equipment.maintenance.ScannerMaintenance;
+import pl.lab.factory.warehouse.*;
+import pl.lab.factory.warehouse.equipment.*;
+import pl.lab.factory.warehouse.equipment.maintenance.*;
 import pl.lab.factory.warehouse.equipment.observer.MaintenanceService;
-import pl.lab.factory.warehouse.interpreter.OrderAndExpression;
-import pl.lab.factory.warehouse.interpreter.OrderExpression;
-import pl.lab.factory.warehouse.interpreter.OrderMinQuantityExpression;
-import pl.lab.factory.warehouse.interpreter.OrderStatusExpression;
-import pl.lab.factory.warehouse.packing.AntiStaticBagDecorator;
-import pl.lab.factory.warehouse.packing.FoamProtectionDecorator;
-import pl.lab.factory.warehouse.packing.PackageFactory;
-import pl.lab.factory.warehouse.packing.PackageImplementor;
-import pl.lab.factory.warehouse.shipping.PriorityShipping;
-import pl.lab.factory.warehouse.shipping.ShippingFacade;
-import pl.lab.factory.warehouse.shipping.ShippingStrategy;
-import pl.lab.factory.warehouse.shipping.StandardShipping;
-import pl.lab.factory.warehouse.shipping.command.ShipOrderCommand;
-import pl.lab.factory.warehouse.shipping.command.ShippingCommand;
-import pl.lab.factory.warehouse.shipping.command.ShippingManager;
+import pl.lab.factory.warehouse.interpreter.*;
+import pl.lab.factory.warehouse.packing.*;
+import pl.lab.factory.warehouse.shipping.*;
+import pl.lab.factory.warehouse.shipping.command.*;
 import pl.lab.factory.warehouse.shipping.strategy.PriorityFirstDispatcher;
-import pl.lab.factory.warehouse.state.LockedState;
-import pl.lab.factory.warehouse.state.OpenState;
+import pl.lab.factory.warehouse.state.*;
 
 public class Main {
+    private BaseBoard boardA;
+    private BaseElectronicBoard electronicBoardA;
+    private BaseElectronicBoard electronicBoardB;
+
+    private OrderSpecification specPcb;
+    private OrderSpecification specElectronic;
+
+    private ProductionOrder orderA;
+    private ProductionOrder orderB;
+    private ProductionOrder orderC;
+    private ProductionOrder orderBaseClone;
+    private ProductionOrder orderElectronicClone;
+    private List<ProductionOrder> allOrders;
+
+    private PricingStrategy standardPricing;
+    private OrderInvoice invoiceA;
+    private OrderInvoice invoiceB;
+
+    private OrderProcessor pcbProcessor;
+    private OrderProcessor electronicBoardProcessor;
+    private WarehouseAdapter warehouseAdapter;
+    private WarehouseService warehouse;
+    private CentralControlMediator mediator;
+    private ProductionDepartment prodDept;
+
     public static void main(String[] args) throws InterruptedException {
         SystemLogger.INSTANCE.logInfo("MAIN", "This is the PCB/Electronic board factory!");
+        new Main().runAllDemos();
+        SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
+    }
 
-        FirmwareAdapter firmwareAdapter;
-        firmwareAdapter = new HighLevelFirmwareAdapter(new HighLevelFirmware("v0.0.1-prototype"));
+    private void runAllDemos() throws InterruptedException {
+        demoSmartBoardAndFirmware();
+
+        demoCreatingOrderSpecifications();
+        demoCreatingPrototypes();
+        demoCreatingFinalOrders();
+
+        demoOrderInvoiceLifecycle();
+        demoRevenueCalculation();
+        demoCustomerLoyaltyPoints();
+        demoInvoiceDispatch();
+        demoTaxAndCustomsCalculator();
+
+        demoCentralControlMediator();
+        demoOrderObservers();
+        demoOrderQueue();
+
+        demoWarehouseAndShipping();
+        demoWarehouseFiltering();
+        demoWarehouseEquipment();
+        demoFireAlarm();
+
+        demoReports();
+        demoOrderStatusMemento();
+        demoOrderIteratorPattern();
+
+        demoIspTest();
+        demoLspTest();
+    }
+
+    private void demoSmartBoardAndFirmware() throws InterruptedException {
+        FirmwareAdapter firmwareAdapter = new HighLevelFirmwareAdapter(new HighLevelFirmware("v0.0.1-prototype"));
         BaseElectronicBoard sqcEBoard = SuperElectronicBoardFactory.createBoard(ElectronicType.NORMAL);
+
         ProcessObserver observer = new ProcessObserver();
         observer.setBoard(sqcEBoard.getBaseBoard());
+
         BoardProducer smartProducer = new SmartBoardProducer();
         CostReport costSummary = new CostReport();
         costSummary.generate(sqcEBoard.getBaseBoard());
@@ -139,16 +125,17 @@ public class Main {
         ProgrammingDevice faultyDevice = new FaultyDevice();
         FirmwareProgrammer oldProgrammer = new OldFirmwareProgrammer(faultyDevice);
         oldProgrammer.program(sqcEBoard, firmwareAdapter);
+
         sqcEBoard.getBaseBoard().getComponentInfo();
         CountingVisitor counter = new CountingVisitor();
         sqcEBoard.getBaseBoard().accept(counter);
         System.out.println("[COMPONENT INFO] Board contains " + counter.getResistors() + " resistors.");
+    }
 
+    private void demoCreatingOrderSpecifications() {
         // -- Creating orders --
-
-        StandardBoardFactory boardFactory = new StandardBoardFactory();
-        OrderProcessor pcbProcessor = new BaseBoardOrderProcessor();
-        OrderProcessor electronicBoardProcessor = new ElectronicBoardOrderProcessor();
+        pcbProcessor = new BaseBoardOrderProcessor();
+        electronicBoardProcessor = new ElectronicBoardOrderProcessor();
 
         OrderSpecification rohs = OrderSpecification.builder()
                 .voltageTolerance(5.0)
@@ -158,31 +145,33 @@ public class Main {
                 .qualityStandard("Class 2")
                 .build();
 
-        OrderSpecification specPcb = rohs.clone();
+        specPcb = rohs.clone();
         specPcb.addCertificate("IPC-A-610");
         specPcb.displayCertificates("ORD-001");
 
-        OrderSpecification specElectronic = rohs.clone();
+        specElectronic = rohs.clone();
         specElectronic.setQualityStandard("Class 3");
         specElectronic.setVoltageTolerance(2.5);
+    }
 
-
-
+    private void demoCreatingPrototypes() {
         BaseElectronicBoard electronicBoardPrototype = ElectronicBoardFactory.createBoard(ElectronicType.HIGHLY_DEPENDANT);
 
         BoardPrototypes boardPrototypes = new BoardPrototypes();
         boardPrototypes.registerPrototype("highly-dependant-v1", electronicBoardPrototype);
 
-        BaseElectronicBoard electronicBoardA = boardPrototypes.createFromPrototype("highly-dependant-v1");
-        firmwareAdapter = new HighLevelFirmwareAdapter(new HighLevelFirmware("v1.0.0-release"));
+        electronicBoardA = boardPrototypes.createFromPrototype("highly-dependant-v1");
+        FirmwareAdapter firmwareAdapter = new HighLevelFirmwareAdapter(new HighLevelFirmware("v1.0.0-release"));
         InternalProgrammer internalProgrammer = new InternalProgrammer(new SeggerJLinkDevice());
         internalProgrammer.program(electronicBoardA, firmwareAdapter);
-        BaseElectronicBoard electronicBoardB = boardPrototypes.createFromPrototype("highly-dependant-v1");
+
+        electronicBoardB = boardPrototypes.createFromPrototype("highly-dependant-v1");
         System.out.println("[COMPONENT INFO] Gathering information about boards components!");
         electronicBoardB.getBaseBoard().getComponentInfo();
-        counter = new CountingVisitor();
+        CountingVisitor counter = new CountingVisitor();
         electronicBoardB.getBaseBoard().accept(counter);
         System.out.println("[COMPONENT INFO] Board contains " + counter.getResistors() + " resistors.");
+
         firmwareAdapter = new ProprietaryFirmwareAdapter(new ProprietaryFirmware("v1.1.0-hotfix"));
         internalProgrammer = new InternalProgrammer(new STLinkDevice());
         internalProgrammer.program(electronicBoardB, firmwareAdapter);
@@ -190,42 +179,54 @@ public class Main {
         SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Prototype: firmware=" + electronicBoardPrototype.getFirmware());
         SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Clone A:   firmware=" + electronicBoardA.getFirmware());
         SystemLogger.INSTANCE.logInfo("PROTOTYPE", "Clone B:   firmware=" + electronicBoardB.getFirmware());
+    }
 
-        BaseBoard boardA = boardFactory.createBoard();
+    private void demoCreatingFinalOrders() {
+        StandardBoardFactory boardFactory = new StandardBoardFactory();
+        boardA = boardFactory.createBoard();
 
-        ProductionOrder orderA = ProductionOrderFactory.createOrder(boardA, new OrderContext("ORD-001", 10, specPcb));
-        ProductionOrder orderB = ProductionOrderFactory.createOrder(electronicBoardA, new OrderContext("ORD-002", 3, specElectronic));
-        ProductionOrder orderC = ProductionOrderFactory.createOrder(electronicBoardB, new OrderContext("ORD-003", 2, specElectronic));
-        ProductionOrder orderBaseClone = orderA.clone("ORD-004");
-        ProductionOrder orderElectronicClone = orderB.clone("ORD-005");
+        orderA = ProductionOrderFactory.createOrder(boardA, new OrderContext("ORD-001", 10, specPcb));
+        orderB = ProductionOrderFactory.createOrder(electronicBoardA, new OrderContext("ORD-002", 3, specElectronic));
+        orderC = ProductionOrderFactory.createOrder(electronicBoardB, new OrderContext("ORD-003", 2, specElectronic));
+        orderBaseClone = orderA.clone("ORD-004");
+        orderElectronicClone = orderB.clone("ORD-005");
 
-        List<ProductionOrder> allOrders = new ArrayList<>(List.of(orderA, orderB, orderC, orderBaseClone, orderElectronicClone));
+        allOrders = new ArrayList<>(List.of(orderA, orderB, orderC, orderBaseClone, orderElectronicClone));
+    }
 
-
+    private void demoOrderInvoiceLifecycle() {
         // -- Order Invoice --
-
         SystemLogger.INSTANCE.logInfo("MAIN", "=== STATE 1 AND STRATEGY 1 PATTERNS TEST (INVOICE LIFECYCLE) ===");
 
-        PricingStrategy standardPricing = new StandardPricingStrategy();
-        PricingStrategy vipPricing = new VipPricingStrategy();
-        PricingStrategy bulkPricing = new BulkPricingStrategy();
-
+        standardPricing = new StandardPricingStrategy();
         ProductionOrder orderZ = ProductionOrderFactory.createOrder(boardA, new OrderContext("ORD-Z", 150, specPcb));
-        OrderInvoice invoiceA = new OrderInvoice(orderZ, standardPricing);
+        invoiceA = new OrderInvoice(orderZ, standardPricing);
         SystemLogger.INSTANCE.logInfo("MAIN", "Initial draft amount: $" + String.format("%.2f", invoiceA.getAmount()));
 
+        demoInvoiceActionsBeforeConfirmation();
+        demoInvoiceActionsAfterConfirmation();
+
+        invoiceB = new OrderInvoice(orderB, standardPricing);
+        invoiceB.cancel();
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF STATE 1 AND STRATEGY 1 PATTERNS TEST ===");
+    }
+
+    private void demoInvoiceActionsBeforeConfirmation() {
         // Can't pay and generate receipt before confirming
         invoiceA.pay();
         invoiceA.generateReceipt();
 
-        invoiceA.setPricingStrategy(vipPricing);
+        invoiceA.setPricingStrategy(new VipPricingStrategy());
         invoiceA.recalculatePrice();
         invoiceA.applyDiscount(10.0);
 
         invoiceA.confirm();
+    }
 
+    private void demoInvoiceActionsAfterConfirmation() {
         // Can't change price or apply discount after confirmation
-        invoiceA.setPricingStrategy(bulkPricing);
+        invoiceA.setPricingStrategy(new BulkPricingStrategy());
         invoiceA.recalculatePrice();
         invoiceA.applyDiscount(10.0);
 
@@ -238,14 +239,9 @@ public class Main {
         invoiceA.cancel();
 
         invoiceA.generateReceipt();
+    }
 
-        OrderInvoice invoiceB = new OrderInvoice(orderB, standardPricing);
-        invoiceB.cancel();
-
-        SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF STATE 1 AND STRATEGY 1 PATTERNS TEST ===");
-
-
-
+    private void demoRevenueCalculation() {
         SystemLogger.INSTANCE.logInfo("MAIN", "=== SRP 1 TEST (REVENUE CALCULATION) ===");
 
         OrderInvoice invoiceC = new OrderInvoice(orderC, standardPricing);
@@ -254,22 +250,17 @@ public class Main {
         invoiceC.recalculatePrice(); invoiceC.confirm(); invoiceC.pay();
         invoiceD.recalculatePrice(); invoiceD.confirm(); invoiceD.pay();
 
-        RevenuePolicy policy = new PaidInvoiceRevenuePolicy();
-        RevenueFilter filter = new RevenueFilter(policy);
-        RevenueCalculator calculator = new RevenueCalculator();
-
-        RevenueService revenueService = new RevenueService(filter, calculator);
+        RevenueService revenueService = new RevenueService(
+                new RevenueFilter(new PaidInvoiceRevenuePolicy()), new RevenueCalculator());
 
         List<OrderInvoice> allInvoices = List.of(invoiceA, invoiceB, invoiceC, invoiceD);
         double totalRevenue = revenueService.calculateRevenue(allInvoices);
 
         SystemLogger.INSTANCE.logInfo("REVENUE-REPORT", "Calculated Total Revenue: $" + String.format("%.2f", totalRevenue));
-
         SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF SRP 1 TEST ===");
+    }
 
-
-
-
+    private void demoCustomerLoyaltyPoints() {
         SystemLogger.INSTANCE.logInfo("MAIN", "=== OCP 1 TEST (CUSTOMER LOYALTY POINTS) ===");
 
         CustomerLoyaltyService loyaltyService = new CustomerLoyaltyService();
@@ -281,11 +272,10 @@ public class Main {
         loyaltyService.calculateByTier(orderC, "PLATINUM");
 
         SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF OCP 1 TEST ===");
+    }
 
-
-
+    private void demoInvoiceDispatch() {
         // -- Invoice Dispatch --
-
         SystemLogger.INSTANCE.logInfo("MAIN", "=== TEMPLATE METHOD 1 PATTERN TEST (INVOICE DISPATCH) ===");
 
         InvoiceDispatcher emailDispatcher = new EmailInvoiceDispatcher();
@@ -296,9 +286,9 @@ public class Main {
         emailDispatcher.dispatch(invoiceB);
 
         SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF TEMPLATE METHOD 1 PATTERN TEST ===");
+    }
 
-
-
+    private void demoTaxAndCustomsCalculator() {
         SystemLogger.INSTANCE.logInfo("MAIN", "=== VISITOR 1 PATTERN TEST (TAX/CUSTOMS CALCULATOR) ===");
 
         UsaCustomsVisitor usaVisitor = new UsaCustomsVisitor();
@@ -316,15 +306,14 @@ public class Main {
                 "Total EU VAT expected: $" + String.format("%.2f", euVisitor.getTotalVat()));
 
         SystemLogger.INSTANCE.logInfo("MAIN", "=== END OF VISITOR 1 PATTERN TEST ===");
+    }
 
-
-
+    private void demoCentralControlMediator() {
         // -- CentralControlMediator --
-
         LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
         Set<String> unapproved = Set.of("ORD-999", "ORD-888");
-        WarehouseAdapter warehouseAdapter = new WarehouseAdapter(legacyWarehouse);
-        WarehouseService warehouse = new WarehouseAccessProxy(
+        warehouseAdapter = new WarehouseAdapter(legacyWarehouse);
+        warehouse = new WarehouseAccessProxy(
                 warehouseAdapter,
                 unapproved
         );
@@ -333,38 +322,39 @@ public class Main {
                 new LegacyAuditSystemAdapter(new LegacyAuditSystem())
         );
 
-        CentralControlMediator mediator = new CentralControlMediator();
+        mediator = new CentralControlMediator();
 
-        ProductionDepartment prodDept = new ProductionDepartment(mediator, pcbProcessor, electronicBoardProcessor);
+        prodDept = new ProductionDepartment(mediator, pcbProcessor, electronicBoardProcessor);
         WarehouseDepartment wareDept = new WarehouseDepartment(mediator, warehouse);
         ReportingDepartment repDept = new ReportingDepartment(mediator, boardReporter);
 
         mediator.setProductionDepartment(prodDept);
         mediator.setWarehouseDepartment(wareDept);
         mediator.setReportingDepartment(repDept);
+    }
 
-
+    private void demoOrderObservers() {
         // -- Order Observers --
-
         SystemLogger.INSTANCE.logInfo("MAIN", "=== ORDER OBSERVER 1 PATTERN TEST ===");
         OrderObserver acmeCorpNotifier = new ClientEmailNotifier("contact@acmecorp.com");
         OrderObserver globalErpSync = new ErpSystemUpdater();
 
         orderA.addObserver(acmeCorpNotifier);
         orderA.addObserver(globalErpSync);
+    }
 
-
+    private void demoOrderQueue() throws InterruptedException {
         // -- Order queue --
-
-        ProductionBatch weeklyPlan = new ProductionBatch("Weekly plan");
-        ProductionQueue queue = ProductionQueue.getInstance();
-
         SystemLogger.INSTANCE.logInfo("MAIN", "=== COMMAND PATTERN TEST (UNDO/REDO FOR QUEUE) ===");
 
-        // Invoker
         QueueCommandInvoker queueCommandInvoker = new QueueCommandInvoker();
+        ProductionQueue queue = ProductionQueue.getInstance();
 
-        // Concrete Commands
+        executeQueueCommands(queueCommandInvoker, queue);
+        executeWeeklyProductionPlan(queue);
+    }
+
+    private void executeQueueCommands(QueueCommandInvoker queueCommandInvoker, ProductionQueue queue) {
         OrderQueueCommand addA = new AddOrderCommand(orderA);
         OrderQueueCommand addB = new AddOrderCommand(orderB);
         OrderQueueCommand clearAll = new ClearQueueCommand();
@@ -373,8 +363,7 @@ public class Main {
         queueCommandInvoker.executeCommand(addB);
         queue.printQueue(); // State: [ orderA, orderB]
 
-        OrderQueueCommand removeA = new RemoveOrderCommand(orderA);
-        queueCommandInvoker.executeCommand(removeA);
+        queueCommandInvoker.executeCommand(new RemoveOrderCommand(orderA));
         queue.printQueue(); // State: [orderB]
 
         queueCommandInvoker.undo();
@@ -389,11 +378,13 @@ public class Main {
         queueCommandInvoker.executeCommand(clearAll);
         queue.printQueue(); // State: empty
 
-        OrderQueueCommand addAllOrders = new AddMultipleOrdersCommand(allOrders);
-        queueCommandInvoker.executeCommand(addAllOrders);
+        queueCommandInvoker.executeCommand(new AddMultipleOrdersCommand(allOrders));
         queue.printQueue(); // State: allOrders
+    }
 
+    private void executeWeeklyProductionPlan(ProductionQueue queue) throws InterruptedException {
         TimeUnit.SECONDS.sleep(1);
+        ProductionBatch weeklyPlan = new ProductionBatch("Weekly plan");
 
         while (!queue.isEmpty()) {
             ProductionOrder order = queue.nextOrder();
@@ -402,11 +393,10 @@ public class Main {
 
         System.out.println(weeklyPlan.getDescription(""));
         weeklyPlan.execute();
+    }
 
-
-
+    private void demoWarehouseAndShipping() {
         // -- Warehouse --
-
         ProductionOrder unapprovedOrder = orderA.clone("ORD-999");
         warehouse.storeOrder(unapprovedOrder);
 
@@ -419,9 +409,12 @@ public class Main {
         ShippingStrategy standardShipping = new StandardShipping(cardboardBoxPackaging);
         ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);
 
+        executeShippingCommands(standardShipping, priorityShipping);
+    }
+
+    private void executeShippingCommands(ShippingStrategy standardShipping, ShippingStrategy priorityShipping) {
         ShippingFacade shippingFacade = new ShippingFacade(warehouse);
         ShippingManager shippingManager = new ShippingManager();
-
 
         ShippingCommand shipCommandA = new ShipOrderCommand(shippingFacade, standardShipping, orderA);
         ShippingCommand shipCommandB = new ShipOrderCommand(shippingFacade, priorityShipping, orderB);
@@ -438,7 +431,9 @@ public class Main {
         shippingManager.undoLastAction();
 
         warehouse.printWarehouse();
+    }
 
+    private void demoWarehouseFiltering() {
         // Filtering
         OrderExpression isCompleted = new OrderStatusExpression(OrderStatus.COMPLETED);
         OrderExpression isLarge = new OrderMinQuantityExpression(5);
@@ -449,7 +444,9 @@ public class Main {
         allOrders.stream()
                 .filter(complexRule::interpret)
                 .forEach(o -> SystemLogger.INSTANCE.logInfo("[FILTERING]", "Match found: " + o.getId()));
+    }
 
+    private void demoWarehouseEquipment() {
         //Equipment
         WarehouseAssetsManager assetsManager = new WarehouseAssetsManager();
 
@@ -463,6 +460,11 @@ public class Main {
         assetsManager.addEquipment(solderer);
         assetsManager.addEquipment(terminal);
 
+        checkEquipmentMaintenance(assetsManager);
+        performEquipmentService(assetsManager, forklift, scan);
+    }
+
+    private void checkEquipmentMaintenance(WarehouseAssetsManager assetsManager) {
         EquipmentIterator maintenanceIt = assetsManager.getMaintenanceIterator();
 
         SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Devices requiring immediate service:");
@@ -471,7 +473,9 @@ public class Main {
             WarehouseEquipment equipment = maintenanceIt.next();
             SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Check needed: " + equipment.toString());
         }
+    }
 
+    private void performEquipmentService(WarehouseAssetsManager assetsManager, WarehouseEquipment forklift, WarehouseEquipment scan) {
         MaintenanceService serviceDept = new MaintenanceService();
 
         assetsManager.subscribeAll(serviceDept);
@@ -485,9 +489,10 @@ public class Main {
 
         forkliftService.executeService(forklift, "STANDARD");
         scannerService.executeService(scan, "SHORT");
+    }
 
+    private void demoFireAlarm() {
         // Fire Alarm
-
         WarehouseSafetyCenter warehouseSafetyCenter = new WarehouseSafetyCenter();
         SafetyHistory safetyHistory = new SafetyHistory();
 
@@ -514,8 +519,9 @@ public class Main {
         }
 
         warehouse.storeOrder(fireOrder);
+    }
 
-
+    private void demoReports() {
         // -- Reports --
 
         // not completed order example
@@ -523,14 +529,12 @@ public class Main {
         allOrders.add(orderD);
 
         // Reporting Facade
-
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CSV, allOrders);
         ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CSV, allOrders);
 
         // Reporting Interpreter
-
         AbstractExpression query1 = new StatusExpression(OrderStatus.COMPLETED);
 
         AbstractExpression query2 = new AndExpression(
@@ -546,9 +550,11 @@ public class Main {
         ReportingFacade.generateDynamic(query1, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generateDynamic(query2, ReportFormat.CONSOLE, allOrders);
         ReportingFacade.generateDynamic(query3, ReportFormat.CSV, allOrders);
+    }
 
-
+    private void demoOrderStatusMemento() {
         // Order Status Memento
+        ProductionOrder orderD = allOrders.get(allOrders.size() - 1);
         orderD.setStatus(OrderStatus.COMPLETED);
         orderD.setStatus(OrderStatus.PACKED);
         orderD.setStatus(OrderStatus.SHIPPED);
@@ -557,10 +563,35 @@ public class Main {
         orderD.restoreStatus();
         orderD.restoreStatus();
         orderD.restoreStatus();
+    }
 
-
+    private void demoOrderIteratorPattern() {
         SystemLogger.INSTANCE.logInfo("MAIN", "=== ORDER ITERATOR PATTERN TEST ===");
 
+        OrderCollection orderCollection = setupOrderCollectionForIterator();
+
+        System.out.println("\n--- Searching for all orders with status: COMPLETED ---");
+        OrderIterator completedOrdersIterator = orderCollection.statusIterator(OrderStatus.COMPLETED);
+        while (completedOrdersIterator.hasNext()) {
+            System.out.println(completedOrdersIterator.next().toString());
+        }
+
+        System.out.println("\n--- Searching for all orders with status: PENDING ---");
+        OrderIterator pendingOrdersIterator = orderCollection.statusIterator(OrderStatus.PENDING);
+        while (pendingOrdersIterator.hasNext()) {
+            System.out.println(pendingOrdersIterator.next().toString());
+        }
+
+        System.out.println("\n--- Searching for PENDING orders with quantity > 6 ---");
+        pendingOrdersIterator.reset();
+        while (pendingOrdersIterator.hasNextByQuantity(">", 6)) {
+            System.out.println(pendingOrdersIterator.nextByQuantity().toString());
+        }
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
+    }
+
+    private OrderCollection setupOrderCollectionForIterator() {
         ProductionOrder orderE = ProductionOrderFactory.createOrder(boardA, new OrderContext("ITER-01", 2, specPcb));
         ProductionOrder orderF = ProductionOrderFactory.createOrder(electronicBoardB, new OrderContext("ITER-02", 8, specElectronic));
         ProductionOrder orderG = ProductionOrderFactory.createOrder(boardA, new OrderContext("ITER-03", 5, specPcb));
@@ -572,7 +603,7 @@ public class Main {
         orderF.setStatus(OrderStatus.COMPLETED);
 
         OrderCollection orderCollection = ProductionQueue.getInstance();
-        queueCommandInvoker.executeCommand(clearAll);
+        new QueueCommandInvoker().executeCommand(new ClearQueueCommand());
 
         orderCollection.addOrder(orderE);
         orderCollection.addOrder(orderF);
@@ -581,34 +612,11 @@ public class Main {
         orderCollection.addOrder(orderI);
         orderCollection.addOrder(orderJ);
 
-        System.out.println("\n--- Searching for all orders with status: COMPLETED ---");
-        OrderIterator completedOrdersIterator = orderCollection.statusIterator(OrderStatus.COMPLETED);
-        while (completedOrdersIterator.hasNext()) {
-            ProductionOrder order = completedOrdersIterator.next();
-            System.out.println(order.toString());
-        }
+        return orderCollection;
+    }
 
-        System.out.println("\n--- Searching for all orders with status: PENDING ---");
-        OrderIterator pendingOrdersIterator = orderCollection.statusIterator(OrderStatus.PENDING);
-        while (pendingOrdersIterator.hasNext()) {
-            ProductionOrder order = pendingOrdersIterator.next();
-            System.out.println(order.toString());
-        }
-
-        System.out.println("\n--- Searching for PENDING orders with quantity > 6 ---");
-        pendingOrdersIterator.reset();
-        while (pendingOrdersIterator.hasNextByQuantity(">", 6)) {
-            ProductionOrder order = pendingOrdersIterator.nextByQuantity();
-            System.out.println(order.toString());
-        }
-
-        SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
-
-
-
-
+    private void demoIspTest() {
         SystemLogger.INSTANCE.logInfo("MAIN", "--- ISP 1 TEST ---");
-
 
         ReportGenerator generator = new SimpleReportGenerator();
         ReportFormatter formatter = new SimpleReportFormatter();
@@ -623,13 +631,18 @@ public class Main {
         dispatcher.sendReportByEmail(orderA);
 
         SystemLogger.INSTANCE.logInfo("MAIN", "--- END OF ISP 1 TEST ---");
+    }
 
-
-
-
-
+    private void demoLspTest() {
         SystemLogger.INSTANCE.logInfo("MAIN", "--- LSP 1 AND LSP 4 TEST ---");
 
+        testLspPricingStrategies();
+        testLspProductionReports();
+
+        SystemLogger.INSTANCE.logInfo("MAIN", "--- END OF LSP 1 AND LSP 4 TEST ---");
+    }
+
+    private void testLspPricingStrategies() {
         // Klasa bazowa (konkretna)
         StandardPricingStrategy standardPricing1 = new StandardPricingStrategy();
 
@@ -644,8 +657,9 @@ public class Main {
         testPriceCalculation(holidayPricing1, orderA);
         testPriceCalculation(rushPricing1, orderA);
         testPriceCalculation(rushPricing2, orderA);
+    }
 
-
+    private void testLspProductionReports() {
         // Klasy pochodne z typem klasy pochodnej
         CompletedOnlyProductionReport reportCompletedDerived = new CompletedOnlyProductionReport(new ConsoleReportFormatter());
         SummaryProductionReport reportAllDerived = new SummaryProductionReport(new ConsoleReportFormatter());
@@ -657,13 +671,6 @@ public class Main {
         ProductionReport reportAllBase = new SummaryProductionReport(new ConsoleReportFormatter());
         reportCompletedBase.generate(allOrders);
         reportAllBase.generate(allOrders);
-
-        SystemLogger.INSTANCE.logInfo("MAIN", "--- END OF LSP 1 AND LSP 4 TEST ---");
-
-
-
-
-        SystemLogger.INSTANCE.logInfo("MAIN", "All orders processed. End.");
     }
 
     public static void testPriceCalculation(StandardPricingStrategy strategy, ProductionOrder order) {

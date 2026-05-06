@@ -18,8 +18,8 @@ import pl.lab.factory.orders.ProductionOrder;
 // StandardPricingStrategy jest klasą pochodną, która implementuje abstrakcyjną metodę z interfejsu PricingStrategy
 public class StandardPricingStrategy implements PricingStrategy {
 
-    private static final double BASE_BOARD_UNIT_PRICE = 50.0;
-    private static final double ELECTRONIC_BOARD_UNIT_PRICE = 150.0;
+    public static final double BASE_BOARD_UNIT_PRICE = 50.0;
+    public static final double ELECTRONIC_BOARD_UNIT_PRICE = 150.0;
 
     @Override
     public double calculatePrice(ProductionOrder order) {

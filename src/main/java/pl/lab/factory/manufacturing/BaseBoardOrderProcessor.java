@@ -1,9 +1,6 @@
 package pl.lab.factory.manufacturing;
 
-import pl.lab.factory.assemblyline.BoardProducer;
-import pl.lab.factory.assemblyline.QualityControlDecorator;
-import pl.lab.factory.assemblyline.SimpleBoardProducer;
-import pl.lab.factory.assemblyline.TimedProducerDecorator;
+import pl.lab.factory.assemblyline.*;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.ProductionOrder;
 
@@ -22,7 +19,7 @@ public class BaseBoardOrderProcessor extends OrderProcessor {
     // SimpleBoardProducer  →  TimedProducerDecorator  →  QualityControlDecorator
     // Każdy dekorator dodaje nową odpowiedzialność bez modyfikowania poprzednich warstw.
     public BaseBoardOrderProcessor() {
-        this.producer = new QualityControlDecorator(new TimedProducerDecorator(new SimpleBoardProducer()));
+        this.producer = BoardProducerFactory.createStandardProducer();
     }
     // Koniec, Tydzień 3
     // Wzorzec Decorator 1

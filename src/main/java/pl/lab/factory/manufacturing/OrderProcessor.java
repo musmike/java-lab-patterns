@@ -11,19 +11,30 @@ import java.util.concurrent.TimeUnit;
 // Klasa abstrakcyjna OrderProcessor jest abstrakcją, od której zależy moduł wysokopoziomowy (ProductionDepartment), 
 // a nie od konkretnej implementacji
 public abstract class OrderProcessor {
-    public void process(ProductionOrder order) throws InterruptedException {
+    private static final int PRODUCTION_DELAY_MILLIS = 100;
+
+    public final void process(ProductionOrder order) throws InterruptedException {
+        startProduction(order);
+        executeProductionLoop(order);
+        completeProduction(order);
+    }
+
+    private void startProduction(ProductionOrder order) {
         order.setStatus(OrderStatus.IN_PRODUCTION);
         SystemLogger.INSTANCE.logInfo("PRODUCTION", "Order started: " + order.getId()
-                + " | qty: " + order.getQuantity()
-                + " | spec: " + order.getSpecification());
+                + " | qty: " + order.getQuantity() + " | spec: " + order.getSpecification());
+    }
 
+    private void executeProductionLoop(ProductionOrder order) throws InterruptedException {
         for (int i = 1; i <= order.getQuantity(); i++) {
             SystemLogger.INSTANCE.logInfo("PRODUCTION", "[" + i + "/" + order.getQuantity() + "] "
                     + order.getId() + " — producing unit...");
             produceUnit(order);
-            TimeUnit.MILLISECONDS.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(PRODUCTION_DELAY_MILLIS);
         }
+    }
 
+    private void completeProduction(ProductionOrder order) {
         order.setStatus(OrderStatus.COMPLETED);
         SystemLogger.INSTANCE.logInfo("PRODUCTION", order.getId() + " -> " + order.getStatus());
     }

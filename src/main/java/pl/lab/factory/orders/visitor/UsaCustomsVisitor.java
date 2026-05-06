@@ -5,6 +5,7 @@ import pl.lab.factory.electronicboards.ElectronicType;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.BaseElectronicBoardProductionOrder;
 import pl.lab.factory.orders.ProductionOrder;
+import pl.lab.factory.orders.pricing.CurrencyFormatter;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Visitor 1 (Concrete Visitor)
@@ -52,7 +53,7 @@ public class UsaCustomsVisitor implements OrderVisitor {
 
     private void logFinalTax(String orderId, String typeName, double taxRate, double tax) {
         SystemLogger.INSTANCE.logInfo("USA-CUSTOMS", "Order " + orderId
-                + " (" + typeName + ") -> " + (taxRate * 100) + "% tariff. Tax: $" + String.format("%.2f", tax));
+                + " (" + typeName + ") -> " + (taxRate * 100) + "% tariff. Tax: $" + CurrencyFormatter.format(tax));
     }
 
     public double getTotalCustomsTax() {

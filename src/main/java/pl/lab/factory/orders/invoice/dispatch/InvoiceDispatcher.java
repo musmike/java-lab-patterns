@@ -4,6 +4,7 @@ import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.invoice.OrderInvoice;
 import pl.lab.factory.orders.invoice.OrderInvoiceCancelledState;
 import pl.lab.factory.orders.invoice.OrderInvoiceDraftState;
+import pl.lab.factory.orders.pricing.CurrencyFormatter;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Template Method 1 (Abstract Class)
@@ -36,7 +37,7 @@ public abstract class InvoiceDispatcher {
 
     private void logDispatchActivity(OrderInvoice invoice) {
         SystemLogger.INSTANCE.logInfo("DISPATCH", "Activity logged: Invoice for amount $"
-                + String.format("%.2f", invoice.getAmount()) + " has been processed and dispatched.");
+                + CurrencyFormatter.format(invoice.getAmount()) + " has been processed and dispatched.");
     }
 
     // --- Metody abstrakcyjne ---

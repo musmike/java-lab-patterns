@@ -13,7 +13,8 @@ public class HolidayPricingStrategy extends StandardPricingStrategy {
     public double calculatePrice(ProductionOrder order) {
         double basePrice = super.calculatePrice(order);
         double holidayPrice = basePrice * HOLIDAY_DISCOUNT_MULTIPLIER;
-        SystemLogger.INSTANCE.logInfo("PRICING", "Holiday discount applied! New price: $" + holidayPrice);
+        SystemLogger.INSTANCE.logInfo("PRICING", "Holiday discount applied! New price: $"
+                + CurrencyFormatter.format((holidayPrice)));
         return holidayPrice;
     }
 }

@@ -36,9 +36,9 @@ public enum SystemLogger {
     }
 
     private void printLogLine(String context, String prefix, String message) {
-        String c = padRight(context, CONTEXT_WIDTH);
-        String t = padRight(prefix, TYPE_WIDTH);
-        System.out.println(t + c + "\t" + message);
+        String paddedContext = padRight(context, CONTEXT_WIDTH);
+        String paddedType = padRight(prefix, TYPE_WIDTH);
+        System.out.println(paddedType + paddedContext + "\t" + message);
     }
 }
 // Koniec, Tydzień 2

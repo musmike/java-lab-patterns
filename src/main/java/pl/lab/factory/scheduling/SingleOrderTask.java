@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 // Wzorzec Composite 1 (Liść)
 // Niepodzielna jednostka drzewa
 public class SingleOrderTask implements ProductionTask {
+    private static final int TASK_DELAY_MILLIS = 500;
 
     private final ProductionOrder order;
     private final ProductionDepartment productionDepartment;
@@ -20,7 +21,7 @@ public class SingleOrderTask implements ProductionTask {
     @Override
     public void execute() throws InterruptedException {
         productionDepartment.manufacture(order);
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(TASK_DELAY_MILLIS);
     }
 
     @Override

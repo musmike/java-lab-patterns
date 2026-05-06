@@ -30,7 +30,7 @@ public class StandardPricingStrategy implements PricingStrategy {
         double finalPrice = unitPrice * order.getQuantity();
 
         SystemLogger.INSTANCE.logInfo("PRICING", "Standard pricing for " + order.getId() + ": "
-                + order.getQuantity() + " units * $" + unitPrice + " = $" + String.format("%.2f", finalPrice));
+                + order.getQuantity() + " units * $" + unitPrice + " = $" + CurrencyFormatter.format(finalPrice));
 
         return finalPrice;
     }

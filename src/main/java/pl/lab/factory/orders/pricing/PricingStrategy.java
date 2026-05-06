@@ -11,6 +11,7 @@ import pl.lab.factory.orders.ProductionOrder;
 // Interfejs PricingStrategy jest abstrakcją, od której zależy moduł wysokopoziomowy (OrderInvoice),
 // a nie od konkretnej implementacji.
 public interface PricingStrategy {
+    double PERCENTAGE_DIVISOR = 100.0;
     double calculatePrice(ProductionOrder order);
 }
 // Koniec, Tydzień 6

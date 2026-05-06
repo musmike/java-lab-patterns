@@ -2,6 +2,7 @@ package pl.lab.factory.orders.invoice.dispatch;
 
 import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.invoice.OrderInvoice;
+import pl.lab.factory.orders.pricing.CurrencyFormatter;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Template Method 1 (Concrete Class)
@@ -12,7 +13,7 @@ public class B2bApiInvoiceDispatcher extends InvoiceDispatcher {
     protected String renderDocument(OrderInvoice invoice) {
         SystemLogger.INSTANCE.logInfo("DISPATCH-API", "Serializing invoice to JSON format...");
         return "{ \"orderId\": \"" + invoice.getOrder().getId()
-                + "\", \"amount\": " + String.format("%.2f", invoice.getAmount()) + ", \"currency\": \"USD\" }";
+                + "\", \"amount\": " + CurrencyFormatter.format(invoice.getAmount()) + ", \"currency\": \"USD\" }";
     }
 
     @Override

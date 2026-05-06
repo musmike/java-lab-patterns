@@ -17,8 +17,7 @@ public class OrderInvoiceUnpaidState implements OrderInvoiceState {
 
     @Override
     public void applyDiscount(OrderInvoice invoice, double percentage) {
-        SystemLogger.INSTANCE.logError("INVOICE", 
-        "Cannot apply discount. Invoice has already been confirmed and awaits payment.");
+        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_AWAITS_PAYMENT);
     }
 
     @Override
@@ -35,8 +34,7 @@ public class OrderInvoiceUnpaidState implements OrderInvoiceState {
 
     @Override
     public void recalculatePrice(OrderInvoice invoice, PricingStrategy strategy) {
-        SystemLogger.INSTANCE.logError("INVOICE", "Cannot recalculate price. " +
-                "Invoice is already confirmed and awaits payment.");
+        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_AWAITS_PAYMENT);
     }
 
     @Override

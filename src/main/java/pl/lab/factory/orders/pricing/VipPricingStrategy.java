@@ -6,21 +6,17 @@ import pl.lab.factory.orders.ProductionOrder;
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Strategy 1 (Concrete Strategy)
 // Specjalna strategia dla klientów VIP: stały rabat + dodatkowe bonusy.
-public class VipPricingStrategy implements PricingStrategy {
-
-    private final PricingStrategy standardStrategy = new StandardPricingStrategy();
+public class VipPricingStrategy extends StandardPricingStrategy {
     private static final double VIP_DISCOUNT_PERCENTAGE = 15.0;
-    private static final double PERCENTAGE_DIVISOR = 100.0;
 
     @Override
     public double calculatePrice(ProductionOrder order) {
-        double basePrice = standardStrategy.calculatePrice(order);
-        double discountAmount = basePrice * (VIP_DISCOUNT_PERCENTAGE / PERCENTAGE_DIVISOR);
+        double basePrice = super.calculatePrice(order);
+        double discountAmount = basePrice * (VIP_DISCOUNT_PERCENTAGE / PricingStrategy.PERCENTAGE_DIVISOR);
         double finalPrice = basePrice - discountAmount;
 
         SystemLogger.INSTANCE.logInfo("PRICING", "Applied VIP discount of " + VIP_DISCOUNT_PERCENTAGE
-                + "% for " + order.getId() + ". Final price: $" + String.format("%.2f", finalPrice));
-
+                + "% for " + order.getId() + ". Final price: $" + CurrencyFormatter.format((finalPrice)));
         return finalPrice;
     }
 }

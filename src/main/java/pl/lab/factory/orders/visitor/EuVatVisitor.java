@@ -4,6 +4,7 @@ import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.BaseElectronicBoardProductionOrder;
 import pl.lab.factory.orders.ProductionOrder;
+import pl.lab.factory.orders.pricing.CurrencyFormatter;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Visitor 1 (Concrete Visitor)
@@ -52,7 +53,7 @@ public class EuVatVisitor implements OrderVisitor {
 
     private void logFinalTax(String orderId, String typeName, double tax) {
         SystemLogger.INSTANCE.logInfo("EU-VAT", "Order " + orderId
-                + " (" + typeName + ") -> " + (VAT_RATE * 100) + "% VAT. Tax: $" + String.format("%.2f", tax));
+                + " (" + typeName + ") -> " + (VAT_RATE * 100) + "% VAT. Tax: $" + CurrencyFormatter.format((tax)));
     }
 
     public double getTotalVat() {

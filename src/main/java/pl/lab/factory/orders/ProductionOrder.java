@@ -76,7 +76,7 @@ public abstract class ProductionOrder implements Originator, OrderSubject, Produ
 
     // Prywatna metoda pomijająca save() — używana wyłącznie przez restore(),
     // żeby nie odkładać migawki podczas przywracania.
-    private void setStatusFromMomento(OrderStatus status) {
+    private void setStatusFromMemento(OrderStatus status) {
         if (this.status != status) {
             this.status = status;
 
@@ -171,7 +171,7 @@ public abstract class ProductionOrder implements Originator, OrderSubject, Produ
 
         @Override
         public void restore() {
-            order.setStatusFromMomento(savedStatus);
+            order.setStatusFromMemento(savedStatus);
         }
     }
 

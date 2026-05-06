@@ -2,6 +2,7 @@ package pl.lab.factory.orders.invoice.dispatch;
 
 import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.invoice.OrderInvoice;
+import pl.lab.factory.orders.pricing.CurrencyFormatter;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Template Method 1 (Concrete Class)
@@ -12,7 +13,7 @@ public class EmailInvoiceDispatcher extends InvoiceDispatcher {
     protected String renderDocument(OrderInvoice invoice) {
         SystemLogger.INSTANCE.logInfo("DISPATCH-EMAIL", "Rendering PDF document...");
         return "Attachment: Invoice_PDF_" + invoice.getOrder().getId()
-                + ".pdf (Total: $" + String.format("%.2f", invoice.getAmount()) + ")";
+                + ".pdf (Total: $" + CurrencyFormatter.format(invoice.getAmount()) + ")";
     }
 
     @Override

@@ -1,0 +1,241 @@
+package pl.lab.factory.processes;
+
+import pl.lab.factory.SystemLogger;
+import pl.lab.factory.orders.OrderStatus;
+import pl.lab.factory.orders.ProductionOrder;
+import pl.lab.factory.orders.ProductionOrderFactory;
+import pl.lab.factory.processes.context.FactoryContext;
+import pl.lab.factory.orders.OrderContext;
+import pl.lab.factory.safetymediator.SafetyHistory;
+import pl.lab.factory.safetymediator.SafetySystemMemento;
+import pl.lab.factory.safetymediator.components.AlarmSiren;
+import pl.lab.factory.safetymediator.components.FireGate;
+import pl.lab.factory.safetymediator.components.SmokeDetector;
+import pl.lab.factory.safetymediator.components.SprinklerSystem;
+import pl.lab.factory.warehouse.WarehouseSafetyCenter;
+import pl.lab.factory.warehouse.equipment.EquipmentIterator;
+import pl.lab.factory.warehouse.WarehouseAssetsManager;
+import pl.lab.factory.warehouse.equipment.WarehouseEquipment;
+import pl.lab.factory.warehouse.equipment.maintenance.ForkliftMaintenance;
+import pl.lab.factory.warehouse.equipment.maintenance.MaintenanceProtocol;
+import pl.lab.factory.warehouse.equipment.maintenance.ScannerMaintenance;
+import pl.lab.factory.warehouse.equipment.observer.MaintenanceService;
+import pl.lab.factory.warehouse.interpreter.OrderAndExpression;
+import pl.lab.factory.warehouse.interpreter.OrderExpression;
+import pl.lab.factory.warehouse.interpreter.OrderMinQuantityExpression;
+import pl.lab.factory.warehouse.interpreter.OrderStatusExpression;
+import pl.lab.factory.warehouse.packing.AntiStaticBagDecorator;
+import pl.lab.factory.warehouse.packing.FoamProtectionDecorator;
+import pl.lab.factory.warehouse.packing.PackageFactory;
+import pl.lab.factory.warehouse.packing.PackageImplementor;
+import pl.lab.factory.warehouse.shipping.PriorityShipping;
+import pl.lab.factory.warehouse.shipping.ShippingFacade;
+import pl.lab.factory.warehouse.shipping.ShippingStrategy;
+import pl.lab.factory.warehouse.shipping.StandardShipping;
+import pl.lab.factory.warehouse.shipping.command.ShipOrderCommand;
+import pl.lab.factory.warehouse.shipping.command.ShippingManager;
+import pl.lab.factory.warehouse.shipping.strategy.PriorityFirstDispatcher;
+import pl.lab.factory.warehouse.state.LockedState;
+import pl.lab.factory.warehouse.state.OpenState;
+
+import java.time.LocalDate;
+
+public class WarehouseManagementProcess {
+
+    private static final String UNAPPROVED_ORDER_ID = "ORD-999";
+    private static final String PKG_CARDBOARD = "cardboard";
+    private static final String PKG_PLASTIC = "plastic";
+    private static final int LARGE_QTY_THRESHOLD = 5;
+
+    private static final String FORKLIFT_ID = "FORK-001";
+    private static final String FORKLIFT_NAME = "Toyota Forklift";
+    private static final int FORKLIFT_MONTHS = 14;
+    private static final int FORKLIFT_HOURS = 498;
+    private static final int FORKLIFT_USAGE = 5;
+
+    private static final String SCANNER_ID = "SCAN-052";
+    private static final String SCANNER_NAME = "Zebra Scanner";
+    private static final int SCANNER_MONTHS = 2;
+    private static final int SCANNER_HOURS = 540;
+    private static final String SERVICE_SHORT = "SHORT";
+    private static final int SERVICE_SHORT_MINS = 20;
+    private static final String SERVICE_STANDARD = "STANDARD";
+
+    private static final String SOLDERER_ID = "SOLDER-20";
+    private static final String SOLDERER_NAME = "Weller Station";
+    private static final int SOLDERER_MONTHS = 1;
+    private static final int SOLDERER_HOURS = 120;
+
+    private static final String TERM_ID = "TERM-03";
+    private static final String TERM_NAME = "Logistics Terminal";
+
+    private static final String FIRE_ORDER_ID = "FIRE-01";
+    private static final int FIRE_ORDER_QTY = 1;
+
+    private final FactoryContext context;
+
+    public WarehouseManagementProcess(FactoryContext context) {
+        this.context = context;
+    }
+
+    public void execute() {
+        validateContext();
+        testWarehouseAndShipping();
+        testWarehouseFiltering();
+        testWarehouseEquipmentAndMaintenance();
+        testFireAlarm();
+    }
+
+    private void validateContext() {
+        if (context.getWarehouse() == null || context.getOrderA() == null) {
+            throw new IllegalStateException("Warehouse & Orders must be initialized.");
+        }
+    }
+
+    private void testWarehouseAndShipping() {
+        // -- Warehouse --
+        storeUnapprovedOrder();
+        printWarehouseStates();
+        executeShippingCommands();
+    }
+
+    private void storeUnapprovedOrder() {
+        ProductionOrder unapprovedOrder = context.getOrderA().clone(UNAPPROVED_ORDER_ID);
+        context.getWarehouse().storeOrder(unapprovedOrder);
+    }
+
+    private void printWarehouseStates() {
+        context.getWarehouse().printLegacyWarehouse();
+        context.getWarehouse().printWarehouse();
+    }
+
+    private void executeShippingCommands() {
+        PackageImplementor cardboardBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PKG_CARDBOARD)));
+        PackageImplementor plasticBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PKG_PLASTIC)));
+
+        ShippingStrategy standardShipping = new StandardShipping(cardboardBoxPackaging);
+        ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);
+
+        ShippingFacade shippingFacade = new ShippingFacade(context.getWarehouse());
+        ShippingManager shippingManager = new ShippingManager();
+
+        shippingManager.addCommand(new ShipOrderCommand(shippingFacade, priorityShipping, context.getOrderB()));
+        shippingManager.addCommand(new ShipOrderCommand(shippingFacade, standardShipping, context.getOrderA()));
+        shippingManager.addCommand(new ShipOrderCommand(shippingFacade, standardShipping, context.getOrderC()));
+
+        //Liskov
+        shippingManager.setDispatcher(new PriorityFirstDispatcher());
+        shippingManager.shipEverything();
+
+        shippingManager.undoLastAction();
+        context.getWarehouse().printWarehouse();
+    }
+
+    private void testWarehouseFiltering() {
+        // Filtering
+        OrderExpression isCompleted = new OrderStatusExpression(OrderStatus.COMPLETED);
+        OrderExpression isLarge = new OrderMinQuantityExpression(LARGE_QTY_THRESHOLD);
+
+        OrderExpression complexRule = new OrderAndExpression(isCompleted, isLarge);
+
+        SystemLogger.INSTANCE.logInfo("INTERPRETER", "Filtering completed orders with quantity >= " + LARGE_QTY_THRESHOLD);
+        context.getAllOrders().stream()
+                .filter(complexRule::interpret)
+                .forEach(o -> SystemLogger.INSTANCE.logInfo("[FILTERING]", "Match found: " + o.getId()));
+    }
+
+    private void testWarehouseEquipmentAndMaintenance() {
+        //Equipment
+        WarehouseAssetsManager assetsManager = setupWarehouseEquipment();
+        verifyMaintenanceNeeds(assetsManager);
+        executeMaintenanceProtocols(assetsManager);
+    }
+
+    private WarehouseAssetsManager setupWarehouseEquipment() {
+        WarehouseAssetsManager assetsManager = new WarehouseAssetsManager();
+
+        WarehouseEquipment forklift = new WarehouseEquipment(FORKLIFT_ID, FORKLIFT_NAME, LocalDate.now().minusMonths(FORKLIFT_MONTHS), FORKLIFT_HOURS);
+        WarehouseEquipment scan = new WarehouseEquipment(SCANNER_ID, SCANNER_NAME, LocalDate.now().minusMonths(SCANNER_MONTHS), SCANNER_HOURS);
+        WarehouseEquipment solderer = new WarehouseEquipment(SOLDERER_ID, SOLDERER_NAME, LocalDate.now().minusMonths(SOLDERER_MONTHS), SOLDERER_HOURS);
+        WarehouseEquipment terminal = new WarehouseEquipment(TERM_ID, TERM_NAME);
+
+        assetsManager.addEquipment(forklift);
+        assetsManager.addEquipment(scan);
+        assetsManager.addEquipment(solderer);
+        assetsManager.addEquipment(terminal);
+
+        MaintenanceService serviceDept = new MaintenanceService();
+
+        assetsManager.subscribeAll(serviceDept);
+        return assetsManager;
+    }
+
+    private void verifyMaintenanceNeeds(WarehouseAssetsManager manager) {
+        EquipmentIterator maintenanceIt = manager.getMaintenanceIterator();
+        SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Devices requiring immediate service:");
+        while(maintenanceIt.hasNext()){
+            SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Check needed: " + maintenanceIt.next().toString());
+        }
+    }
+
+    private void executeMaintenanceProtocols(WarehouseAssetsManager manager) {
+        WarehouseEquipment forklift = getEquipmentById(manager, FORKLIFT_ID);
+        WarehouseEquipment scanner = getEquipmentById(manager, SCANNER_ID);
+
+        if (forklift != null) forklift.use(FORKLIFT_USAGE);
+
+        MaintenanceProtocol forkliftService = new ForkliftMaintenance();
+        MaintenanceProtocol scannerService = new ScannerMaintenance();
+
+        scannerService.registerServiceDuration(SERVICE_SHORT, SERVICE_SHORT_MINS);
+
+        if (forklift != null) forkliftService.executeService(forklift, SERVICE_STANDARD);
+        if (scanner != null) scannerService.executeService(scanner, SERVICE_SHORT);
+    }
+
+    private WarehouseEquipment getEquipmentById(WarehouseAssetsManager manager, String id) {
+        EquipmentIterator iterator = manager.getEquipmentIterator();
+        while (iterator.hasNext()) {
+            WarehouseEquipment eq = iterator.next();
+            if (eq.getId().equals(id)) return eq;
+        }
+        return null;
+    }
+
+    private void testFireAlarm() {
+        // Fire Alarm
+        WarehouseSafetyCenter warehouseSafetyCenter = new WarehouseSafetyCenter();
+        SafetyHistory history = new SafetyHistory();
+
+        SmokeDetector sensor = new SmokeDetector(warehouseSafetyCenter);
+        FireGate gate = new FireGate(warehouseSafetyCenter);
+        SprinklerSystem sprinkler = new SprinklerSystem(warehouseSafetyCenter);
+        AlarmSiren siren = new AlarmSiren(warehouseSafetyCenter);
+
+        warehouseSafetyCenter.setComponents(sensor, gate, sprinkler, siren);
+
+        history.save(warehouseSafetyCenter.save());
+
+        triggerFireAlarmAndLockdown(sensor);
+
+        ProductionOrder fireOrder = ProductionOrderFactory.createOrder(
+                context.getBoardA(), new OrderContext(FIRE_ORDER_ID, FIRE_ORDER_QTY, context.getSpecPcb()));
+        context.getWarehouse().storeOrder(fireOrder);
+
+        restoreSafetySystem(warehouseSafetyCenter, history);
+        context.getWarehouse().storeOrder(fireOrder);
+    }
+
+    private void triggerFireAlarmAndLockdown(SmokeDetector sensor) {
+        sensor.detectFire();
+        context.getWarehouseAdapter().getZoneA().setState(new LockedState());
+    }
+
+    private void restoreSafetySystem(WarehouseSafetyCenter center, SafetyHistory history) {
+        SafetySystemMemento lastState = history.undo();
+        if (lastState != null) {
+            center.restore(lastState);
+            context.getWarehouseAdapter().getZoneA().setState(new OpenState());
+        }
+    }
+}

@@ -12,7 +12,7 @@ public class SafetyHistory {
     }
 
     public SafetySystemMemento undo() {
-        if (history.isEmpty()) return null;
+        if (history.isEmpty()) throw new IllegalStateException("Safety history is empty.");
         return history.pop();
     }
 }

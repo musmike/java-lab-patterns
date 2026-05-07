@@ -84,8 +84,8 @@ public class FinancialProcess {
 
     private void verifyDraftRestrictions(OrderInvoice invoice) {
         // Can't pay and generate receipt before confirming
-        invoice.pay();
-        invoice.generateReceipt();
+        try { invoice.pay(); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
+        try { invoice.generateReceipt(); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
     }
 
     private void applyDiscountsAndConfirm(OrderInvoice invoice) {
@@ -97,17 +97,16 @@ public class FinancialProcess {
 
     private void verifyConfirmedRestrictions(OrderInvoice invoice) {
         // Can't change price or apply discount after confirmation
-        invoice.setPricingStrategy(new BulkPricingStrategy());
-        invoice.recalculatePrice();
-        invoice.applyDiscount(VIP_DISCOUNT_PERCENT);
+        try { invoice.setPricingStrategy(new BulkPricingStrategy()); invoice.recalculatePrice(); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
+        try { invoice.applyDiscount(VIP_DISCOUNT_PERCENT); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
         // Can't generate receipt before payment
-        invoice.generateReceipt();
+        try { invoice.generateReceipt(); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
     }
 
     private void payAndGenerateReceipt(OrderInvoice invoice) {
         invoice.pay();
         // Can't cancel after payment
-        invoice.cancel();
+        try { invoice.cancel(); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
         invoice.generateReceipt();
     }
 

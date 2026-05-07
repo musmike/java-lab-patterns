@@ -1,6 +1,7 @@
 package pl.lab.factory.warehouse.equipment;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
 // Wzorzec Iterator 2 (Konkretny iterator)
@@ -25,7 +26,10 @@ public class EquipmentServiceIterator implements EquipmentIterator{
 
     @Override
     public WarehouseEquipment next(){
-        return hasNext() ? equipmentList.get(position++) : null;
+        if (!hasNext()) {
+            throw new NoSuchElementException("No more equipment requires maintenance.");
+        }
+        return equipmentList.get(position++);
     }
 }
 // Koniec, Tydzień 5

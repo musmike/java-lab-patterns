@@ -1,6 +1,5 @@
 package pl.lab.factory.orders.invoice;
 
-import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.pricing.PricingStrategy;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
@@ -10,32 +9,32 @@ public class OrderInvoiceCancelledState implements OrderInvoiceState {
 
     @Override
     public void pay(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_CANCELLED);
+        throw new IllegalStateException(MSG_ERR_CANCELLED);
     }
 
     @Override
     public void applyDiscount(OrderInvoice invoice, double percentage) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_CANCELLED);
+        throw new IllegalStateException(MSG_ERR_CANCELLED);
     }
 
     @Override
     public void generateReceipt(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_CANCELLED);
+        throw new IllegalStateException(MSG_ERR_CANCELLED);
     }
 
     @Override
     public void cancel(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_CANCELLED);
+        throw new IllegalStateException(MSG_ERR_CANCELLED);
     }
 
     @Override
     public void recalculatePrice(OrderInvoice invoice, PricingStrategy strategy) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_CANCELLED);
+        throw new IllegalStateException(MSG_ERR_CANCELLED);
     }
 
     @Override
     public void confirm(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_CANCELLED);
+        throw new IllegalStateException(MSG_ERR_CANCELLED);
     }
 
     @Override

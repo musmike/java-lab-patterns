@@ -9,7 +9,7 @@ import java.util.List;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Composite 2 (Kompozyt)
-public class WarehouseSection implements WarehouseComponent{
+public class WarehouseSection implements WarehouseComponent {
     private final String name;
     private final List<WarehouseComponent> children = new ArrayList<>();
 
@@ -44,11 +44,11 @@ public class WarehouseSection implements WarehouseComponent{
     }
 
     @Override
-    public void remove(String orderId){
+    public void removeOrder(String orderId){
         children.removeIf(component->
                 component instanceof WarehouseItem item && item.getOrderId().equals(orderId));
         for(WarehouseComponent component : children){
-            component.remove(orderId);
+            component.removeOrder(orderId);
         }
     }
 

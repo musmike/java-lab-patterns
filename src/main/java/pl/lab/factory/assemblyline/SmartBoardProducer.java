@@ -1,8 +1,8 @@
 package pl.lab.factory.assemblyline;
 
 import pl.lab.factory.assemblyline.assemblingsteps.*;
-import pl.lab.factory.assemblyline.assemblingstrategiers.*;
-import pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies.PrintingProxy;
+import pl.lab.factory.assemblyline.assemblingstrategies.*;
+import pl.lab.factory.assemblyline.assemblingstrategies.safetyproxies.PrintingProxy;
 import pl.lab.factory.assemblyline.coordination.FactoryMachineMediator;
 import pl.lab.factory.assemblyline.coordination.MachineMediator;
 import pl.lab.factory.assemblyline.smartinterpreter.BaseProducerExpression;

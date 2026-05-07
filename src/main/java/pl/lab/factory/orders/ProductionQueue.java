@@ -34,7 +34,7 @@ public class ProductionQueue implements OrderCollection {
             throw new IllegalArgumentException("Order cannot be null");
         queue.offer(order);
         SystemLogger.INSTANCE.logInfo("ProductionQueue", "Added: " + order.getId()
-                + " | typ: " + order.getClass().getSimpleName()
+                + " | type: " + order.getClass().getSimpleName()
                 + " | qty: " + order.getQuantity());
     }
 

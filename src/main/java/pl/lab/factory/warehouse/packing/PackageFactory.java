@@ -15,7 +15,7 @@ public class PackageFactory {
                     flyweights.put(type, new CardboardBoxPacking());
                     break;
                 case "plastic":
-                    flyweights.put(type, new PlacticBoxPacking());
+                    flyweights.put(type, new PlasticBoxPacking());
                     break;
             }
         }

@@ -1,8 +1,8 @@
 package pl.lab.factory.assemblyline.coordination;
 
-import pl.lab.factory.assemblyline.assemblingstrategiers.MountingStrategy;
-import pl.lab.factory.assemblyline.assemblingstrategiers.PrintingStrategy;
-import pl.lab.factory.assemblyline.assemblingstrategiers.SolderingStrategy;
+import pl.lab.factory.assemblyline.assemblingstrategies.MountingStrategy;
+import pl.lab.factory.assemblyline.assemblingstrategies.PrintingStrategy;
+import pl.lab.factory.assemblyline.assemblingstrategies.SolderingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1

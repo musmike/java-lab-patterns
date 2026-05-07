@@ -9,7 +9,7 @@ import pl.lab.factory.orders.ProductionOrder;
 
 // Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
 // Zasada odwracania zależności (DIP) (klasa pochodna)
-public class PlacticBoxPacking implements PackageImplementor {
+public class PlasticBoxPacking implements PackageImplementor {
     @Override
     public void packOrder(ProductionOrder order){
         order.setStatus(OrderStatus.PACKED);

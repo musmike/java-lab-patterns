@@ -36,7 +36,7 @@ import pl.lab.factory.reporting.reportingsystem.SimpleReportGenerator;
 
 public class ReportingAndMetricsProcess {
 
-    private static final String APP_CONTEXT = "MAIN";
+    private static final String APP_CONTEXT = ReportingAndMetricsProcess.class.getName();
     private static final String ORDER_6_ID = "ORD-006";
     private static final int ORDER_6_QTY = 5;
 

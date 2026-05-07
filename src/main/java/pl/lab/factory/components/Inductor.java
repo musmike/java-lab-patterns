@@ -41,7 +41,7 @@ public class Inductor implements BaseComponent, PositionableComponent, SignalPro
     }
 
     @Override
-    public double mofifyResult(double value) {
+    public double modifyResult(double value) {
         return value * definition.getInductance();
     }
 

@@ -3,7 +3,6 @@ package pl.lab.factory.electronicboards.firmware.commands;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 import pl.lab.factory.electronicboards.firmware.memento.FirmwareMemento;
-import pl.lab.factory.electronicboards.firmware.programmers.FirmwareProgrammer;
 import pl.lab.factory.electronicboards.firmware.programmers.ProgrammingDevice;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
@@ -13,7 +12,6 @@ public class WriteFirmwareCommand implements FirmwareCommand{
     private BaseElectronicBoard board;
     private FirmwareAdapter adapter;
     private FirmwareMemento backup;
-
 
     public WriteFirmwareCommand(ProgrammingDevice device, BaseElectronicBoard board, FirmwareAdapter adapter) {
         this.device = device;
@@ -26,7 +24,7 @@ public class WriteFirmwareCommand implements FirmwareCommand{
         backup = board.saveFirmware();
         try{
             device.writeFirmware(board, adapter);
-            board._programBoard();
+            board.programBoard();
         } catch (RuntimeException e){
             board.restoreFirmware(backup);
             throw e;
@@ -34,6 +32,5 @@ public class WriteFirmwareCommand implements FirmwareCommand{
 
     }
 }
-
 //command 3
 //koniec tydzien 5

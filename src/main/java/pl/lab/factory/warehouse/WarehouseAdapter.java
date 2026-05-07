@@ -31,7 +31,7 @@ public class WarehouseAdapter implements WarehouseService {
                 "WAREHOUSE",
                 "Removing order " + order.getId() + " from warehouse"
         );
-        mainWarehouse.remove(order.getId());
+        mainWarehouse.removeOrder(order.getId());
     }
 
     @Override

@@ -1,11 +1,11 @@
 package pl.lab.factory.assemblyline;
 
 import pl.lab.factory.assemblyline.assemblingsteps.*;
-import pl.lab.factory.assemblyline.assemblingstrategiers.AutoMount;
-import pl.lab.factory.assemblyline.assemblingstrategiers.LaserPrint;
-import pl.lab.factory.assemblyline.assemblingstrategiers.WaveSolder;
-import pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies.PrintingProxy;
-import pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies.SolderingProxy;
+import pl.lab.factory.assemblyline.assemblingstrategies.AutoMount;
+import pl.lab.factory.assemblyline.assemblingstrategies.LaserPrint;
+import pl.lab.factory.assemblyline.assemblingstrategies.WaveSolder;
+import pl.lab.factory.assemblyline.assemblingstrategies.safetyproxies.PrintingProxy;
+import pl.lab.factory.assemblyline.assemblingstrategies.safetyproxies.SolderingProxy;
 import pl.lab.factory.assemblyline.coordination.FactoryMachineMediator;
 import pl.lab.factory.assemblyline.coordination.MachineMediator;
 import pl.lab.factory.pcbboards.BaseBoard;

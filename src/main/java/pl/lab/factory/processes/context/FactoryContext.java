@@ -31,7 +31,7 @@ public class FactoryContext {
     private OrderProcessor electronicBoardProcessor;
     private WarehouseAdapter warehouseAdapter;
     private WarehouseService warehouse;
-    private ProductionDepartment prodDept;
+    private ProductionDepartment productionDepartment;
 
     public BaseBoard getBoardA() { return boardA; }
     public void setBoardA(BaseBoard boardA) { this.boardA = boardA; }
@@ -84,6 +84,6 @@ public class FactoryContext {
     public WarehouseService getWarehouse() { return warehouse; }
     public void setWarehouse(WarehouseService warehouse) { this.warehouse = warehouse; }
 
-    public ProductionDepartment getProdDept() { return prodDept; }
-    public void setProdDept(ProductionDepartment prodDept) { this.prodDept = prodDept; }
+    public ProductionDepartment getProductionDepartment() { return productionDepartment; }
+    public void setProductionDepartment(ProductionDepartment productionDepartment) { this.productionDepartment = productionDepartment; }
 }

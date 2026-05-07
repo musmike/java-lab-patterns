@@ -1,4 +1,4 @@
-package pl.lab.factory.assemblyline.assemblingstrategiers;
+package pl.lab.factory.assemblyline.assemblingstrategies;
 
 import pl.lab.factory.pcbboards.BaseBoard;
 

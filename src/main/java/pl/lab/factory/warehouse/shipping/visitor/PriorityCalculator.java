@@ -6,10 +6,12 @@ import pl.lab.factory.warehouse.shipping.command.ShipOrderCommand;
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Visitor 2 (Concrete Visitor)
 public class PriorityCalculator implements CommandVisitor {
+    private static final int HIGH_PRIORITY_SCORE = 10;
+    
     @Override
     public int visit(ShipOrderCommand command){
         if(command.getStrategy() instanceof PriorityShipping){
-            return 10;
+            return HIGH_PRIORITY_SCORE;
         }
         return 0;
     }

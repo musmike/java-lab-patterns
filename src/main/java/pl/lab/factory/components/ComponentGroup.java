@@ -67,12 +67,12 @@ public class ComponentGroup implements BaseComponent, SignalProcessorComponent, 
     }
 
     @Override
-    public double mofifyResult(double value) {
+    public double modifyResult(double value) {
         double result = value;
         Iterator<BaseComponent> it = iterator();
         while(it.hasNext()){
             if(it.next() instanceof SignalProcessorComponent spc){
-                result = spc.mofifyResult(result);
+                result = spc.modifyResult(result);
             }
 
         }
@@ -93,8 +93,6 @@ public class ComponentGroup implements BaseComponent, SignalProcessorComponent, 
         return new CompositeIterator(this);
     }
 
-
-
     @Override
     public void accept(BoardVisitor v) {
         v.visit(this);
@@ -104,7 +102,6 @@ public class ComponentGroup implements BaseComponent, SignalProcessorComponent, 
             }
         }
     }
-    
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 3

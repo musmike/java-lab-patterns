@@ -4,7 +4,7 @@ import pl.lab.factory.assemblyline.CircuitPrinter;
 import pl.lab.factory.assemblyline.Machine;
 import pl.lab.factory.assemblyline.Mounter;
 import pl.lab.factory.assemblyline.Solderer;
-import pl.lab.factory.assemblyline.assemblingstrategiers.*;
+import pl.lab.factory.assemblyline.assemblingstrategies.*;
 import pl.lab.factory.assemblyline.machinesubroutines.MachineAdjusterDecorator;
 import pl.lab.factory.assemblyline.machinesubroutines.MachineWarmupDecorator;
 import pl.lab.factory.assemblyline.machinesubroutines.MounterValueTesterDecorator;
@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit;
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
 // Wzorzec Mediator 3 (Konkretny Mediator)
 public class FactoryMachineMediator implements MachineMediator{
+    private static final int MANUAL_MOUNT_DELAY_MS = 100;
+    private static final double DEFAULT_TEST_VALUE = 1.0;
+    
     private final CircuitPrinter printer = CircuitPrinter.getInstance();
     private final Mounter mounter = Mounter.getInstance();
     private final Solderer solderer = Solderer.getInstance();
@@ -32,7 +35,7 @@ public class FactoryMachineMediator implements MachineMediator{
             Machine decorated =
                     new MachineWarmupDecorator<>(
                             new MachineAdjusterDecorator<>(
-                                    new MounterValueTesterDecorator(mounter, 1)
+                                    new MounterValueTesterDecorator(mounter, DEFAULT_TEST_VALUE)
                             )
                     );
             decorated.perform(board);
@@ -41,7 +44,7 @@ public class FactoryMachineMediator implements MachineMediator{
         else if (strategy instanceof ManualMount) {
             board.mountComponents();
             try {
-                TimeUnit.MILLISECONDS.sleep(100);
+                TimeUnit.MILLISECONDS.sleep(MANUAL_MOUNT_DELAY_MS);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

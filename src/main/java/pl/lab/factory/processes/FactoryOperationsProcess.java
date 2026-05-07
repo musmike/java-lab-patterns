@@ -66,17 +66,17 @@ public class FactoryOperationsProcess {
         );
 
         CentralControlMediator mediator = new CentralControlMediator();
-        ProductionDepartment prodDept = new ProductionDepartment(mediator, context.getPcbProcessor(), context.getElectronicBoardProcessor());
-        WarehouseDepartment wareDept = new WarehouseDepartment(mediator, proxyWarehouse);
-        ReportingDepartment repDept = new ReportingDepartment(mediator, boardReporter);
+        ProductionDepartment productionDepartment = new ProductionDepartment(mediator, context.getPcbProcessor(), context.getElectronicBoardProcessor());
+        WarehouseDepartment warehouseDepartment = new WarehouseDepartment(mediator, proxyWarehouse);
+        ReportingDepartment reportingDepartment = new ReportingDepartment(mediator, boardReporter);
 
-        mediator.setProductionDepartment(prodDept);
-        mediator.setWarehouseDepartment(wareDept);
-        mediator.setReportingDepartment(repDept);
+        mediator.setProductionDepartment(productionDepartment);
+        mediator.setWarehouseDepartment(warehouseDepartment);
+        mediator.setReportingDepartment(reportingDepartment);
 
         context.setWarehouseAdapter(adapter);
         context.setWarehouse(proxyWarehouse);
-        context.setProdDept(prodDept);
+        context.setProductionDepartment(productionDepartment);
     }
 
     private void testOrderObservers() {
@@ -110,10 +110,10 @@ public class FactoryOperationsProcess {
         queue.printQueue(); // State: [ orderA, orderB]
 
         invoker.executeCommand(new RemoveOrderCommand(context.getOrderA()));
-        queue.printQueue(); // State: [ orderB ]
+        queue.printQueue(); // State:[ orderB ]
 
         invoker.undo();
-        queue.printQueue(); // State: [ orderA, orderB ]
+        queue.printQueue(); // State:[ orderA, orderB ]
 
         OrderQueueCommand clearAll = new ClearQueueCommand();
         invoker.executeCommand(clearAll);
@@ -136,7 +136,7 @@ public class FactoryOperationsProcess {
 
         while (!queue.isEmpty()) {
             ProductionOrder order = queue.nextOrder();
-            weeklyPlan.add(new SingleOrderTask(order, context.getProdDept()));
+            weeklyPlan.add(new SingleOrderTask(order, context.getProductionDepartment()));
         }
 
         System.out.println(weeklyPlan.getDescription(""));

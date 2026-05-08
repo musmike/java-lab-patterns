@@ -102,9 +102,9 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     }
 
     @Override
-    public void register(BoardObserver o) {
+    public void register(BoardObserver o) throws RuntimeException{
         if(o == null)
-            System.out.println("Observer not found!");
+            throw new RuntimeException("Observer not found!");
 
         if(!observers.contains(o))
             observers.add(o);

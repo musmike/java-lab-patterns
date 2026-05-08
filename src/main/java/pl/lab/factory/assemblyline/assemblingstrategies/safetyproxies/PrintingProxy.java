@@ -1,6 +1,6 @@
-package pl.lab.factory.assemblyline.assemblingstrategiers.safetyproxies;
+package pl.lab.factory.assemblyline.assemblingstrategies.safetyproxies;
 
-import pl.lab.factory.assemblyline.assemblingstrategiers.PrintingStrategy;
+import pl.lab.factory.assemblyline.assemblingstrategies.PrintingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 // Tydzień 4 - Stosowanie strukturalnych wzorców projektowych cz. 2

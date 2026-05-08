@@ -1,4 +1,4 @@
-package pl.lab.factory.assemblyline.assemblingstrategiers;
+package pl.lab.factory.assemblyline.assemblingstrategies;
 
 import pl.lab.factory.assemblyline.coordination.MachineMediator;
 import pl.lab.factory.pcbboards.BaseBoard;
@@ -7,15 +7,15 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // zasada OCP - specyfikacja otwartego formatu klasy dziedziczonej
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz.2
 // wzorzec strategy 3 - konkretna strategia typu procesu
-public class WaveSolder implements SolderingStrategy{
+public class LaserPrint implements PrintingStrategy{
     private final MachineMediator mediator;
 
-    public WaveSolder(MachineMediator mediator) {
+    public LaserPrint(MachineMediator mediator) {
         this.mediator = mediator;
     }
     @Override
     public void execute(BaseBoard board) throws InterruptedException {
-        mediator.requestSolder(board, this);
+        mediator.requestPrint(board, this);
     }
 }
 //strategy 3

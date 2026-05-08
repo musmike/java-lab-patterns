@@ -1,7 +1,5 @@
 package pl.lab.factory.electronicboards.firmware.commands;
 
-import pl.lab.factory.electronicboards.firmware.memento.FirmwareMemento;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +26,7 @@ public class FirmwareCommandInvoker {
                     attempts++;
                     System.out.println("[Firmware Invoker] Command failed, retrying... (" + attempts + ")");
                     if(attempts >= MAX_ATTEMPTS){
-                        System.out.println("[Firmware Invoker] Command failed completely after 3 tries!!!");
+                        System.out.println("[Firmware Invoker] Command failed completely after " + MAX_ATTEMPTS + " tries!!!");
                     }
                 }
             }

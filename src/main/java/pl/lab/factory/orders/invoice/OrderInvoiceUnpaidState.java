@@ -17,12 +17,12 @@ public class OrderInvoiceUnpaidState implements OrderInvoiceState {
 
     @Override
     public void applyDiscount(OrderInvoice invoice, double percentage) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_AWAITS_PAYMENT);
+        throw new IllegalStateException(MSG_ERR_AWAITS_PAYMENT);
     }
 
     @Override
     public void generateReceipt(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", "Cannot generate receipt. Invoice for "
+        throw new IllegalStateException("Cannot generate receipt. Invoice for "
                 + invoice.getOrder().getId() + " is UNPAID.");
     }
 
@@ -34,12 +34,12 @@ public class OrderInvoiceUnpaidState implements OrderInvoiceState {
 
     @Override
     public void recalculatePrice(OrderInvoice invoice, PricingStrategy strategy) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_AWAITS_PAYMENT);
+        throw new IllegalStateException(MSG_ERR_AWAITS_PAYMENT);
     }
 
     @Override
     public void confirm(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", "Invoice is already confirmed.");
+        throw new IllegalStateException("Invoice is already confirmed.");
     }
 
     @Override

@@ -1,7 +1,6 @@
 package pl.lab.factory.assemblyline.assemblingsteps;
 
-import pl.lab.factory.assemblyline.assemblingstrategiers.AssemblingStrategy;
-import pl.lab.factory.assemblyline.assemblingstrategiers.SolderingStrategy;
+import pl.lab.factory.assemblyline.assemblingstrategies.SolderingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
 //Tydzien 8 - Podstawienie Liskov
 //klasa którą można podstawić pod klasę dziedziczoną w dowolnym miejscu

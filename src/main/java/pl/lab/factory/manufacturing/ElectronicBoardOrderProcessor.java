@@ -1,10 +1,7 @@
 package pl.lab.factory.manufacturing;
 
 import pl.lab.factory.SystemLogger;
-import pl.lab.factory.assemblyline.BoardProducer;
-import pl.lab.factory.assemblyline.QualityControlDecorator;
-import pl.lab.factory.assemblyline.SimpleBoardProducer;
-import pl.lab.factory.assemblyline.TimedProducerDecorator;
+import pl.lab.factory.assemblyline.*;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.orders.BaseElectronicBoardProductionOrder;
 import pl.lab.factory.orders.ProductionOrder;
@@ -14,9 +11,7 @@ public class ElectronicBoardOrderProcessor extends OrderProcessor {
     private final BoardProducer pcbProducer;
 
     public ElectronicBoardOrderProcessor() {
-        this.pcbProducer = new QualityControlDecorator(
-                new TimedProducerDecorator(new SimpleBoardProducer())
-        );
+        this.pcbProducer = BoardProducerFactory.createStandardProducer();
     }
 
     @Override

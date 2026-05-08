@@ -18,7 +18,7 @@ public class InternalProgrammer extends FirmwareProgrammer {
         System.out.println("Internal programming device engaged...");
         device.start();
         device.writeFirmware(board, firmwareAdapter);
-        board._programBoard();
+        board.programBoard();
         device.finish();
     }
 }

@@ -16,11 +16,11 @@ public class WarehouseSafetyCenter implements SafetyMediator {
     private SprinklerSystem sprinkler;
     private AlarmSiren siren;
 
-    public void setComponents(SmokeDetector d, FireGate g, SprinklerSystem s, AlarmSiren as){
-        this.detector = d;
-        this.gate = g;
-        this.sprinkler = s;
-        this.siren = as;
+    public void setComponents(SmokeDetector detector, FireGate gate, SprinklerSystem sprinkler, AlarmSiren siren){
+        this.detector = detector;
+        this.gate = gate;
+        this.sprinkler = sprinkler;
+        this.siren = siren;
     }
 
     @Override

@@ -17,7 +17,7 @@ public class BootloaderProgrammer extends FirmwareProgrammer{
         device.start();
         device.writeFirmware(board, firmwareAdapter);
         System.out.println("Preparing bootloader...\n.\n.\n.\nDone!");
-        board._programBoard();
+        board.programBoard();
         System.out.println("Programming finished!");
         device.finish();
     }

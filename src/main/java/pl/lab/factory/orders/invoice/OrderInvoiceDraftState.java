@@ -14,7 +14,7 @@ public class OrderInvoiceDraftState implements OrderInvoiceState {
 
     @Override
     public void pay(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_DRAFT);
+        throw new IllegalStateException(MSG_ERR_DRAFT);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class OrderInvoiceDraftState implements OrderInvoiceState {
 
     @Override
     public void generateReceipt(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_DRAFT);
+        throw new IllegalStateException(MSG_ERR_DRAFT);
     }
 
     @Override

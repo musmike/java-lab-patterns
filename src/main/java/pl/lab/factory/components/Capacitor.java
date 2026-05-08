@@ -12,7 +12,6 @@ import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
 public class Capacitor implements BaseComponent, PositionableComponent, SignalProcessorComponent, VisitableComponent {
     private final short VOLTAGE_COMPARATOR = 5;
 
-
     private CapacitorDefinition definition;
     private boolean mounted = false;
     private final Pair<Integer, Integer> position;
@@ -43,7 +42,7 @@ public class Capacitor implements BaseComponent, PositionableComponent, SignalPr
     }
 
     @Override
-    public double mofifyResult(double value) {
+    public double modifyResult(double value) {
         return value + VOLTAGE_COMPARATOR > definition.getCapacitance() ? value - definition.getCapacitance() : value + definition.getCapacitance();
     }
 

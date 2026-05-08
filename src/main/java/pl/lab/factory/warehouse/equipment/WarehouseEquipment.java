@@ -11,6 +11,9 @@ import java.util.List;
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
 // Wzorzec Iterator 2 (Element kolekcji)
 public class WarehouseEquipment implements MaintenanceObservable {
+    private static final int MAINTENANCE_HOURS_LIMIT = 500;
+    private static final int MAINTENANCE_YEARS_LIMIT = 1;
+    
     private final String  id;
     private final String name;
     private LocalDate lastServiceDate;
@@ -45,7 +48,7 @@ public class WarehouseEquipment implements MaintenanceObservable {
             return;
         }
         this.operatingHours += hours;
-        if(this.operatingHours > 500){
+        if(this.operatingHours > MAINTENANCE_HOURS_LIMIT){
             notifyObservers("Maintenance limit reached: " + operatingHours + "h");
         }
     }
@@ -64,7 +67,7 @@ public class WarehouseEquipment implements MaintenanceObservable {
     }
 
     public boolean needsMaintenance(){
-        return operatingHours >= 500 || lastServiceDate.isBefore(LocalDate.now().minusYears(1));
+        return operatingHours >= MAINTENANCE_HOURS_LIMIT || lastServiceDate.isBefore(LocalDate.now().minusYears(MAINTENANCE_YEARS_LIMIT));
     }
 
 

@@ -4,7 +4,7 @@ package pl.lab.factory.warehouse;
 // Wzorzec Composite 2 (Komponent)
 public interface WarehouseComponent {
     public void print(String indent);
-    public void remove(String orderId);
+    public void removeOrder(String orderId);
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 2

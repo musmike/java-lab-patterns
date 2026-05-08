@@ -1,6 +1,6 @@
 package pl.lab.factory.assemblyline.assemblingsteps;
 
-import pl.lab.factory.assemblyline.assemblingstrategiers.AssemblingStrategy;
+import pl.lab.factory.assemblyline.assemblingstrategies.AssemblingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 //Tydzien 8 - Podstawienie Liskov

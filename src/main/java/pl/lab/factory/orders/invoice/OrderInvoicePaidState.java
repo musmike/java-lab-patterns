@@ -13,12 +13,12 @@ public class OrderInvoicePaidState implements OrderInvoiceState {
 
     @Override
     public void pay(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_ALREADY_PAID);
+        throw new IllegalStateException(MSG_ERR_ALREADY_PAID);
     }
 
     @Override
     public void applyDiscount(OrderInvoice invoice, double percentage) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_ALREADY_PAID);
+        throw new IllegalStateException(MSG_ERR_ALREADY_PAID);
     }
 
     @Override
@@ -32,17 +32,17 @@ public class OrderInvoicePaidState implements OrderInvoiceState {
 
     @Override
     public void cancel(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_CANCELLED);
+        throw new IllegalStateException(MSG_ERR_CANCELLED);
     }
 
     @Override
     public void recalculatePrice(OrderInvoice invoice, PricingStrategy strategy) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_ALREADY_PAID);
+        throw new IllegalStateException(MSG_ERR_ALREADY_PAID);
     }
 
     @Override
     public void confirm(OrderInvoice invoice) {
-        SystemLogger.INSTANCE.logError("INVOICE", MSG_ERR_ALREADY_PAID);
+        throw new IllegalStateException(MSG_ERR_ALREADY_PAID);
     }
 
     @Override

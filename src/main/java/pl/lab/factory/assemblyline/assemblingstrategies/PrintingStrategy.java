@@ -1,4 +1,4 @@
-package pl.lab.factory.assemblyline.assemblingstrategiers;
+package pl.lab.factory.assemblyline.assemblingstrategies;
 
 // tydzien 7 - stosowanie zasad SRP i OCP
 // zasada OCP - klasa bazowa otwarta na szerokie poszerzanie poprzez dziedziczenie

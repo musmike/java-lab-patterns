@@ -15,9 +15,10 @@ import pl.lab.factory.pcbboards.monitoring.VisitableBoard;
 public abstract class BaseBoard implements ManufacturableProduct, Cloneable, ObservableBoard, VisitableBoard {
     protected List<BoardObserver> observers = new ArrayList<>();
     protected boolean[] changed = {false, false, false};
-    private short PRINTING_CHANGE = 1;
-    private short SOLDERING_CHANGE = 2;
-    private short MOUNTING_CHANGE = 0;
+    private static final short MOUNTING_CHANGE = 0;
+    private static final short PRINTING_CHANGE = 1;
+    private static final short SOLDERING_CHANGE = 2;
+    
     protected ArrayList<BaseComponent> components = new ArrayList<>();
     protected double workingVoltage;
     protected BoardMaterials boardMaterial;
@@ -30,7 +31,6 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     protected boolean _circuitsPrinted = false;
     protected boolean _componentsMounted = false;
     protected boolean _soldered = false;
-
 
     public abstract double getWorkingVoltage();
     public abstract BoardMaterials getBoardMaterial();
@@ -54,11 +54,13 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     }
 
     public abstract boolean isReady();
+    
     public void printCircuits(){
         _circuitsPrinted = true;
         changed[PRINTING_CHANGE] = true;
         notifyObservers();
     }
+    
     public void mountComponents(){
         for (BaseComponent c : components){
             c.mount();
@@ -67,6 +69,7 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
         changed[MOUNTING_CHANGE] = true;
         notifyObservers();
     }
+    
     public double getComponentCost(){
         double cost = 0;
         for(BaseComponent c : components){
@@ -74,19 +77,22 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
         }
         return cost;
     }
+    
     public double getValue(double value){
         for(BaseComponent c : components){
             if(c instanceof SignalProcessorComponent spc){
-                value = spc.mofifyResult(value);
+                value = spc.modifyResult(value);
             }
         }
         return value;
     }
+    
     public void getComponentInfo(){
         for(BaseComponent c : components){
             c.print();
         }
     }
+    
     public void solder(){
         _soldered = true;
         changed[SOLDERING_CHANGE] = true;
@@ -149,5 +155,4 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
             }
         }
     }
-
 }

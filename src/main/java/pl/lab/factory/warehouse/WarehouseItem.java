@@ -29,7 +29,7 @@ public class WarehouseItem implements WarehouseComponent{
     }
 
     @Override
-    public void remove(String orderId){}
+    public void removeOrder(String orderId){}
 }
 // Koniec, Tydzień 3
 // Wzorzec Composite 2

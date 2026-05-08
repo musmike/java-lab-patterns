@@ -29,8 +29,8 @@ public abstract class TaxVisitor implements OrderVisitor {
         return estimatedValue * taxRate;
     }
 
-    protected void logFinalTax(String region, ProductionOrder order, String taxDescription, double tax) {
+    protected void logFinalTax(String region, ProductionOrder order, TaxCalculationResult taxResult) {
         SystemLogger.INSTANCE.logInfo(region, "Order " + order.getId()
-                + " (" + getTypeName(order) + ") -> " + taxDescription + ". Tax: $" + CurrencyFormatter.format(tax));
+                + " (" + getTypeName(order) + ") -> " + taxResult.description() + ". Tax: $" + CurrencyFormatter.format(taxResult.amount()));
     }
 }

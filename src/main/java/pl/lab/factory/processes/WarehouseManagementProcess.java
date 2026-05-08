@@ -15,6 +15,7 @@ import pl.lab.factory.safetymediator.components.SprinklerSystem;
 import pl.lab.factory.warehouse.WarehouseSafetyCenter;
 import pl.lab.factory.warehouse.equipment.EquipmentIterator;
 import pl.lab.factory.warehouse.WarehouseAssetsManager;
+import pl.lab.factory.warehouse.equipment.MaintenanceRecord;
 import pl.lab.factory.warehouse.equipment.WarehouseEquipment;
 import pl.lab.factory.warehouse.equipment.maintenance.ForkliftMaintenance;
 import pl.lab.factory.warehouse.equipment.maintenance.MaintenanceProtocol;
@@ -158,9 +159,9 @@ public class WarehouseManagementProcess {
     private WarehouseAssetsManager setupWarehouseEquipment() {
         WarehouseAssetsManager assetsManager = new WarehouseAssetsManager();
 
-        assetsManager.addEquipment(new WarehouseEquipment(FORKLIFT_ID, FORKLIFT_NAME, LocalDate.now().minusMonths(FORKLIFT_MONTHS), FORKLIFT_HOURS));
-        assetsManager.addEquipment(new WarehouseEquipment(SCANNER_ID, SCANNER_NAME, LocalDate.now().minusMonths(SCANNER_MONTHS), SCANNER_HOURS));
-        assetsManager.addEquipment(new WarehouseEquipment(SOLDERER_ID, SOLDERER_NAME, LocalDate.now().minusMonths(SOLDERER_MONTHS), SOLDERER_HOURS));
+        assetsManager.addEquipment(new WarehouseEquipment(FORKLIFT_ID, FORKLIFT_NAME, new MaintenanceRecord(LocalDate.now().minusMonths(FORKLIFT_MONTHS), FORKLIFT_HOURS)));
+        assetsManager.addEquipment(new WarehouseEquipment(SCANNER_ID, SCANNER_NAME, new MaintenanceRecord(LocalDate.now().minusMonths(SCANNER_MONTHS), SCANNER_HOURS)));
+        assetsManager.addEquipment(new WarehouseEquipment(SOLDERER_ID, SOLDERER_NAME, new MaintenanceRecord(LocalDate.now().minusMonths(SOLDERER_MONTHS), SOLDERER_HOURS)));
         assetsManager.addEquipment(new WarehouseEquipment(TERM_ID, TERM_NAME));
 
         assetsManager.subscribeAll(new MaintenanceService());
@@ -220,7 +221,11 @@ public class WarehouseManagementProcess {
         SprinklerSystem sprinkler = new SprinklerSystem(center);
         AlarmSiren siren = new AlarmSiren(center);
 
-        center.setComponents(sensor, gate, sprinkler, siren);
+        center.setDetector(sensor);
+        center.setGate(gate);
+        center.setSprinkler(sprinkler);
+        center.setSiren(siren);
+
         return sensor;
     }
 

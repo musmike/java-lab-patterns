@@ -13,7 +13,7 @@ import java.util.List;
 public class WarehouseEquipment implements MaintenanceObservable {
     private static final int MAINTENANCE_HOURS_LIMIT = 500;
     private static final int MAINTENANCE_YEARS_LIMIT = 1;
-    
+
     private final String  id;
     private final String name;
     private LocalDate lastServiceDate;
@@ -55,15 +55,15 @@ public class WarehouseEquipment implements MaintenanceObservable {
     // Koniec, Tydzień 6
     // Wzorzec Observer 2
 
-    public WarehouseEquipment(String id, String name, LocalDate lastServiceDate, int operatingHours){
+    public WarehouseEquipment(String id, String name, MaintenanceRecord maintenanceRecord){
         this.id = id;
         this.name = name;
-        this.lastServiceDate = lastServiceDate;
-        this.operatingHours = operatingHours;
+        this.lastServiceDate = maintenanceRecord.lastServiceDate();
+        this.operatingHours = maintenanceRecord.operatingHours();
     }
 
     public WarehouseEquipment(String id, String name){
-        this(id, name, LocalDate.now(), 0);
+        this(id, name, new MaintenanceRecord(LocalDate.now(), 0));
     }
 
     public boolean needsMaintenance(){

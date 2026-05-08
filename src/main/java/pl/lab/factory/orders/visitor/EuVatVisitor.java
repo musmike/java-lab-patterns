@@ -29,7 +29,7 @@ public class EuVatVisitor extends TaxVisitor {
         tax += calculateSmallOrderFee(order);
 
         totalTax += tax;
-        logFinalTax("EU-VAT", order, (VAT_RATE * 100) + "% VAT", tax);
+        logFinalTax("EU-VAT", order, new TaxCalculationResult((VAT_RATE * 100) + "% VAT", tax));
     }
 
     private double calculateSmallOrderFee(ProductionOrder order) {

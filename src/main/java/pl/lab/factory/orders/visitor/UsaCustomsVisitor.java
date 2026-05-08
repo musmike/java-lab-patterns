@@ -38,7 +38,7 @@ public class UsaCustomsVisitor extends TaxVisitor {
     private void processCustomsTax(ProductionOrder order, double taxRate) {
         double tax = calculateBaseTax(order, taxRate);
         totalTax += tax;
-        logFinalTax("USA-CUSTOMS", order, (taxRate * 100) + "% tariff", tax);
+        logFinalTax("USA-CUSTOMS", order, new TaxCalculationResult((taxRate * 100) + "% tariff", tax));
     }
 
     public double getTotalCustomsTax() {

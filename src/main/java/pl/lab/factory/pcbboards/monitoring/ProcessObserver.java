@@ -18,7 +18,11 @@ public class ProcessObserver implements BoardObserver {
     @Override
     public void setBoard(BaseBoard board) {
         b = board;
-        b.register(this);
+        try{
+            b.register(this);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
 }

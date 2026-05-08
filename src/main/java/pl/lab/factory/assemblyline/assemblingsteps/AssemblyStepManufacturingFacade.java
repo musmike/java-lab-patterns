@@ -16,10 +16,7 @@ public class AssemblyStepManufacturingFacade {
     }
 
     public void manufacture(BaseBoard board) throws InterruptedException {
-        short cnt = 0;
-        for(AssemblyStep step : steps){
-
-            cnt++;
+        for (AssemblyStep step : steps) {
             step.perform(board);
         }
     }

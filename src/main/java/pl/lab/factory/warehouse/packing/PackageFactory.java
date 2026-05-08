@@ -8,15 +8,17 @@ import java.util.Map;
 public class PackageFactory {
     private static final Map<String, PackageImplementor> flyweights = new HashMap<>();
 
-    public static PackageImplementor getPackage(String type){
-        if(!flyweights.containsKey(type)){
-            switch (type.toLowerCase()){
+    public static PackageImplementor getPackage(String type) {
+        if (!flyweights.containsKey(type)) {
+            switch (type.toLowerCase()) {
                 case "cardboard":
                     flyweights.put(type, new CardboardBoxPacking());
                     break;
                 case "plastic":
                     flyweights.put(type, new PlasticBoxPacking());
                     break;
+                default:
+                    throw new IllegalArgumentException("Unknown package type: " + type);
             }
         }
         return flyweights.get(type);

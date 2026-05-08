@@ -4,6 +4,7 @@ import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.BaseElectronicBoardProductionOrder;
 import pl.lab.factory.orders.ProductionOrder;
+import pl.lab.factory.orders.pricing.PricingStrategy;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Visitor 1 (Concrete Visitor)
@@ -29,7 +30,7 @@ public class EuVatVisitor extends TaxVisitor {
         tax += calculateSmallOrderFee(order);
 
         totalTax += tax;
-        logFinalTax("EU-VAT", order, new TaxCalculationResult((VAT_RATE * 100) + "% VAT", tax));
+        logFinalTax("EU-VAT", order, new TaxCalculationResult((VAT_RATE * PricingStrategy.PERCENTAGE_DIVISOR) + "% VAT", tax));
     }
 
     private double calculateSmallOrderFee(ProductionOrder order) {

@@ -10,8 +10,6 @@ import pl.lab.factory.orders.pricing.PricingStrategy;
 // Nie można tu jednak opłacić faktury ani wygenerować paragonu.
 public class OrderInvoiceDraftState implements OrderInvoiceState {
 
-    private static final double PERCENTAGE_DIVISOR = 100.0;
-
     @Override
     public void pay(OrderInvoice invoice) {
         throw new IllegalStateException(MSG_ERR_DRAFT);
@@ -20,7 +18,7 @@ public class OrderInvoiceDraftState implements OrderInvoiceState {
     @Override
     public void applyDiscount(OrderInvoice invoice, double percentage) {
         double currentAmount = invoice.getAmount();
-        double deduction = currentAmount * (percentage / PERCENTAGE_DIVISOR);
+        double deduction = currentAmount * (percentage / PricingStrategy.PERCENTAGE_DIVISOR);
         invoice.setAmount(currentAmount - deduction);
         SystemLogger.INSTANCE.logInfo("INVOICE",
                 "Discount of " + percentage + "% applied to draft. New amount: $" + CurrencyFormatter.format(invoice.getAmount()));

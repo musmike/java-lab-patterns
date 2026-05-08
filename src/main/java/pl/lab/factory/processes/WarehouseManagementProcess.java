@@ -40,6 +40,7 @@ import pl.lab.factory.warehouse.state.LockedState;
 import pl.lab.factory.warehouse.state.OpenState;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 
 public class WarehouseManagementProcess {
 
@@ -197,7 +198,7 @@ public class WarehouseManagementProcess {
             WarehouseEquipment eq = iterator.next();
             if (eq.getId().equals(id)) return eq;
         }
-        return null;
+        throw new NoSuchElementException("Equipment not found with id: " + id);
     }
 
     private void testFireAlarm() {

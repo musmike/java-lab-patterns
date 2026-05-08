@@ -14,12 +14,16 @@ public abstract class TaxVisitor implements OrderVisitor {
         return totalTax;
     }
 
+    private boolean isElectronicBoard(ProductionOrder order) {
+        return order instanceof BaseElectronicBoardProductionOrder;
+    }
+
     protected String getTypeName(ProductionOrder order) {
-        return (order instanceof BaseElectronicBoardProductionOrder) ? "ElectronicBoard" : "BaseBoard";
+        return isElectronicBoard(order) ? "ElectronicBoard" : "BaseBoard";
     }
 
     protected double getUnitPrice(ProductionOrder order) {
-        return (order instanceof BaseElectronicBoardProductionOrder)
+        return isElectronicBoard(order)
                 ? StandardPricingStrategy.ELECTRONIC_BOARD_UNIT_PRICE
                 : StandardPricingStrategy.BASE_BOARD_UNIT_PRICE;
     }

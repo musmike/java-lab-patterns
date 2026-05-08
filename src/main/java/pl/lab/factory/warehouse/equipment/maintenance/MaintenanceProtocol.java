@@ -12,11 +12,15 @@ import java.util.Map;
 // Wzorzec Template 2 (Abstract Class)
 public abstract class MaintenanceProtocol {
 
+    private static final int STANDARD_SERVICE_DURATION_MINUTES = 60;
+    private static final int EXTENDED_SERVICE_DURATION_MINUTES = 120;
+    private static final int DEFAULT_SERVICE_DURATION_MINUTES  = 30;
+
     private final Map<String, Integer> serviceDurations = new HashMap<>();
 
     public MaintenanceProtocol(){
-        serviceDurations.put("STANDARD", 60);
-        serviceDurations.put("EXTENDED", 120);
+        serviceDurations.put("STANDARD", STANDARD_SERVICE_DURATION_MINUTES);
+        serviceDurations.put("EXTENDED", EXTENDED_SERVICE_DURATION_MINUTES);
     }
 
     public void registerServiceDuration(String type, int minutes) {
@@ -24,7 +28,7 @@ public abstract class MaintenanceProtocol {
     }
 
     public final void executeService(WarehouseEquipment equipment, String serviceType){
-        int duration = serviceDurations.getOrDefault(serviceType, 30);
+        int duration = serviceDurations.getOrDefault(serviceType, DEFAULT_SERVICE_DURATION_MINUTES);
 
         SystemLogger.INSTANCE.logInfo("MAINTENANCE",
                 "Starting maintenance for: " + equipment.getName() + " (Est. time: " + duration + "min)");

@@ -21,6 +21,7 @@ import pl.lab.factory.scheduling.SingleOrderTask;
 import pl.lab.factory.warehouse.LegacyWarehouseSystem;
 import pl.lab.factory.warehouse.WarehouseAccessProxy;
 import pl.lab.factory.warehouse.WarehouseAdapter;
+import pl.lab.factory.warehouse.WarehouseService;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -54,29 +55,38 @@ public class FactoryOperationsProcess {
     }
 
     private void setupCentralControlMediator() {
-        // -- CentralControlMediator --
-        LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
+        WarehouseService proxyWarehouse = createWarehouseProxy();
+        BoardReporter boardReporter = createBoardReporter();
+        wireMediatorWithDepartments(proxyWarehouse, boardReporter);
+    }
+
+    private WarehouseService createWarehouseProxy() {
         Set<String> unapproved = Set.of(UNAPPROVED_ORD_1, UNAPPROVED_ORD_2);
-
+        LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
         WarehouseAdapter adapter = new WarehouseAdapter(legacyWarehouse);
-        WarehouseAccessProxy proxyWarehouse = new WarehouseAccessProxy(adapter, unapproved);
+        context.setWarehouseAdapter(adapter);
+        return new WarehouseAccessProxy(adapter, unapproved);
+    }
 
-        BoardReporter boardReporter = new CachingBoardReporterProxy(
+    private BoardReporter createBoardReporter() {
+        return new CachingBoardReporterProxy(
                 new LegacyAuditSystemAdapter(new LegacyAuditSystem())
         );
+    }
 
+    private void wireMediatorWithDepartments(WarehouseService proxyWarehouse, BoardReporter boardReporter) {
         CentralControlMediator mediator = new CentralControlMediator();
-        ProductionDepartment productionDepartment = new ProductionDepartment(mediator, context.getPcbProcessor(), context.getElectronicBoardProcessor());
-        WarehouseDepartment warehouseDepartment = new WarehouseDepartment(mediator, proxyWarehouse);
-        ReportingDepartment reportingDepartment = new ReportingDepartment(mediator, boardReporter);
 
-        mediator.setProductionDepartment(productionDepartment);
-        mediator.setWarehouseDepartment(warehouseDepartment);
-        mediator.setReportingDepartment(reportingDepartment);
+        ProductionDepartment productionDept = new ProductionDepartment(mediator, context.getPcbProcessor(), context.getElectronicBoardProcessor());
+        WarehouseDepartment warehouseDept = new WarehouseDepartment(mediator, proxyWarehouse);
+        ReportingDepartment reportingDept = new ReportingDepartment(mediator, boardReporter);
 
-        context.setWarehouseAdapter(adapter);
+        mediator.setProductionDepartment(productionDept);
+        mediator.setWarehouseDepartment(warehouseDept);
+        mediator.setReportingDepartment(reportingDept);
+
         context.setWarehouse(proxyWarehouse);
-        context.setProductionDepartment(productionDepartment);
+        context.setProductionDepartment(productionDept);
     }
 
     private void testOrderObservers() {

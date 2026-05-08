@@ -5,6 +5,7 @@ import pl.lab.factory.electronicboards.ElectronicType;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.BaseElectronicBoardProductionOrder;
 import pl.lab.factory.orders.ProductionOrder;
+import pl.lab.factory.orders.pricing.PricingStrategy;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Visitor 1 (Concrete Visitor)
@@ -29,7 +30,7 @@ public class UsaCustomsVisitor extends TaxVisitor {
     private double determineElectronicTaxRate(BaseElectronicBoardProductionOrder order) {
         if (order.getBaseElectronicBoard().getBoardType() == ElectronicType.HIGHLY_DEPENDANT) {
             SystemLogger.INSTANCE.logInfo("USA-CUSTOMS", "WARNING: Restricted tech. Applying "
-                    + (RESTRICTED_TECH_TARIFF_RATE * 100) + "% tariff.");
+                    + (RESTRICTED_TECH_TARIFF_RATE * PricingStrategy.PERCENTAGE_DIVISOR) + "% tariff.");
             return RESTRICTED_TECH_TARIFF_RATE;
         }
         return ELECTRONIC_TARIFF_RATE;
@@ -38,7 +39,7 @@ public class UsaCustomsVisitor extends TaxVisitor {
     private void processCustomsTax(ProductionOrder order, double taxRate) {
         double tax = calculateBaseTax(order, taxRate);
         totalTax += tax;
-        logFinalTax("USA-CUSTOMS", order, new TaxCalculationResult((taxRate * 100) + "% tariff", tax));
+        logFinalTax("USA-CUSTOMS", order, new TaxCalculationResult((taxRate * PricingStrategy.PERCENTAGE_DIVISOR) + "% tariff", tax));
     }
 
     public double getTotalCustomsTax() {

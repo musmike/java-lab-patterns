@@ -82,10 +82,18 @@ public class FinancialProcess {
         return invoice;
     }
 
+    private void attemptInvoiceAction(Runnable action) {
+        try {
+            action.run();
+        } catch (IllegalStateException e) {
+            SystemLogger.INSTANCE.logError("INVOICE", e.getMessage());
+    }
+}
+
     private void verifyDraftRestrictions(OrderInvoice invoice) {
         // Can't pay and generate receipt before confirming
-        try { invoice.pay(); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
-        try { invoice.generateReceipt(); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
+        attemptInvoiceAction(invoice::pay);
+        attemptInvoiceAction(invoice::generateReceipt);
     }
 
     private void applyDiscountsAndConfirm(OrderInvoice invoice) {
@@ -97,16 +105,16 @@ public class FinancialProcess {
 
     private void verifyConfirmedRestrictions(OrderInvoice invoice) {
         // Can't change price or apply discount after confirmation
-        try { invoice.setPricingStrategy(new BulkPricingStrategy()); invoice.recalculatePrice(); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
-        try { invoice.applyDiscount(VIP_DISCOUNT_PERCENT); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
+        attemptInvoiceAction(() -> { invoice.setPricingStrategy(new BulkPricingStrategy()); invoice.recalculatePrice(); });
+        attemptInvoiceAction(() -> invoice.applyDiscount(VIP_DISCOUNT_PERCENT));
         // Can't generate receipt before payment
-        try { invoice.generateReceipt(); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
+        attemptInvoiceAction(invoice::generateReceipt);
     }
 
     private void payAndGenerateReceipt(OrderInvoice invoice) {
         invoice.pay();
         // Can't cancel after payment
-        try { invoice.cancel(); } catch (IllegalStateException e) { SystemLogger.INSTANCE.logError("INVOICE", e.getMessage()); }
+        attemptInvoiceAction(invoice::cancel);
         invoice.generateReceipt();
     }
 

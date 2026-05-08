@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class FactoryMachineMediator implements MachineMediator{
     private static final int MANUAL_MOUNT_DELAY_MS = 100;
     private static final double DEFAULT_TEST_VALUE = 1.0;
-    
+
     private final CircuitPrinter printer = CircuitPrinter.getInstance();
     private final Mounter mounter = Mounter.getInstance();
     private final Solderer solderer = Solderer.getInstance();
@@ -32,24 +32,32 @@ public class FactoryMachineMediator implements MachineMediator{
     @Override
     public void requestMount(BaseBoard board, MountingStrategy strategy) {
         if (strategy instanceof AutoMount) {
-            Machine decorated =
-                    new MachineWarmupDecorator<>(
-                            new MachineAdjusterDecorator<>(
-                                    new MounterValueTesterDecorator(mounter, DEFAULT_TEST_VALUE)
-                            )
-                    );
-            decorated.perform(board);
-            System.out.println("Automatically mounting components!");
+            executeAutoMount(board);
         }
         else if (strategy instanceof ManualMount) {
-            board.mountComponents();
-            try {
-                TimeUnit.MILLISECONDS.sleep(MANUAL_MOUNT_DELAY_MS);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            System.out.println("Manually mounting components!");
+            executeManualMount(board);
         }
+    }
+
+    private void executeAutoMount(BaseBoard board) {
+        Machine decorated =
+                new MachineWarmupDecorator<>(
+                        new MachineAdjusterDecorator<>(
+                                new MounterValueTesterDecorator(mounter, DEFAULT_TEST_VALUE)
+                        )
+                );
+        decorated.perform(board);
+        System.out.println("Automatically mounting components!");
+    }
+
+    private void executeManualMount(BaseBoard board) {
+        board.mountComponents();
+        try {
+            TimeUnit.MILLISECONDS.sleep(MANUAL_MOUNT_DELAY_MS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        System.out.println("Manually mounting components!");
     }
 
     @Override

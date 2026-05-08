@@ -9,15 +9,20 @@ import pl.lab.factory.components.Resistor;
 
 public class QXCBoard extends BaseBoard{
 
-    private final double DEFAULT_VOLTAGE = 5;
-    private final BoardMaterials DEFAULT_BOARD_MATERIAL = BoardMaterials.COPPER;
-    private final SolderMaterials DEFAULT_SOLDER_MATERIAL = SolderMaterials.WITH_GOLD;
-    private final double DEFAULT_THICKNESS = 2.3;
-    private final Pair<Integer, Integer> DEFAULT_SIZE = new Pair<>(120, 120);
-    private final int DEFAULT_COLOR = 0x007700;
-    private final int DEFAULT_LAYERS = 3;
+    private static final double DEFAULT_VOLTAGE = 5;
+    private static final BoardMaterials DEFAULT_BOARD_MATERIAL = BoardMaterials.COPPER;
+    private static final SolderMaterials DEFAULT_SOLDER_MATERIAL = SolderMaterials.WITH_GOLD;
+    private static final double DEFAULT_THICKNESS = 2.3;
+    private static final Pair<Integer, Integer> DEFAULT_SIZE = new Pair<>(120, 120);
+    private static final int DEFAULT_COLOR = 0x007700;
+    private static final int DEFAULT_LAYERS = 3;
 
     public QXCBoard() {
+        configurePhysicalProperties();
+        buildComponentsTopology();
+    }
+
+    private void configurePhysicalProperties() {
         this.workingVoltage = DEFAULT_VOLTAGE;
         this.boardMaterial = DEFAULT_BOARD_MATERIAL;
         this.solderType = DEFAULT_SOLDER_MATERIAL;
@@ -26,12 +31,17 @@ public class QXCBoard extends BaseBoard{
         this.length = DEFAULT_SIZE.second();
         this.boardColor = DEFAULT_COLOR;
         this.layers = DEFAULT_LAYERS;
+    }
+
+    private void buildComponentsTopology() {
         ComponentGroup mainGroup = new ComponentGroup("SCQ");
         mainGroup.add(new Resistor(ComponentDefinitionFactory.getResistorDefinition(20, 20.2), new Pair<>(1,1)));
         mainGroup.add(new Capacitor(ComponentDefinitionFactory.getCapacitorDefinition(5, 12.2), new Pair<>(3, 1)));
         mainGroup.add(new Resistor(ComponentDefinitionFactory.getResistorDefinition(20, 3.2), new Pair<>(1,1)));
+
         ComponentGroup subGroup = new ComponentGroup("sub CAWD");
         subGroup.add(new Inductor(ComponentDefinitionFactory.getInductorDefinition(15, 4.5), new Pair<>(21,20)));
+
         mainGroup.add(subGroup);
         this.components.add(mainGroup);
     }
@@ -65,6 +75,6 @@ public class QXCBoard extends BaseBoard{
 
     @Override
     public String toString() {
-        return "StandardBoard{" + width + "x" + length + "mm, " + layers + " layers, " + boardMaterial + "}";
+        return "QXCBoard{" + width + "x" + length + "mm, " + layers + " layers, " + boardMaterial + "}";
     }
 }

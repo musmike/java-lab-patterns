@@ -101,7 +101,11 @@ public class WarehouseManagementProcess {
 
     private void storeUnapprovedOrder() {
         ProductionOrder unapprovedOrder = context.getOrderA().clone(UNAPPROVED_ORDER_ID);
-        context.getWarehouse().storeOrder(unapprovedOrder);
+        try {
+            context.getWarehouse().storeOrder(unapprovedOrder);
+        } catch (SecurityException e) {
+            SystemLogger.INSTANCE.logError("SECURITY", e.getMessage());
+        }
     }
 
     private void printWarehouseStates() {
@@ -154,19 +158,12 @@ public class WarehouseManagementProcess {
     private WarehouseAssetsManager setupWarehouseEquipment() {
         WarehouseAssetsManager assetsManager = new WarehouseAssetsManager();
 
-        WarehouseEquipment forklift = new WarehouseEquipment(FORKLIFT_ID, FORKLIFT_NAME, LocalDate.now().minusMonths(FORKLIFT_MONTHS), FORKLIFT_HOURS);
-        WarehouseEquipment scan = new WarehouseEquipment(SCANNER_ID, SCANNER_NAME, LocalDate.now().minusMonths(SCANNER_MONTHS), SCANNER_HOURS);
-        WarehouseEquipment solderer = new WarehouseEquipment(SOLDERER_ID, SOLDERER_NAME, LocalDate.now().minusMonths(SOLDERER_MONTHS), SOLDERER_HOURS);
-        WarehouseEquipment terminal = new WarehouseEquipment(TERM_ID, TERM_NAME);
+        assetsManager.addEquipment(new WarehouseEquipment(FORKLIFT_ID, FORKLIFT_NAME, LocalDate.now().minusMonths(FORKLIFT_MONTHS), FORKLIFT_HOURS));
+        assetsManager.addEquipment(new WarehouseEquipment(SCANNER_ID, SCANNER_NAME, LocalDate.now().minusMonths(SCANNER_MONTHS), SCANNER_HOURS));
+        assetsManager.addEquipment(new WarehouseEquipment(SOLDERER_ID, SOLDERER_NAME, LocalDate.now().minusMonths(SOLDERER_MONTHS), SOLDERER_HOURS));
+        assetsManager.addEquipment(new WarehouseEquipment(TERM_ID, TERM_NAME));
 
-        assetsManager.addEquipment(forklift);
-        assetsManager.addEquipment(scan);
-        assetsManager.addEquipment(solderer);
-        assetsManager.addEquipment(terminal);
-
-        MaintenanceService serviceDept = new MaintenanceService();
-
-        assetsManager.subscribeAll(serviceDept);
+        assetsManager.subscribeAll(new MaintenanceService());
         return assetsManager;
     }
 
@@ -207,23 +204,24 @@ public class WarehouseManagementProcess {
         WarehouseSafetyCenter warehouseSafetyCenter = new WarehouseSafetyCenter();
         SafetyHistory history = new SafetyHistory();
 
-        SmokeDetector sensor = new SmokeDetector(warehouseSafetyCenter);
-        FireGate gate = new FireGate(warehouseSafetyCenter);
-        SprinklerSystem sprinkler = new SprinklerSystem(warehouseSafetyCenter);
-        AlarmSiren siren = new AlarmSiren(warehouseSafetyCenter);
-
-        warehouseSafetyCenter.setComponents(sensor, gate, sprinkler, siren);
-
+        SmokeDetector sensor = setupWarehouseSafetySystem(warehouseSafetyCenter);
         history.save(warehouseSafetyCenter.save());
 
         triggerFireAlarmAndLockdown(sensor);
-
-        ProductionOrder fireOrder = ProductionOrderFactory.createOrder(
-                context.getBoardA(), new OrderContext(FIRE_ORDER_ID, FIRE_ORDER_QTY, context.getSpecPcb()));
-        context.getWarehouse().storeOrder(fireOrder);
+        dispatchFireOrder();
 
         restoreSafetySystem(warehouseSafetyCenter, history);
-        context.getWarehouse().storeOrder(fireOrder);
+        dispatchFireOrder();
+    }
+
+    private SmokeDetector setupWarehouseSafetySystem(WarehouseSafetyCenter center) {
+        SmokeDetector sensor = new SmokeDetector(center);
+        FireGate gate = new FireGate(center);
+        SprinklerSystem sprinkler = new SprinklerSystem(center);
+        AlarmSiren siren = new AlarmSiren(center);
+
+        center.setComponents(sensor, gate, sprinkler, siren);
+        return sensor;
     }
 
     private void triggerFireAlarmAndLockdown(SmokeDetector sensor) {
@@ -231,8 +229,18 @@ public class WarehouseManagementProcess {
         context.getWarehouseAdapter().getZoneA().setState(new LockedState());
     }
 
+    private void dispatchFireOrder() {
+        ProductionOrder fireOrder = ProductionOrderFactory.createOrder(
+                context.getBoardA(), new OrderContext(FIRE_ORDER_ID, FIRE_ORDER_QTY, context.getSpecPcb()));
+        try {
+            context.getWarehouse().storeOrder(fireOrder);
+        } catch (IllegalStateException e) {
+            SystemLogger.INSTANCE.logError("WAREHOUSE", e.getMessage());
+        }
+    }
+
     private void restoreSafetySystem(WarehouseSafetyCenter center, SafetyHistory history) {
-        SafetySystemMemento lastState = history.undo();
+            SafetySystemMemento lastState = history.undo();
         if (lastState != null) {
             center.restore(lastState);
             context.getWarehouseAdapter().getZoneA().setState(new OpenState());

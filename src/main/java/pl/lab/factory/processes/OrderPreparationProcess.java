@@ -49,24 +49,33 @@ public class OrderPreparationProcess {
         context.setPcbProcessor(new BaseBoardOrderProcessor());
         context.setElectronicBoardProcessor(new ElectronicBoardOrderProcessor());
 
-        OrderSpecification baseSpec = OrderSpecification.builder()
+        OrderSpecification baseSpec = createBaseSpec();
+        context.setSpecPcb(createPcbSpec(baseSpec));
+        context.setSpecElectronic(createElectronicSpec(baseSpec));
+    }
+
+    private OrderSpecification createBaseSpec() {
+        return OrderSpecification.builder()
                 .voltageTolerance(STD_VOLTAGE_TOL)
                 .thicknessTolerance(STD_THICKNESS_TOL)
                 .addCertificate(CERT_ROHS)
                 .addCertificate(CERT_ISO9001)
                 .qualityStandard(QUALITY_CLASS_2)
                 .build();
+    }
 
+    private OrderSpecification createPcbSpec(OrderSpecification baseSpec) {
         OrderSpecification specPcb = baseSpec.clone();
         specPcb.addCertificate(CERT_IPC);
         specPcb.displayCertificates(ORDER_1_ID);
+        return specPcb;
+    }
 
+    private OrderSpecification createElectronicSpec(OrderSpecification baseSpec) {
         OrderSpecification specElectronic = baseSpec.clone();
         specElectronic.setQualityStandard(QUALITY_CLASS_3);
         specElectronic.setVoltageTolerance(TIGHT_VOLTAGE_TOL);
-
-        context.setSpecPcb(specPcb);
-        context.setSpecElectronic(specElectronic);
+        return specElectronic;
     }
 
     private void createFinalOrders() {
@@ -81,17 +90,15 @@ public class OrderPreparationProcess {
         ProductionOrder orderC = ProductionOrderFactory.createOrder(
                 context.getElectronicBoardB(), new OrderContext(ORDER_3_ID, ORDER_3_QTY, context.getSpecElectronic()));
 
-        ProductionOrder orderBaseClone = orderA.clone(ORDER_BASE_CLONE_ID);
-        ProductionOrder orderElectronicClone = orderB.clone(ORDER_ELEC_CLONE_ID);
-
         context.setOrderA(orderA);
         context.setOrderB(orderB);
         context.setOrderC(orderC);
-        context.setOrderBaseClone(orderBaseClone);
-        context.setOrderElectronicClone(orderElectronicClone);
+
+        context.setOrderBaseClone(orderA.clone(ORDER_BASE_CLONE_ID));
+        context.setOrderElectronicClone(orderB.clone(ORDER_ELEC_CLONE_ID));
 
         context.setAllOrders(new ArrayList<>(List.of(
-                orderA, orderB, orderC, orderBaseClone, orderElectronicClone
+                orderA, orderB, orderC, context.getOrderBaseClone(), context.getOrderElectronicClone()
         )));
     }
 }

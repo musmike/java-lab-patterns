@@ -104,14 +104,17 @@ public class ProductionQueue implements OrderCollection {
         // --- Tryb 1: Iteracja po statusie ---
         @Override
         public boolean hasNext() {
-            int tempPosition = statusPosition;
-            while (tempPosition < orderList.size()) {
-                if (orderList.get(tempPosition).getStatus() == statusToFilter) {
+            while (statusPosition < orderList.size()) {
+                if (matchesStatus(orderList.get(statusPosition))) {
                     return true;
                 }
-                tempPosition++;
+                statusPosition++;
             }
             return false;
+        }
+
+        private boolean matchesStatus(ProductionOrder order) {
+            return order.getStatus() == statusToFilter;
         }
 
         @Override
@@ -130,14 +133,16 @@ public class ProductionQueue implements OrderCollection {
         @Override
         public boolean hasNextByQuantity(String operator, int value) {
             while (quantityPosition < orderList.size()) {
-                ProductionOrder order = orderList.get(quantityPosition);
-
-                if (order.getStatus() == statusToFilter && isQuantityMatch(order.getQuantity(), operator, value)) {
+                if (matchesStatusAndQuantity(orderList.get(quantityPosition), operator, value)) {
                     return true;
                 }
                 quantityPosition++;
             }
             return false;
+        }
+
+        private boolean matchesStatusAndQuantity(ProductionOrder order, String operator, int value) {
+            return matchesStatus(order) && isQuantityMatch(order.getQuantity(), operator, value);
         }
 
         private boolean isQuantityMatch(int orderQuantity, String operator, int value) {

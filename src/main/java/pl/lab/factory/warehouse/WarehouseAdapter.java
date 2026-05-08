@@ -43,20 +43,22 @@ public class WarehouseAdapter implements WarehouseService {
 
         WarehouseItem item = new WarehouseItem(itemName + " (" + order.getId() + ")", quantity, order.getId());
 
-        WarehouseSection targetSection;
-        if(order instanceof BaseBoardProductionOrder){
-            targetSection = zoneA;
-        } else if (order instanceof BaseElectronicBoardProductionOrder) {
-            targetSection = zoneB;
-        }else {
-            targetSection = mainWarehouse;
-        }
+        WarehouseSection targetSection = determineTargetSection(order);
 
         SystemLogger.INSTANCE.logInfo(
                 "WAREHOUSE",
                 "Sending order " + order.getId() + " to "+targetSection.getName()
         );
         targetSection.add(item);
+    }
+
+    private WarehouseSection determineTargetSection(ProductionOrder order) {
+        if(order instanceof BaseBoardProductionOrder){
+            return zoneA;
+        } else if (order instanceof BaseElectronicBoardProductionOrder) {
+            return zoneB;
+        }
+        return mainWarehouse;
     }
 
     public void printLegacyWarehouse(){

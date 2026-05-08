@@ -17,7 +17,6 @@ public class ReportingDepartment extends Department {
 
     public void report(ProductionOrder order) {
         reporter.report(order);
-        reporter.report(order); // repeated to test caching
     }
 }
 // Koniec, Tydzień 5

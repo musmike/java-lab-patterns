@@ -10,9 +10,6 @@ import pl.lab.factory.orders.command.ClearQueueCommand;
 import pl.lab.factory.orders.command.QueueCommandInvoker;
 import pl.lab.factory.orders.iterator.OrderCollection;
 import pl.lab.factory.orders.iterator.OrderIterator;
-import pl.lab.factory.orders.pricing.HolidayPricingStrategy;
-import pl.lab.factory.orders.pricing.RushOrderPricingStrategy;
-import pl.lab.factory.orders.pricing.StandardPricingStrategy;
 import pl.lab.factory.processes.context.FactoryContext;
 import pl.lab.factory.reporting.CompletedOnlyProductionReport;
 import pl.lab.factory.reporting.ConsoleReportFormatter;
@@ -150,22 +147,22 @@ public class ReportingAndMetricsProcess {
     private void testOrderIteratorSearches() {
         OrderCollection orderCollection = ProductionQueue.getInstance();
 
-        System.out.println("\n--- Searching for all orders with status: COMPLETED ---");
+        SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- Searching for all orders with status: COMPLETED ---");
         OrderIterator completedOrdersIterator = orderCollection.statusIterator(OrderStatus.COMPLETED);
         while (completedOrdersIterator.hasNext()) {
-            System.out.println(completedOrdersIterator.next().toString());
+            SystemLogger.INSTANCE.logInfo("ITERATOR-RESULT", completedOrdersIterator.next().toString());
         }
 
-        System.out.println("\n--- Searching for all orders with status: PENDING ---");
+        SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- Searching for all orders with status: PENDING ---");
         OrderIterator pendingOrdersIterator = orderCollection.statusIterator(OrderStatus.PENDING);
         while (pendingOrdersIterator.hasNext()) {
-            System.out.println(pendingOrdersIterator.next().toString());
+            SystemLogger.INSTANCE.logInfo("ITERATOR-RESULT", pendingOrdersIterator.next().toString());
         }
 
-        System.out.println("\n--- Searching for PENDING orders with quantity > 6 ---");
+        SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- Searching for PENDING orders with quantity > 6 ---");
         pendingOrdersIterator.reset();
         while (pendingOrdersIterator.hasNextByQuantity(">", 6)) {
-            System.out.println(pendingOrdersIterator.nextByQuantity().toString());
+            SystemLogger.INSTANCE.logInfo("ITERATOR-RESULT", pendingOrdersIterator.nextByQuantity().toString());
         }
     }
 

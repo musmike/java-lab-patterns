@@ -18,7 +18,7 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     private static final short MOUNTING_CHANGE = 0;
     private static final short PRINTING_CHANGE = 1;
     private static final short SOLDERING_CHANGE = 2;
-    
+
     protected ArrayList<BaseComponent> components = new ArrayList<>();
     protected double workingVoltage;
     protected BoardMaterials boardMaterial;
@@ -54,22 +54,25 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     }
 
     public abstract boolean isReady();
-    
-    public void printCircuits(){
-        _circuitsPrinted = true;
-        changed[PRINTING_CHANGE] = true;
+
+    protected void markAsChangedAndNotify(int changeIndex) {
+        changed[changeIndex] = true;
         notifyObservers();
     }
-    
+
+    public void printCircuits(){
+        _circuitsPrinted = true;
+        markAsChangedAndNotify(PRINTING_CHANGE);
+    }
+
     public void mountComponents(){
         for (BaseComponent c : components){
             c.mount();
         }
         _componentsMounted = true;
-        changed[MOUNTING_CHANGE] = true;
-        notifyObservers();
+        markAsChangedAndNotify(MOUNTING_CHANGE);
     }
-    
+
     public double getComponentCost(){
         double cost = 0;
         for(BaseComponent c : components){
@@ -77,7 +80,7 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
         }
         return cost;
     }
-    
+
     public double getValue(double value){
         for(BaseComponent c : components){
             if(c instanceof SignalProcessorComponent spc){
@@ -86,17 +89,16 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
         }
         return value;
     }
-    
+
     public void getComponentInfo(){
         for(BaseComponent c : components){
             c.print();
         }
     }
-    
+
     public void solder(){
         _soldered = true;
-        changed[SOLDERING_CHANGE] = true;
-        notifyObservers();
+        markAsChangedAndNotify(SOLDERING_CHANGE);
     }
 
     public BaseBoard deepCopy() {
@@ -138,8 +140,8 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     public String getUpdate(BoardObserver o) {
         if(!changed[MOUNTING_CHANGE] && !changed[PRINTING_CHANGE] && !changed[SOLDERING_CHANGE])
             return "Nothing changed!";
-        
-        return "" + 
+
+        return "" +
         (changed[MOUNTING_CHANGE] ? "[OBS] Board was mounted!" : "") +
         (changed[PRINTING_CHANGE] ? "[OBS] Board was printed!" : "") +
         (changed[SOLDERING_CHANGE] ? "[OBS] Board was soldered!" : "")

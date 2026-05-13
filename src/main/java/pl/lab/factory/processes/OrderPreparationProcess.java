@@ -52,8 +52,8 @@ public class OrderPreparationProcess {
 
     private void createOrderSpecifications() {
         OrderSpecification baseSpec = createBaseSpec();
-        context.setSpecPcb(createPcbSpec(baseSpec));
-        context.setSpecElectronic(createElectronicSpec(baseSpec));
+        context.setPcbSpecification(createPcbSpec(baseSpec));
+        context.setElectronicBoardSpecification(createElectronicSpec(baseSpec));
     }
 
     private OrderSpecification createBaseSpec() {
@@ -67,17 +67,17 @@ public class OrderPreparationProcess {
     }
 
     private OrderSpecification createPcbSpec(OrderSpecification baseSpec) {
-        OrderSpecification specPcb = baseSpec.clone();
-        specPcb.addCertificate(CERTIFICATION_IPC);
-        specPcb.displayCertificates(PCB_ORDER_ID);
-        return specPcb;
+        OrderSpecification specificationPcb = baseSpec.clone();
+        specificationPcb.addCertificate(CERTIFICATION_IPC);
+        specificationPcb.displayCertificates(PCB_ORDER_ID);
+        return specificationPcb;
     }
 
     private OrderSpecification createElectronicSpec(OrderSpecification baseSpec) {
-        OrderSpecification specElectronic = baseSpec.clone();
-        specElectronic.setQualityStandard(QUALITY_CLASS_3);
-        specElectronic.setVoltageTolerance(TIGHT_VOLTAGE_TOLERANCE);
-        return specElectronic;
+        OrderSpecification specificationElectronic = baseSpec.clone();
+        specificationElectronic.setQualityStandard(QUALITY_CLASS_3);
+        specificationElectronic.setVoltageTolerance(TIGHT_VOLTAGE_TOLERANCE);
+        return specificationElectronic;
     }
 
     private void createFinalOrders() {
@@ -96,7 +96,7 @@ public class OrderPreparationProcess {
     private void createPcbOrder() {
         ProductionOrder pcbOrder = ProductionOrderFactory.createOrder(
             context.getStandardPcbBoard(),
-            new OrderContext(PCB_ORDER_ID, PCB_ORDER_QUANTITY, context.getSpecPcb())
+            new OrderContext(PCB_ORDER_ID, PCB_ORDER_QUANTITY, context.getPcbSpecification())
         );
         context.setPcbOrder(pcbOrder);
     }
@@ -104,7 +104,7 @@ public class OrderPreparationProcess {
     private void createStandardElectronicOrder() {
         ProductionOrder standardElectronicOrder = ProductionOrderFactory.createOrder(
             context.getHighlyDependentElectronicBoard(),
-            new OrderContext(STANDARD_ELECTRONIC_ORDER_ID, STANDARD_ELECTRONIC_ORDER_QUANTITY, context.getSpecElectronic())
+            new OrderContext(STANDARD_ELECTRONIC_ORDER_ID, STANDARD_ELECTRONIC_ORDER_QUANTITY, context.getElectronicBoardSpecification())
         );
         context.setStandardElectronicOrder(standardElectronicOrder);
     }
@@ -112,7 +112,7 @@ public class OrderPreparationProcess {
     private void createSuperElectronicOrder() {
         ProductionOrder superElectronicOrder = ProductionOrderFactory.createOrder(
             context.getHotfixElectronicBoard(),
-            new OrderContext(SUPER_ELECTRONIC_ORDER_ID, SUPER_ELECTRONIC_ORDER_QUANTITY, context.getSpecElectronic())
+            new OrderContext(SUPER_ELECTRONIC_ORDER_ID, SUPER_ELECTRONIC_ORDER_QUANTITY, context.getElectronicBoardSpecification())
         );
         context.setSuperElectronicOrder(superElectronicOrder);
     }

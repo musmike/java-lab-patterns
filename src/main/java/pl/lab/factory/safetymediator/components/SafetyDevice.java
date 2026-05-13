@@ -7,8 +7,8 @@ import pl.lab.factory.safetymediator.SafetyMediator;
 public abstract class SafetyDevice {
     protected SafetyMediator mediator;
 
-    public SafetyDevice(SafetyMediator mediator){
-        this.mediator = mediator;
+    public SafetyDevice(SafetyMediator safetyMediator){
+        this.mediator = safetyMediator;
     }
 }
 // Koniec, Tydzień 5

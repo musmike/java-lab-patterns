@@ -6,21 +6,21 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz. 2
 // Wzorzec Visitor 1 (Concrete Element)
 public class BaseBoardProductionOrder extends ProductionOrder {
-    private BaseBoard board;
+    private BaseBoard baseBoard;
 
     private BaseBoardProductionOrder(Builder builder) {
-        super(new OrderContext(builder.id, builder.quantity, builder.specification), builder.status);
-        this.board = builder.board;
+        super(new OrderContext(builder.id, builder.quantity, builder.orderSpecification), builder.status);
+        this.baseBoard = builder.baseBoard;
     }
 
-    public BaseBoard getBoard() { return board; }
+    public BaseBoard getBaseBoard() { return baseBoard; }
 
     // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
     // Wzorzec Prototype 3
     @Override
     public ProductionOrder clone(String newId) {
         OrderContext context = new OrderContext(newId, this.quantity, this.specification.clone());
-        return ProductionOrderFactory.createOrder(board.deepCopy(), context);
+        return ProductionOrderFactory.createOrder(baseBoard.deepCopy(), context);
     }
     // Koniec, Tydzień 2
     // Wzorzec Prototype 3
@@ -37,36 +37,22 @@ public class BaseBoardProductionOrder extends ProductionOrder {
     // Builder konstruuje obiekt BaseBoardProductionOrder etapami przez łańcuch
     // wywołań setterów — oddziela proces budowania od reprezentacji obiektu
 
-    public static class Builder {
-        private static final int DEFAULT_QUANTITY = 1;
+    public static class Builder extends AbstractOrderBuilder<Builder> {
+        protected BaseBoard baseBoard;
 
-        private BaseBoard board;
-        private String id;
-        private int quantity = DEFAULT_QUANTITY;
-        private OrderStatus status = OrderStatus.PENDING;
-        private OrderSpecification specification;
-
-        public Builder(String id, BaseBoard board) {
-            this.id = id;
-            this.board = board;
+        public Builder(String id, BaseBoard baseBoard) {
+            super(id);
+            this.baseBoard = baseBoard;
         }
 
-        public Builder setQuantity(int quantity) {
-            this.quantity = quantity;
+        @Override
+        protected Builder self() {
             return this;
         }
 
-        public Builder setStatus(OrderStatus status) {
-            this.status = status;
-            return this;
+        public BaseBoardProductionOrder build() {
+            return new BaseBoardProductionOrder(this);
         }
-
-        public Builder setSpecification(OrderSpecification spec) {
-            this.specification = spec;
-            return this;
-        }
-
-        public BaseBoardProductionOrder build() { return new BaseBoardProductionOrder(this); }
     }
 
     // Koniec, Tydzień 2

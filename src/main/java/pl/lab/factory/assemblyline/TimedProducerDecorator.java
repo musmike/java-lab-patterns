@@ -18,13 +18,13 @@ public class TimedProducerDecorator extends BoardProducerDecorator {
     }
 
     @Override
-    public void produce(BaseBoard board) throws InterruptedException {
+    public void produce(BaseBoard baseBoard) throws InterruptedException {
         long start = System.currentTimeMillis();
-        boardProducer.produce(board);
+        boardProducer.produce(baseBoard);
         TimeUnit.MILLISECONDS.sleep(PRODUCTION_STEP_DELAY_MILLIS);
         long elapsed = System.currentTimeMillis() - start;
         SystemLogger.INSTANCE.logInfo("TimedProducer",
-                "Production time: " + elapsed + " ms | " + board);
+                "Production time: " + elapsed + " ms | " + baseBoard.toString());
     }
 }
 // Koniec, Tydzień 3

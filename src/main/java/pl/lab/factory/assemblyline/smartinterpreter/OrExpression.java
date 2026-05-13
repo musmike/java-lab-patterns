@@ -14,8 +14,8 @@ public class OrExpression implements BaseProducerExpression{
     }
 
     @Override
-    public boolean interpret(BaseBoard board) {
-        return first.interpret(board) || second.interpret(board);
+    public boolean interpret(BaseBoard baseBoard) {
+        return first.interpret(baseBoard) || second.interpret(baseBoard);
     }
 }
 

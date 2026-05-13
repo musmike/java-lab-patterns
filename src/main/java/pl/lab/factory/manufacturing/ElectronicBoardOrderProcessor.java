@@ -24,24 +24,24 @@ public class ElectronicBoardOrderProcessor extends OrderProcessor {
         installFirmware(electronicBoard);
     }
 
-    private void buildBaseBoard(BaseElectronicBoard board) throws InterruptedException {
-        boardProducer.produce(board.getBaseBoard());
+    private void buildBaseBoard(BaseElectronicBoard electronicBoard) throws InterruptedException {
+        boardProducer.produce(electronicBoard.getBaseBoard());
         SystemLogger.INSTANCE.logInfo("ElectronicBoardProcessor",
-                "    Building Base Board: " + board.getBaseBoard());
+                "    Building Base Board: " + electronicBoard.getBaseBoard());
     }
 
-    private void solderComponents(BaseElectronicBoard board) {
+    private void solderComponents(BaseElectronicBoard electronicBoard) {
         SystemLogger.INSTANCE.logInfo("ElectronicBoardProcessor",
-                "    Soldering Components on: " + board.getBaseBoard());
+                "    Soldering Components on: " + electronicBoard.getBaseBoard());
     }
 
-    private void assembleBoard(BaseElectronicBoard board) {
+    private void assembleBoard(BaseElectronicBoard electronicBoard) {
         SystemLogger.INSTANCE.logInfo("ElectronicBoardProcessor",
                 "    Assembling Electronic Board");
     }
 
-    private void installFirmware(BaseElectronicBoard board) {
+    private void installFirmware(BaseElectronicBoard electronicBoard) {
         SystemLogger.INSTANCE.logInfo("ElectronicBoardProcessor",
-                "    Installing Firmware: " + board.getFirmware());
+                "    Installing Firmware: " + electronicBoard.getFirmware());
     }
 }

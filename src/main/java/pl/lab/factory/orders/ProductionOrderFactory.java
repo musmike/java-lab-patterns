@@ -19,12 +19,12 @@ public class ProductionOrderFactory {
         if (product instanceof BaseElectronicBoard electronicBoard) {
             return new BaseElectronicBoardProductionOrder.Builder(context.id(), electronicBoard)
                     .setQuantity(context.quantity())
-                    .setSpecification(context.spec())
+                    .setSpecification(context.orderSpecification())
                     .build();
         } else if (product instanceof BaseBoard baseBoard) {
             return new BaseBoardProductionOrder.Builder(context.id(), baseBoard)
                     .setQuantity(context.quantity())
-                    .setSpecification(context.spec())
+                    .setSpecification(context.orderSpecification())
                     .build();
         }
 

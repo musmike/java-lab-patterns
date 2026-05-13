@@ -13,8 +13,8 @@ public class SolderExpression implements BaseProducerExpression{
     }
 
     @Override
-    public boolean interpret(BaseBoard board) {
-        return board.getSolderType() == expected;
+    public boolean interpret(BaseBoard baseBoard) {
+        return baseBoard.getSolderType() == expected;
     }
 }
 

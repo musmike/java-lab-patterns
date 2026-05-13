@@ -73,11 +73,11 @@ public class FinancialProcess {
 
     private OrderInvoice initializeDraftInvoice() {
         ProductionOrder productionOrder = ProductionOrderFactory.createOrder(
-                context.getStandardPcbBoard(), new OrderContext(PRODUCTION_ORDER_ID, PRODUCTION_ORDER_QUANTITY, context.getSpecPcb()));
-        OrderInvoice invoice = new OrderInvoice(productionOrder, new StandardPricingStrategy());
-        SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "Initial draft amount: $" + CurrencyFormatter.format(invoice.getAmount()));
-        context.setInvoiceA(invoice);
-        return invoice;
+                context.getStandardPcbBoard(), new OrderContext(PRODUCTION_ORDER_ID, PRODUCTION_ORDER_QUANTITY, context.getPcbSpecification()));
+        OrderInvoice pcbInvoice = new OrderInvoice(productionOrder, new StandardPricingStrategy());
+        SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "Initial draft amount: $" + CurrencyFormatter.format(pcbInvoice.getAmount()));
+        context.setPcbInvoice(pcbInvoice);
+        return pcbInvoice;
     }
 
     private void attemptInvoiceAction(Runnable action) {
@@ -118,9 +118,9 @@ public class FinancialProcess {
     }
 
     private void cancelAdditionalInvoice() {
-        OrderInvoice invoiceB = new OrderInvoice(context.getStandardElectronicOrder(), new StandardPricingStrategy());
-        invoiceB.cancel();
-        context.setInvoiceB(invoiceB);
+        OrderInvoice electronicBoardInvoice = new OrderInvoice(context.getStandardElectronicOrder(), new StandardPricingStrategy());
+        electronicBoardInvoice.cancel();
+        context.setElectronicBoardInvoice(electronicBoardInvoice);
     }
 
     private void testRevenueCalculation() {
@@ -142,7 +142,7 @@ public class FinancialProcess {
 
         RevenueService revenueService = new RevenueService(revenueFilter, revenueCalculator);
 
-        List<OrderInvoice> allInvoices = List.of(context.getInvoiceA(), context.getInvoiceB(), paidSuperElectronicInvoice, paidClonedPcbInvoice);
+        List<OrderInvoice> allInvoices = List.of(context.getPcbInvoice(), context.getElectronicBoardInvoice(), paidSuperElectronicInvoice, paidClonedPcbInvoice);
         double totalRevenue = revenueService.calculateRevenue(allInvoices);
         return totalRevenue;
     }
@@ -174,9 +174,9 @@ public class FinancialProcess {
         InvoiceDispatcher emailDispatcher = new EmailInvoiceDispatcher();
         InvoiceDispatcher b2bApiDispatcher = new B2bApiInvoiceDispatcher();
 
-        b2bApiDispatcher.dispatch(context.getInvoiceA());
-        emailDispatcher.dispatch(context.getInvoiceA());
-        emailDispatcher.dispatch(context.getInvoiceB());
+        b2bApiDispatcher.dispatch(context.getPcbInvoice());
+        emailDispatcher.dispatch(context.getPcbInvoice());
+        emailDispatcher.dispatch(context.getElectronicBoardInvoice());
 
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== END OF TEMPLATE METHOD 1 PATTERN TEST ===");
     }

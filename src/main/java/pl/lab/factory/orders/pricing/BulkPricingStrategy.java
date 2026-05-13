@@ -15,7 +15,7 @@ public class BulkPricingStrategy extends StandardPricingStrategy {
         double basePrice = super.calculatePrice(order);
 
         if (order.getQuantity() > BULK_THRESHOLD) {
-            double discountAmount = basePrice * (DISCOUNT_PERCENTAGE / PricingStrategy.PERCENTAGE_DIVISOR);
+            double discountAmount = basePrice * (DISCOUNT_PERCENTAGE / PricingStrategy.PERCENT_CONVERSION_FACTOR);
             double finalPrice = basePrice - discountAmount;
 
             SystemLogger.INSTANCE.logInfo("PRICING", "Applied bulk discount of " + DISCOUNT_PERCENTAGE

@@ -14,14 +14,14 @@ public class Mounter extends Machine{
         return instance;
     }
 
-    private void mountBoard(BaseBoard board){
-        board.mountComponents();
+    private void mountBoard(BaseBoard baseBoard){
+        baseBoard.mountComponents();
     }
 
     @Override
-    public void perform(BaseBoard board) {
-        super.perform(board);
+    public void perform(BaseBoard baseBoard) {
+        super.perform(baseBoard);
         System.out.println("[MOUNTER] Mounting board!");
-        mountBoard(board);
+        mountBoard(baseBoard);
     }
 }

@@ -19,8 +19,8 @@ public class FactoryContext {
     private BaseElectronicBoard highlyDependentElectronicBoard;
     private BaseElectronicBoard hotfixElectronicBoard;
 
-    private OrderSpecification specPcb;
-    private OrderSpecification specElectronic;
+    private OrderSpecification pcbSpecification;
+    private OrderSpecification electronicBoardSpecification;
 
     private ProductionOrder pcbOrder;
     private ProductionOrder standardElectronicOrder;
@@ -30,8 +30,8 @@ public class FactoryContext {
 
     private List<ProductionOrder> allOrders = new ArrayList<>();
 
-    private OrderInvoice invoiceA;
-    private OrderInvoice invoiceB;
+    private OrderInvoice pcbInvoice;
+    private OrderInvoice electronicBoardInvoice;
 
     private OrderProcessor pcbProcessor;
     private OrderProcessor electronicBoardProcessor;
@@ -50,11 +50,11 @@ public class FactoryContext {
     public BaseElectronicBoard getHotfixElectronicBoard() { return hotfixElectronicBoard; }
     public void setHotfixElectronicBoard(BaseElectronicBoard hotfixElectronicBoard) { this.hotfixElectronicBoard = hotfixElectronicBoard; }
 
-    public OrderSpecification getSpecPcb() { return specPcb; }
-    public void setSpecPcb(OrderSpecification specPcb) { this.specPcb = specPcb; }
+    public OrderSpecification getPcbSpecification() { return pcbSpecification; }
+    public void setPcbSpecification(OrderSpecification pcbSpecification) { this.pcbSpecification = pcbSpecification; }
 
-    public OrderSpecification getSpecElectronic() { return specElectronic; }
-    public void setSpecElectronic(OrderSpecification specElectronic) { this.specElectronic = specElectronic; }
+    public OrderSpecification getElectronicBoardSpecification() { return electronicBoardSpecification; }
+    public void setElectronicBoardSpecification(OrderSpecification electronicBoardSpecification) { this.electronicBoardSpecification = electronicBoardSpecification; }
 
     public ProductionOrder getPcbOrder() { return pcbOrder; }
     public void setPcbOrder(ProductionOrder pcbOrder) { this.pcbOrder = pcbOrder; }
@@ -74,11 +74,11 @@ public class FactoryContext {
     public List<ProductionOrder> getAllOrders() { return allOrders; }
     public void setAllOrders(List<ProductionOrder> allOrders) { this.allOrders = allOrders; }
 
-    public OrderInvoice getInvoiceA() { return invoiceA; }
-    public void setInvoiceA(OrderInvoice invoiceA) { this.invoiceA = invoiceA; }
+    public OrderInvoice getPcbInvoice() { return pcbInvoice; }
+    public void setPcbInvoice(OrderInvoice pcbInvoice) { this.pcbInvoice = pcbInvoice; }
 
-    public OrderInvoice getInvoiceB() { return invoiceB; }
-    public void setInvoiceB(OrderInvoice invoiceB) { this.invoiceB = invoiceB; }
+    public OrderInvoice getElectronicBoardInvoice() { return electronicBoardInvoice; }
+    public void setElectronicBoardInvoice(OrderInvoice electronicBoardInvoice) { this.electronicBoardInvoice = electronicBoardInvoice; }
 
     public OrderProcessor getPcbProcessor() { return pcbProcessor; }
     public void setPcbProcessor(OrderProcessor pcbProcessor) { this.pcbProcessor = pcbProcessor; }

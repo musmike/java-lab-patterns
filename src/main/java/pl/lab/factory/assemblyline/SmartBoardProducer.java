@@ -15,27 +15,48 @@ import pl.lab.factory.pcbboards.SolderMaterials;
 
 import java.util.List;
 
-public class SmartBoardProducer implements BoardProducer  {
+public class SmartBoardProducer implements BoardProducer {
+
     @Override
-    public void produce(BaseBoard board) throws InterruptedException {
-        MachineMediator mediator = new FactoryMachineMediator();
+    public void produce(BaseBoard baseBoard) throws InterruptedException {
+        MachineMediator machineMediator = new FactoryMachineMediator();
 
-        PrintStep printing = new PrintStep(new PrintingProxy(new LaserPrint(mediator)));
+        AssemblyStep printStep = createPrintStep(machineMediator);
+        AssemblyStep mountStep = createMountStep(machineMediator, baseBoard);
+        AssemblyStep solderStep = createSolderStep(machineMediator, baseBoard);
 
-        BaseProducerExpression copper_aluminium = new OrExpression(
-                new MaterialExpression(BoardMaterials.COPPER),
-                new MaterialExpression(BoardMaterials.ALUMINIUM));
-        MountingStrategy mountStrat = copper_aluminium.interpret(board)
-                ? new ManualMount(mediator) : new AutoMount(mediator);
-        MountStep mounting = new MountStep(mountStrat);
-
-        BaseProducerExpression gold_solder = new SolderExpression(SolderMaterials.WITH_GOLD);
-        SolderingStrategy solderStrat = gold_solder.interpret(board)
-                ? new ReflowSolder(mediator) : new WaveSolder(mediator);
-        SolderStep soldering = new SolderStep(solderStrat);
-
-        AssemblyStepManufacturingFacade assembler = new AssemblyStepManufacturingFacade(List.of(mounting, printing, soldering));
+        AssemblyStepManufacturingFacade assembler = new AssemblyStepManufacturingFacade(
+                List.of(mountStep, printStep, solderStep)
+        );
+        
         System.out.println("[BOARD PRODUCTION] Manufacturing board using smart producer...");
-        assembler.manufacture(board);
+        assembler.manufacture(baseBoard);
+    }
+
+    private AssemblyStep createPrintStep(MachineMediator machineMediator) {
+        return new PrintStep(new PrintingProxy(new LaserPrint(machineMediator)));
+    }
+
+    private AssemblyStep createMountStep(MachineMediator machineMediator, BaseBoard baseBoard) {
+        BaseProducerExpression copperOrAluminiumExpression = new OrExpression(
+                new MaterialExpression(BoardMaterials.COPPER),
+                new MaterialExpression(BoardMaterials.ALUMINIUM)
+        );
+        
+        MountingStrategy mountingStrategy = copperOrAluminiumExpression.interpret(baseBoard) 
+                ? new ManualMount(machineMediator) 
+                : new AutoMount(machineMediator);
+                
+        return new MountStep(mountingStrategy);
+    }
+
+    private AssemblyStep createSolderStep(MachineMediator machineMediator, BaseBoard baseBoard) {
+        BaseProducerExpression goldSolderExpression = new SolderExpression(SolderMaterials.WITH_GOLD);
+        
+        SolderingStrategy solderStrat = goldSolderExpression.interpret(baseBoard) 
+                ? new ReflowSolder(machineMediator) 
+                : new WaveSolder(machineMediator);
+                
+        return new SolderStep(solderStrat);
     }
 }

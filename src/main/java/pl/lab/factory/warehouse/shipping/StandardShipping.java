@@ -1,8 +1,5 @@
 package pl.lab.factory.warehouse.shipping;
 
-import pl.lab.factory.SystemLogger;
-import pl.lab.factory.orders.OrderStatus;
-import pl.lab.factory.orders.ProductionOrder;
 import pl.lab.factory.warehouse.packing.PackageImplementor;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1

@@ -1,7 +1,9 @@
 package pl.lab.factory.pcbboards;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import pl.lab.factory.components.BaseComponent;
 import pl.lab.factory.components.SignalProcessorComponent;
@@ -13,6 +15,7 @@ import pl.lab.factory.pcbboards.monitoring.ObservableBoard;
 import pl.lab.factory.pcbboards.monitoring.VisitableBoard;
 
 public abstract class BaseBoard implements ManufacturableProduct, Cloneable, ObservableBoard, VisitableBoard {
+    
     protected List<BoardObserver> observers = new ArrayList<>();
     protected boolean[] changed = {false, false, false};
     private static final short MOUNTING_CHANGE = 0;
@@ -85,8 +88,8 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
 
     public double getValue(double value){
         for(BaseComponent component : components){
-            if(component instanceof SignalProcessorComponent spc){
-                value = spc.modifyResult(value);
+            if(component instanceof SignalProcessorComponent signalProcessorComponent){
+                value = signalProcessorComponent.modifyResult(value);
             }
         }
         return value;

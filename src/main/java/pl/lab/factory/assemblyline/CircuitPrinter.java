@@ -22,15 +22,15 @@ public class CircuitPrinter extends Machine{
         return instance;
     }
 
-    private void printCircuits(BaseBoard board) {
-        board.printCircuits();
+    private void printCircuits(BaseBoard baseBoard) {
+        baseBoard.printCircuits();
     }
 
     @Override
-    public void perform(BaseBoard board) {
-        super.perform(board);
+    public void perform(BaseBoard baseBoard) {
+        super.perform(baseBoard);
         System.out.println("[PRINTER] Printing board!");
-        printCircuits(board);
+        printCircuits(baseBoard);
     }
 }
 // Koniec, Tydzień 2

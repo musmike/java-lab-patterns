@@ -27,7 +27,7 @@ public class CountingVisitor implements BoardVisitor{
     private int group = 0;
 
     @Override
-    public void visit(BaseBoard board) {
+    public void visit(BaseBoard baseBoard) {
     }
 
     @Override

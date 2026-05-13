@@ -17,15 +17,15 @@ public class QuantityExpression implements AbstractExpression {
     }
 
     @Override
-    public List<ProductionOrder> interpret(ReportContext ctx) {
-        ctx.setFilter(order -> {
+    public List<ProductionOrder> interpret(ReportContext reportContext) {
+        reportContext.setFilter(order -> {
             return switch (operator) {
                 case GREATER_THAN -> order.getQuantity() > value;
                 case LESS_THAN    -> order.getQuantity() < value;
                 case EQUAL        -> order.getQuantity() == value;
             };
         });
-        return ctx.search();
+        return reportContext.search();
     }
 }
 // Koniec, Tydzień 5

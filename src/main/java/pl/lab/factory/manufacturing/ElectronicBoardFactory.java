@@ -2,7 +2,6 @@ package pl.lab.factory.manufacturing;
 
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.ElectronicType;
-import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 import pl.lab.factory.pcbboards.StandardBoard;
 
 // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
@@ -12,11 +11,11 @@ import pl.lab.factory.pcbboards.StandardBoard;
 
 public class ElectronicBoardFactory {
     public static BaseElectronicBoard createBoard(ElectronicType type){
-        BaseElectronicBoard board = new BaseElectronicBoard();
-        board.setBoardType(type);
-        board.setBaseBoard(new StandardBoard());
+        BaseElectronicBoard electronicBoard = new BaseElectronicBoard();
+        electronicBoard.setBoardType(type);
+        electronicBoard.setBaseBoard(new StandardBoard());
 
-        return board;
+        return electronicBoard;
     }
 }
 

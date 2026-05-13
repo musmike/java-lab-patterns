@@ -9,17 +9,17 @@ import pl.lab.factory.pcbboards.BaseBoard;
 public class ProductionStateVisitor implements BoardVisitor{
     private StringBuilder report = new StringBuilder();
     @Override
-    public void visit(BaseBoard board) {
-        if (board.isComponentsMounted())
+    public void visit(BaseBoard baseBoard) {
+        if (baseBoard.isComponentsMounted())
             report.append("[VIS] Components mounted\n");
 
-        if (board.isCircuitsPrinted())
+        if (baseBoard.isCircuitsPrinted())
             report.append("[VIS] Circuits printed\n");
 
-        if (board.isSoldered())
+        if (baseBoard.isSoldered())
             report.append("[VIS] Soldered\n");
 
-        if (!board.isReady())
+        if (!baseBoard.isReady())
             report.append("[VIS] Board NOT ready\n");
     }
     @Override

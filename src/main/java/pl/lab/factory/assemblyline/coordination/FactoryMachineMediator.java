@@ -24,34 +24,34 @@ public class FactoryMachineMediator implements MachineMediator{
 
 
     @Override
-    public void requestPrint(BaseBoard board, PrintingStrategy strategy) {
+    public void requestPrint(BaseBoard baseBoard, PrintingStrategy strategy) {
         System.out.println("Printing the circuit using laser!");
-        printer.perform(board);
+        printer.perform(baseBoard);
     }
 
     @Override
-    public void requestMount(BaseBoard board, MountingStrategy strategy) {
+    public void requestMount(BaseBoard baseBoard, MountingStrategy strategy) {
         if (strategy instanceof AutoMount) {
-            executeAutoMount(board);
+            executeAutoMount(baseBoard);
         }
         else if (strategy instanceof ManualMount) {
-            executeManualMount(board);
+            executeManualMount(baseBoard);
         }
     }
 
-    private void executeAutoMount(BaseBoard board) {
+    private void executeAutoMount(BaseBoard baseBoard) {
         Machine decorated =
                 new MachineWarmupDecorator<>(
                         new MachineAdjusterDecorator<>(
                                 new MounterValueTesterDecorator(mounter, DEFAULT_TEST_VALUE)
                         )
                 );
-        decorated.perform(board);
+        decorated.perform(baseBoard);
         System.out.println("Automatically mounting components!");
     }
 
-    private void executeManualMount(BaseBoard board) {
-        board.mountComponents();
+    private void executeManualMount(BaseBoard baseBoard) {
+        baseBoard.mountComponents();
         try {
             TimeUnit.MILLISECONDS.sleep(MANUAL_MOUNT_DELAY_MS);
         } catch (InterruptedException e) {
@@ -61,7 +61,7 @@ public class FactoryMachineMediator implements MachineMediator{
     }
 
     @Override
-    public void requestSolder(BaseBoard board, SolderingStrategy strategy) {
+    public void requestSolder(BaseBoard baseBoard, SolderingStrategy strategy) {
         System.out.println("Soldering components...");
 
         if (strategy instanceof ReflowSolder) {
@@ -74,7 +74,7 @@ public class FactoryMachineMediator implements MachineMediator{
             System.out.println("Using wave soldering method!");
         }
 
-        solderer.perform(board);
+        solderer.perform(baseBoard);
     }
 }
 

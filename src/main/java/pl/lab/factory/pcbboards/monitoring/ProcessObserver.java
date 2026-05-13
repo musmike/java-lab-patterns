@@ -16,10 +16,10 @@ public class ProcessObserver implements BoardObserver {
     }
 
     @Override
-    public void setBoard(BaseBoard board) {
-        baseBoard = board;
+    public void setBoard(BaseBoard baseBoard) {
+        this.baseBoard = baseBoard;
         try{
-            baseBoard.register(this);
+            this.baseBoard.register(this);
         } catch (Exception e){
             System.out.println(e.getMessage());
         }

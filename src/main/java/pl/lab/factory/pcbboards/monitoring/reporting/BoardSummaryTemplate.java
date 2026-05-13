@@ -5,19 +5,19 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz.2
 // wzorzec template 3 - wzorzec raportów stanu płytek
 public abstract class BoardSummaryTemplate {
-    public final void generate(BaseBoard board){
-        header(board);
-        body(board);
-        footer(board);
+    public final void generate(BaseBoard baseBoard){
+        header(baseBoard);
+        body(baseBoard);
+        footer(baseBoard);
     }
 
-    protected void header(BaseBoard board){
+    protected void header(BaseBoard baseBoard){
         System.out.println("--> Board summary start:");
     }
-    protected void footer(BaseBoard board){
+    protected void footer(BaseBoard baseBoard){
         System.out.println(":<-- Board summary end");
     }
-    protected abstract void body(BaseBoard board);
+    protected abstract void body(BaseBoard baseBoard);
 }
 //template 3
 //koniec tydzien 6

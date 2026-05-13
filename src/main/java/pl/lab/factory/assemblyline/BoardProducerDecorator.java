@@ -15,8 +15,8 @@ public abstract class BoardProducerDecorator implements BoardProducer {
     }
 
     @Override
-    public void produce(BaseBoard board) throws InterruptedException {
-        this.boardProducer.produce(board);
+    public void produce(BaseBoard baseBoard) throws InterruptedException {
+        this.boardProducer.produce(baseBoard);
     }
 }
 // Koniec, Tydzień 3

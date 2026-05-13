@@ -1,14 +1,8 @@
 package pl.lab.factory.reporting;
 
-import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.OrderStatus;
 import pl.lab.factory.orders.ProductionOrder;
-import pl.lab.factory.orders.loyalty.LoyaltyBonusStrategy;
-import pl.lab.factory.orders.loyalty.TierConfig;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Bridge 1 (Uszczegółowiona Abstrakcja — raport ukończonych)

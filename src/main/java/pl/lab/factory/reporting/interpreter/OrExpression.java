@@ -18,9 +18,9 @@ public class OrExpression implements AbstractExpression {
     }
 
     @Override
-    public List<ProductionOrder> interpret(ReportContext ctx) {
-        List<ProductionOrder> leftResult = left.interpret(ctx);
-        List<ProductionOrder> rightResult = right.interpret(ctx);
+    public List<ProductionOrder> interpret(ReportContext reportContext) {
+        List<ProductionOrder> leftResult = left.interpret(reportContext);
+        List<ProductionOrder> rightResult = right.interpret(reportContext);
 
         return Stream.concat(leftResult.stream(), rightResult.stream())
                 .distinct()

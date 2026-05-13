@@ -33,7 +33,7 @@ public class WarehouseSection implements WarehouseComponent {
         }
         else{
             state.printStatus(this.getName());
-            SystemLogger.INSTANCE.logInfo(this.getName().toUpperCase(), "Sending order is cancelled");
+            throw new IllegalStateException("Cannot send item. Section " + this.getName() + " is currently locked.");
         }
     }
     // Koniec, Tydzień 6

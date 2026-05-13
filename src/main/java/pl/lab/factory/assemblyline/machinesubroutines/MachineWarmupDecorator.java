@@ -12,9 +12,9 @@ public class MachineWarmupDecorator<T extends Machine> extends MachineDecorator<
     }
 
     @Override
-    public void perform(BaseBoard board) {
+    public void perform(BaseBoard baseBoard) {
         System.out.println("[WARMUP] Warming the machine up before operation...\n.\n.\n.\nWarmed up!");
-        super.perform(board);
+        super.perform(baseBoard);
     }
 }
 // Koniec, Tydzień 3

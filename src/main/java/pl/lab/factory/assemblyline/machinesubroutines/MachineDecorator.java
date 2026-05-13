@@ -14,8 +14,8 @@ public class MachineDecorator<T extends Machine> extends Machine {
     }
 
     @Override
-    public void perform(BaseBoard board) {
-        decorated.perform(board);
+    public void perform(BaseBoard baseBoard) {
+        decorated.perform(baseBoard);
     }
 }
 // Koniec, Tydzień 3

@@ -9,24 +9,24 @@ import pl.lab.factory.electronicboards.firmware.programmers.ProgrammingDevice;
 // Wzorzec Command 3 (Konkretne polecenie)
 public class WriteFirmwareCommand implements FirmwareCommand{
     private ProgrammingDevice device;
-    private BaseElectronicBoard board;
+    private BaseElectronicBoard electronicBoard;
     private FirmwareAdapter adapter;
     private FirmwareMemento backup;
 
-    public WriteFirmwareCommand(ProgrammingDevice device, BaseElectronicBoard board, FirmwareAdapter adapter) {
+    public WriteFirmwareCommand(ProgrammingDevice device, BaseElectronicBoard electronicBoard, FirmwareAdapter adapter) {
         this.device = device;
-        this.board = board;
+        this.electronicBoard = electronicBoard;
         this.adapter = adapter;
     }
 
     @Override
     public void execute() {
-        backup = board.saveFirmware();
+        backup = electronicBoard.saveFirmware();
         try{
-            device.writeFirmware(board, adapter);
-            board.programBoard();
+            device.writeFirmware(electronicBoard, adapter);
+            electronicBoard.programBoard();
         } catch (RuntimeException e){
-            board.restoreFirmware(backup);
+            electronicBoard.restoreFirmware(backup);
             throw e;
         }
 

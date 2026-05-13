@@ -16,7 +16,7 @@ public class RushOrderPricingStrategy extends StandardPricingStrategy {
         double rushPrice = basePrice * RUSH_ORDER_FEE_MULTIPLIER;
 
         SystemLogger.INSTANCE.logInfo("PRICING",
-            "Rush order fee applied (+" + (int)(RUSH_ORDER_FEE * PERCENTAGE_DIVISOR) + "%). New price: $"
+            "Rush order fee applied (+" + (int)(RUSH_ORDER_FEE * PERCENT_CONVERSION_FACTOR) + "%). New price: $"
             + CurrencyFormatter.format(rushPrice));
 
         return rushPrice;

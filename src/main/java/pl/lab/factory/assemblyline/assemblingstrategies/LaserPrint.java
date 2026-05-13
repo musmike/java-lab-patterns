@@ -8,14 +8,14 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz.2
 // wzorzec strategy 3 - konkretna strategia typu procesu
 public class LaserPrint implements PrintingStrategy{
-    private final MachineMediator mediator;
+    private final MachineMediator machineMediator;
 
-    public LaserPrint(MachineMediator mediator) {
-        this.mediator = mediator;
+    public LaserPrint(MachineMediator machineMediator) {
+        this.machineMediator = machineMediator;
     }
     @Override
-    public void execute(BaseBoard board) throws InterruptedException {
-        mediator.requestPrint(board, this);
+    public void execute(BaseBoard baseBoard) throws InterruptedException {
+        machineMediator.requestPrint(baseBoard, this);
     }
 }
 //strategy 3

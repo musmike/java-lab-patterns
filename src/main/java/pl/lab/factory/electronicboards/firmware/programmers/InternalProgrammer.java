@@ -14,11 +14,11 @@ public class InternalProgrammer extends FirmwareProgrammer {
     }
 
     @Override
-    public void program(BaseElectronicBoard board, FirmwareAdapter firmwareAdapter) {
+    public void program(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
         System.out.println("Internal programming device engaged...");
         device.start();
-        device.writeFirmware(board, firmwareAdapter);
-        board.programBoard();
+        device.writeFirmware(electronicBoard, firmwareAdapter);
+        electronicBoard.programBoard();
         device.finish();
     }
 }

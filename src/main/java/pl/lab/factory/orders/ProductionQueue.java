@@ -66,7 +66,7 @@ public class ProductionQueue implements OrderCollection {
             return;
         }
         SystemLogger.INSTANCE.logInfo("ProductionQueue", "Orders in queue (" + queue.size() + "):");
-        queue.forEach(o -> SystemLogger.INSTANCE.logInfo("ProductionQueue", "  -> " + o));
+        queue.forEach(order -> SystemLogger.INSTANCE.logInfo("ProductionQueue", "  -> " + order));
     }
 
     // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1

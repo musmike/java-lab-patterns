@@ -14,23 +14,23 @@ public class FaultyDevice implements ProgrammingDevice{
     }
 
     @Override
-    public void writeFirmware(BaseElectronicBoard board, FirmwareAdapter firmwareAdapter) {
+    public void writeFirmware(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
         if (first) {
-            simulateFailure(board);
+            simulateFailure(electronicBoard);
         } else {
-            performSuccessfulWrite(board, firmwareAdapter);
+            performSuccessfulWrite(electronicBoard, firmwareAdapter);
         }
     }
 
-    private void simulateFailure(BaseElectronicBoard board) {
+    private void simulateFailure(BaseElectronicBoard electronicBoard) {
         System.out.println("Writing firmware...");
         first = false;
-        applyCorruptedFirmware(board);
+        applyCorruptedFirmware(electronicBoard);
         throw new RuntimeException("Failed to write");
     }
 
-    private void applyCorruptedFirmware(BaseElectronicBoard board) {
-        board.setFirmware(new FirmwareAdapter() {
+    private void applyCorruptedFirmware(BaseElectronicBoard electronicBoard) {
+        electronicBoard.setFirmware(new FirmwareAdapter() {
             @Override
             public String getFirmwareString() {
                 return "#^#@^";
@@ -39,8 +39,8 @@ public class FaultyDevice implements ProgrammingDevice{
         System.out.println("--->Write failed!<---");
     }
 
-    private void performSuccessfulWrite(BaseElectronicBoard board, FirmwareAdapter firmwareAdapter) {
-        board.setFirmware(firmwareAdapter);
+    private void performSuccessfulWrite(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
+        electronicBoard.setFirmware(firmwareAdapter);
         System.out.println("Writing firmware...\n" + firmwareAdapter.getFirmwareString() + "...");
     }
 

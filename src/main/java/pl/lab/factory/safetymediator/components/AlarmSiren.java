@@ -7,8 +7,8 @@ import pl.lab.factory.safetymediator.SafetyMediator;
 // Wzorzec Mediator 2 (Konkretny komponent)
 public class AlarmSiren extends SafetyDevice{
     private boolean isActive = false;
-    public AlarmSiren(SafetyMediator m){
-        super(m);
+    public AlarmSiren(SafetyMediator safetyMediator){
+        super(safetyMediator);
     }
 
     public void turnOn(){

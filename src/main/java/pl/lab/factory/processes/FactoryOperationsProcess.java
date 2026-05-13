@@ -108,7 +108,7 @@ public class FactoryOperationsProcess {
         populateQueueWithAllOrders(productionQueue, queueCommandInvoker);
 
         TimeUnit.SECONDS.sleep(QUEUE_SLEEP_SECONDS);
-        executeWeeklyPlan(productionQueue);
+        executeProductionBatch(productionQueue);
     }
 
     private void executeQueueUndoRedo(ProductionQueue productionQueue, QueueCommandInvoker queueCommandInvoker) {
@@ -150,15 +150,21 @@ public class FactoryOperationsProcess {
         assertQueueState(productionQueue); 
     }
 
-    private void executeWeeklyPlan(ProductionQueue productionQueue) throws InterruptedException {
-        ProductionBatch productionBatch = new ProductionBatch(BATCH_PLAN_NAME);
+    private void executeProductionBatch(ProductionQueue productionQueue) throws InterruptedException {
+        ProductionBatch productionBatch = createBatchFromQueue(productionQueue);
+        
+        System.out.println(productionBatch.getDescription(""));
+        productionBatch.execute();
+    }
 
+    private ProductionBatch createBatchFromQueue(ProductionQueue productionQueue) {
+        ProductionBatch productionBatch = new ProductionBatch(BATCH_PLAN_NAME);
+        
         while (!productionQueue.isEmpty()) {
             ProductionOrder order = productionQueue.nextOrder();
             productionBatch.add(new SingleOrderTask(order, context.getProductionDepartment()));
         }
-
-        System.out.println(productionBatch.getDescription(""));
-        productionBatch.execute();
+        
+        return productionBatch;
     }
 }

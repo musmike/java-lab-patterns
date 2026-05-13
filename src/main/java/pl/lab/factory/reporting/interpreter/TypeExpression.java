@@ -15,9 +15,9 @@ public class TypeExpression implements AbstractExpression {
     }
 
     @Override
-    public List<ProductionOrder> interpret(ReportContext ctx) {
-        ctx.setFilter(order -> order.getClass().getSimpleName().equalsIgnoreCase(typeName));
-        return ctx.search();
+    public List<ProductionOrder> interpret(ReportContext reportContext) {
+        reportContext.setFilter(order -> order.getClass().getSimpleName().equalsIgnoreCase(typeName));
+        return reportContext.search();
     }
 }
 // Koniec, Tydzień 5

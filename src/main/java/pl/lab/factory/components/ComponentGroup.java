@@ -31,8 +31,8 @@ public class ComponentGroup implements BaseComponent, SignalProcessorComponent, 
     public void remove(BaseComponent component) {
         components.remove(component);
     }
-    public void remove(int idx) {
-        components.remove(idx);
+    public void remove(int index) {
+        components.remove(index);
     }
 
     @Override

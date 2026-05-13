@@ -68,8 +68,8 @@ public class WarehouseManagementProcess {
     private static final int SOLDERER_MONTHS = 1;
     private static final int SOLDERER_HOURS = 120;
 
-    private static final String TERM_ID = "TERM-03";
-    private static final String TERM_NAME = "Logistics Terminal";
+    private static final String TERMINAL_ID = "TERM-03";
+    private static final String TERMINAL_NAME = "Logistics Terminal";
 
     private static final String FIRE_ORDER_ID = "FIRE-01";
     private static final int FIRE_ORDER_QUANTITY = 1;
@@ -154,7 +154,7 @@ public class WarehouseManagementProcess {
         SystemLogger.INSTANCE.logInfo("INTERPRETER", "Filtering completed orders with quantity >= " + LARGE_QUANTITY_THRESHOLD);
         context.getAllOrders().stream()
                 .filter(complexRule::interpret)
-                .forEach(o -> SystemLogger.INSTANCE.logInfo("[FILTERING]", "Match found: " + o.getId()));
+                .forEach(order -> SystemLogger.INSTANCE.logInfo("[FILTERING]", "Match found: " + order.getId()));
     }
 
     private void testWarehouseEquipmentAndMaintenance() {
@@ -169,7 +169,7 @@ public class WarehouseManagementProcess {
         assetsManager.addEquipment(new WarehouseEquipment(FORKLIFT_ID, FORKLIFT_NAME, new MaintenanceRecord(LocalDate.now().minusMonths(FORKLIFT_MONTHS), FORKLIFT_HOURS)));
         assetsManager.addEquipment(new WarehouseEquipment(SCANNER_ID, SCANNER_NAME, new MaintenanceRecord(LocalDate.now().minusMonths(SCANNER_MONTHS), SCANNER_HOURS)));
         assetsManager.addEquipment(new WarehouseEquipment(SOLDERER_ID, SOLDERER_NAME, new MaintenanceRecord(LocalDate.now().minusMonths(SOLDERER_MONTHS), SOLDERER_HOURS)));
-        assetsManager.addEquipment(new WarehouseEquipment(TERM_ID, TERM_NAME));
+        assetsManager.addEquipment(new WarehouseEquipment(TERMINAL_ID, TERMINAL_NAME));
 
         assetsManager.subscribeAll(new MaintenanceService());
         return assetsManager;
@@ -242,7 +242,7 @@ public class WarehouseManagementProcess {
 
     private void dispatchFireOrder() {
         ProductionOrder fireOrder = ProductionOrderFactory.createOrder(
-                context.getStandardPcbBoard(), new OrderContext(FIRE_ORDER_ID, FIRE_ORDER_QUANTITY, context.getSpecPcb()));
+                context.getStandardPcbBoard(), new OrderContext(FIRE_ORDER_ID, FIRE_ORDER_QUANTITY, context.getPcbSpecification()));
         try {
             context.getWarehouse().storeOrder(fireOrder);
         } catch (IllegalStateException e) {

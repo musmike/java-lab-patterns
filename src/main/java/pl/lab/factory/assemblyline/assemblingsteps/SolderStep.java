@@ -10,9 +10,9 @@ public class SolderStep extends AssemblyStep{
     }
 
     @Override
-    public void perform(BaseBoard board) throws InterruptedException {
+    public void perform(BaseBoard baseBoard) throws InterruptedException {
         System.out.println("Soldering components...");
-        strategy.execute(board);
+        strategy.execute(baseBoard);
     }
 }
 //LSP 3

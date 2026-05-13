@@ -15,11 +15,11 @@ public class MounterValueTesterDecorator extends MachineDecorator<Mounter> {
     }
 
     @Override
-    public void perform(BaseBoard board) {
-        super.perform(board);
+    public void perform(BaseBoard baseBoard) {
+        super.perform(baseBoard);
         if(decorated != null) {
             System.out.println("Testing final value of " + value + " for mounted circuits.");
-            double finalValue = board.getValue(value);
+            double finalValue = baseBoard.getValue(value);
             System.out.println("Final value of board for " + value + ": " + finalValue);
         }
     }

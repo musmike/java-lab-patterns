@@ -14,17 +14,17 @@ public class QualityControlDecorator extends BoardProducerDecorator {
     }
 
     @Override
-    public void produce(BaseBoard board) throws InterruptedException {
-        boardProducer.produce(board);
+    public void produce(BaseBoard baseBoard) throws InterruptedException {
+        boardProducer.produce(baseBoard);
 
-        if (!board.isReady()) {
+        if (!baseBoard.isReady()) {
             SystemLogger.INSTANCE.logError("QualityControl",
-                    "REJECTED: board failed quality control | " + board);
+                    "REJECTED: board failed quality control | " + baseBoard);
             throw new RuntimeException("Board couldn't be manufactured!");
         }
 
         SystemLogger.INSTANCE.logInfo("QualityControl",
-                "OK: board passed quality control | " + board);
+                "OK: board passed quality control | " + baseBoard);
     }
 }
 // Koniec, Tydzień 3

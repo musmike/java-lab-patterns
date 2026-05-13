@@ -16,11 +16,14 @@ public abstract class MaintenanceProtocol {
     private static final int EXTENDED_SERVICE_DURATION_MINUTES = 120;
     private static final int DEFAULT_SERVICE_DURATION_MINUTES  = 30;
 
+    public static final String SERVICE_STANDARD = "STANDARD";
+    public static final String SERVICE_EXTENDED = "EXTENDED";
+
     private final Map<String, Integer> serviceDurations = new HashMap<>();
 
     public MaintenanceProtocol(){
-        serviceDurations.put("STANDARD", STANDARD_SERVICE_DURATION_MINUTES);
-        serviceDurations.put("EXTENDED", EXTENDED_SERVICE_DURATION_MINUTES);
+        serviceDurations.put(SERVICE_STANDARD, STANDARD_SERVICE_DURATION_MINUTES);
+        serviceDurations.put(SERVICE_EXTENDED, EXTENDED_SERVICE_DURATION_MINUTES);
     }
 
     public void registerServiceDuration(String type, int minutes) {
@@ -63,8 +66,8 @@ public abstract class MaintenanceProtocol {
         SystemLogger.INSTANCE.logInfo("SERVICE", equipment.getName() + " " + equipment.getId() + " has been returned.");
     }
 
-    protected abstract void performDiagnostics(WarehouseEquipment e);
-    protected abstract void applyTechnicalService(WarehouseEquipment e);
+    protected abstract void performDiagnostics(WarehouseEquipment warehouseEquipment);
+    protected abstract void applyTechnicalService(WarehouseEquipment warehouseEquipment);
 }
 // Koniec, Tydzień 6
 // Wzorzec Observer 2

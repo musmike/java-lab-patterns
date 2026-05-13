@@ -10,15 +10,15 @@ public class CostReport extends BoardSummaryTemplate {
 
     
     @Override
-    protected void header(BaseBoard board) {
-        super.header(board);
+    protected void header(BaseBoard baseBoard) {
+        super.header(baseBoard);
         System.out.println("Reporting board costs:");
     }
 
     @Override
-    protected void body(BaseBoard board) {
+    protected void body(BaseBoard baseBoard) {
         CostVisitor visitor = new CostVisitor();
-        board.accept(visitor);
+        baseBoard.accept(visitor);
         System.out.println("Total board cost = " + visitor.getCost());
     }
 

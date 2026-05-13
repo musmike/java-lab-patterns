@@ -28,7 +28,7 @@ public class BaseBoardOrderProcessor extends OrderProcessor {
     @Override
     protected void produceUnit(ProductionOrder order) throws InterruptedException {
         BaseBoardProductionOrder baseBoardOrder = (BaseBoardProductionOrder) order;
-        producer.produce(baseBoardOrder.getBoard());
+        producer.produce(baseBoardOrder.getBaseBoard());
     }
 }
 // Koniec, Tydzień 8

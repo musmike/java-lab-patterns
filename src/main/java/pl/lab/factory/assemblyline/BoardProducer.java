@@ -7,7 +7,7 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Definiuje kontrakt dla wszystkich producentów płytek —
 // zarówno konkretnych implementacji, jak i dekoratorów
 public interface BoardProducer {
-    void produce(BaseBoard board) throws InterruptedException;
+    void produce(BaseBoard baseBoard) throws InterruptedException;
 }
 // Koniec, Tydzień 3
 // Wzorzec Decorator 1

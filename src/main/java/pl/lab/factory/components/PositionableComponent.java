@@ -6,7 +6,7 @@ import pl.lab.factory.Pair;
 //interfejs powstaly przez rozbicie duzego interfejsu bazowego komponentow
 public interface PositionableComponent {
 
-    Pair<Integer, Integer> getPos();
+    Pair<Integer, Integer> getPosition();
 
 }
 // Koniec, Tydzień 8

@@ -8,14 +8,14 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz.2
 // wzorzec strategy 3 - konkretna strategia typu procesu
 public class ReflowSolder implements SolderingStrategy{
-    private final MachineMediator mediator;
+    private final MachineMediator machineMediator;
 
-    public ReflowSolder(MachineMediator mediator) {
-        this.mediator = mediator;
+    public ReflowSolder(MachineMediator machineMediator) {
+        this.machineMediator = machineMediator;
     }
     @Override
-    public void execute(BaseBoard board) throws InterruptedException {
-        mediator.requestSolder(board, this);
+    public void execute(BaseBoard baseBoard) throws InterruptedException {
+        machineMediator.requestSolder(baseBoard, this);
     }
 }
 //strategy 3

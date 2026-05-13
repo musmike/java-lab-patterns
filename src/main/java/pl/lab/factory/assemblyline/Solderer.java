@@ -20,18 +20,16 @@ public class Solderer extends Machine{
         return instance;
     }
 
-
-
-    private void solderBoard(BaseBoard board){
-        board.solder();
+    private void solderBoard(BaseBoard baseBoard){
+        baseBoard.solder();
     }
 
     @Override
-    public void perform(BaseBoard board) {
-        super.perform(board);
+    public void perform(BaseBoard baseBoard) {
+        super.perform(baseBoard);
         System.out.println("[SOLDERER] Soldering board!");
         System.out.println("[SOLDERER] Using " + (reflowMode ? "reflow " : "wave ") + "mode");
-        solderBoard(board);
+        solderBoard(baseBoard);
     }
 }
 // Koniec, Tydzień 2

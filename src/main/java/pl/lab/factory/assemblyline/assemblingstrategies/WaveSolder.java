@@ -14,8 +14,8 @@ public class WaveSolder implements SolderingStrategy{
         this.mediator = mediator;
     }
     @Override
-    public void execute(BaseBoard board) throws InterruptedException {
-        mediator.requestSolder(board, this);
+    public void execute(BaseBoard baseBoard) throws InterruptedException {
+        mediator.requestSolder(baseBoard, this);
     }
 }
 //strategy 3

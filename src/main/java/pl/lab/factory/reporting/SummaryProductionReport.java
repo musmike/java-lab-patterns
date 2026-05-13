@@ -1,8 +1,5 @@
 package pl.lab.factory.reporting;
 
-import pl.lab.factory.orders.ProductionOrder;
-
-import java.util.List;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Bridge 1 (Uszczegółowiona Abstrakcja — raport skrócony)

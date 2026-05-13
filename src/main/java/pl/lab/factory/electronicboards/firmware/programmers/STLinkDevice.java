@@ -17,9 +17,9 @@ public class STLinkDevice implements ProgrammingDevice {
     }
 
     @Override
-    public void writeFirmware(BaseElectronicBoard board, FirmwareAdapter firmwareAdapter) {
+    public void writeFirmware(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
         System.out.println("Writing firmware onto flash...");
-        board.setFirmware(firmwareAdapter);
+        electronicBoard.setFirmware(firmwareAdapter);
     }
 
     @Override

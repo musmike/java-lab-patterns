@@ -10,7 +10,7 @@ public class BaseElectronicBoardProductionOrder extends ProductionOrder {
     private BaseElectronicBoard electronicBoard;
 
     private BaseElectronicBoardProductionOrder(Builder builder) {
-        super(new OrderContext(builder.id, builder.quantity, builder.specification), builder.status);
+        super(new OrderContext(builder.id, builder.quantity, builder.orderSpecification), builder.status);
         this.electronicBoard = builder.electronicBoard;
     }
 
@@ -39,31 +39,16 @@ public class BaseElectronicBoardProductionOrder extends ProductionOrder {
     // Builder konstruuje obiekt BaseElectronicBoardProductionOrder etapami —
     // umożliwia opcjonalne ustawienie specyfikacji i statusu bez wielu konstruktorów
 
-    public static class Builder {
-        private static final int DEFAULT_QUANTITY = 1;
-
-        private BaseElectronicBoard electronicBoard;
-        private String id;
-        private int quantity = DEFAULT_QUANTITY;
-        private OrderStatus status = OrderStatus.PENDING;
-        private OrderSpecification specification;
+    public static class Builder extends AbstractOrderBuilder<Builder> {
+        protected BaseElectronicBoard electronicBoard;
 
         public Builder(String id, BaseElectronicBoard electronicBoard) {
-            this.id = id;
+            super(id);
             this.electronicBoard = electronicBoard;
         }
 
-        public Builder setQuantity(int quantity) {
-            this.quantity = quantity;
-            return this;
-        }
-
-        public Builder setStatus(OrderStatus status) {
-            this.status = status; return this;
-        }
-
-        public Builder setSpecification(OrderSpecification spec) {
-            this.specification = spec;
+        @Override
+        protected Builder self() {
             return this;
         }
 

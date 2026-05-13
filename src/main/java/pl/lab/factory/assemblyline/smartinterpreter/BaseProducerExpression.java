@@ -6,7 +6,7 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Wzorzec Interpreter 3 (Interfejs wyrażenia)
 //
 public interface BaseProducerExpression {
-    boolean interpret(BaseBoard board);
+    boolean interpret(BaseBoard baseBoard);
 }
 
 //interpreter 3

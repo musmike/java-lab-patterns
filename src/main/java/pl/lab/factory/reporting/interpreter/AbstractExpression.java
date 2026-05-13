@@ -7,7 +7,7 @@ import java.util.List;
 // Wzorzec Interpreter 1 (Interfejs wyrażenia)
 // Wspólny kontrakt dla wyrażeń terminalnych i nieterminalnych; interpret() filtruje zamówienia przez kontekst.
 public interface AbstractExpression {
-    List<ProductionOrder> interpret(ReportContext ctx);
+    List<ProductionOrder> interpret(ReportContext reportContext);
 }
 // Koniec, Tydzień 5
 // Wzorzec Interpreter 1

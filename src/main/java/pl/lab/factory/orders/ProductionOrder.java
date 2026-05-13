@@ -35,7 +35,7 @@ public abstract class ProductionOrder implements Originator, OrderSubject, Produ
     public ProductionOrder(OrderContext context, OrderStatus status) {
         this.id = context.id();
         this.quantity = context.quantity();
-        this.specification = context.spec();
+        this.specification = context.orderSpecification();
         this.status = status;
         this.orderStatusMementoCaretaker = new OrderStatusMementoCaretaker();
     }

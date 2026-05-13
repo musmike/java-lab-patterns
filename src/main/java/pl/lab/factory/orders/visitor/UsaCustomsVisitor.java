@@ -30,7 +30,7 @@ public class UsaCustomsVisitor extends TaxVisitor {
     private double determineElectronicTaxRate(BaseElectronicBoardProductionOrder order) {
         if (order.getBaseElectronicBoard().getBoardType() == ElectronicType.HIGHLY_DEPENDANT) {
             SystemLogger.INSTANCE.logInfo("USA-CUSTOMS", "WARNING: Restricted tech. Applying "
-                    + (RESTRICTED_TECH_TARIFF_RATE * PricingStrategy.PERCENTAGE_DIVISOR) + "% tariff.");
+                    + (RESTRICTED_TECH_TARIFF_RATE * PricingStrategy.PERCENT_CONVERSION_FACTOR) + "% tariff.");
             return RESTRICTED_TECH_TARIFF_RATE;
         }
         return ELECTRONIC_TARIFF_RATE;
@@ -39,7 +39,7 @@ public class UsaCustomsVisitor extends TaxVisitor {
     private void processCustomsTax(ProductionOrder order, double taxRate) {
         double tax = calculateBaseTax(order, taxRate);
         totalTax += tax;
-        logFinalTax("USA-CUSTOMS", order, new TaxCalculationResult((taxRate * PricingStrategy.PERCENTAGE_DIVISOR) + "% tariff", tax));
+        logFinalTax("USA-CUSTOMS", order, new TaxCalculationResult((taxRate * PricingStrategy.PERCENT_CONVERSION_FACTOR) + "% tariff", tax));
     }
 
     public double getTotalCustomsTax() {

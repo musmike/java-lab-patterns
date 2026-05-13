@@ -26,19 +26,19 @@ public class WarehouseEquipment implements MaintenanceObservable {
     private final List<MaintenanceObserver> observers = new ArrayList<>();
 
     @Override
-    public void addObserver(MaintenanceObserver obs){
-        observers.add(obs);
+    public void addObserver(MaintenanceObserver observer){
+        observers.add(observer);
     }
 
     @Override
-    public void removeObserver(MaintenanceObserver obs){
-        observers.remove(obs);
+    public void removeObserver(MaintenanceObserver observer){
+        observers.remove(observer);
     }
 
     @Override
     public void notifyObservers(String reason){
-        for(MaintenanceObserver obs : observers){
-            obs.onMaintenanceRequired(this, reason);
+        for(MaintenanceObserver observer : observers){
+            observer.onMaintenanceRequired(this, reason);
         }
     }
 

@@ -11,9 +11,9 @@ public class PrintStep extends AssemblyStep{
     }
 
     @Override
-    public void perform(BaseBoard board) throws InterruptedException {
+    public void perform(BaseBoard baseBoard) throws InterruptedException {
         System.out.println("Printing circuit...");
-        strategy.execute(board);
+        strategy.execute(baseBoard);
     }
 }
 //LSP 3

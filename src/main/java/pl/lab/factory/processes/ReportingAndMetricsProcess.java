@@ -38,30 +38,30 @@ public class ReportingAndMetricsProcess {
 
     private static class IteratorTestOrder {
         private final String id;
-        private final int qty;
+        private final int quantity;
         private final OrderStatus status;
         private final boolean isElectronic;
 
         private IteratorTestOrder(Builder builder) {
             this.id = builder.id;
-            this.qty = builder.qty;
+            this.quantity = builder.quantity;
             this.status = builder.status;
             this.isElectronic = builder.isElectronic;
         }
 
         public String getId() { return id; }
-        public int getQty() { return qty; }
+        public int getQuantity() { return quantity; }
         public OrderStatus getStatus() { return status; }
         public boolean isElectronic() { return isElectronic; }
 
         public static class Builder {
             private String id;
-            private int qty;
+            private int quantity;
             private OrderStatus status;
             private boolean isElectronic;
 
             public Builder id(String id) { this.id = id; return this; }
-            public Builder qty(int qty) { this.qty = qty; return this; }
+            public Builder quantity(int quantity) { this.quantity = quantity; return this; }
             public Builder status(OrderStatus status) { this.status = status; return this; }
             public Builder isElectronic(boolean isElectronic) { this.isElectronic = isElectronic; return this; }
 
@@ -70,12 +70,12 @@ public class ReportingAndMetricsProcess {
     }
 
     private static final List<IteratorTestOrder> ITERATOR_TEST_ORDERS = List.of(
-            new IteratorTestOrder.Builder().id("ITER-01").qty(2).status(OrderStatus.COMPLETED).isElectronic(false).build(),
-            new IteratorTestOrder.Builder().id("ITER-02").qty(8).status(OrderStatus.COMPLETED).isElectronic(true).build(),
-            new IteratorTestOrder.Builder().id("ITER-03").qty(5).status(OrderStatus.PENDING).isElectronic(false).build(),
-            new IteratorTestOrder.Builder().id("ITER-04").qty(9).status(OrderStatus.PENDING).isElectronic(true).build(),
-            new IteratorTestOrder.Builder().id("ITER-05").qty(6).status(OrderStatus.PENDING).isElectronic(false).build(),
-            new IteratorTestOrder.Builder().id("ITER-06").qty(7).status(OrderStatus.PENDING).isElectronic(true).build()
+            new IteratorTestOrder.Builder().id("ITER-01").quantity(2).status(OrderStatus.COMPLETED).isElectronic(false).build(),
+            new IteratorTestOrder.Builder().id("ITER-02").quantity(8).status(OrderStatus.COMPLETED).isElectronic(true).build(),
+            new IteratorTestOrder.Builder().id("ITER-03").quantity(5).status(OrderStatus.PENDING).isElectronic(false).build(),
+            new IteratorTestOrder.Builder().id("ITER-04").quantity(9).status(OrderStatus.PENDING).isElectronic(true).build(),
+            new IteratorTestOrder.Builder().id("ITER-05").quantity(6).status(OrderStatus.PENDING).isElectronic(false).build(),
+            new IteratorTestOrder.Builder().id("ITER-06").quantity(7).status(OrderStatus.PENDING).isElectronic(true).build()
     );
 
     private final FactoryContext context;
@@ -109,7 +109,7 @@ public class ReportingAndMetricsProcess {
     private void createOrderNotCompletedOrder() {
         ProductionOrder notCompletedOrder = ProductionOrderFactory.createOrder(
                 context.getStandardPcbBoard(), new OrderContext(NOT_COMPLETED_ORDER_ID, 
-                    NOT_COMPLETED_ORDER_QUANTITY, context.getSpecPcb()));
+                    NOT_COMPLETED_ORDER_QUANTITY, context.getPcbSpecification()));
         context.getAllOrders().add(notCompletedOrder);
     }
 
@@ -169,10 +169,10 @@ public class ReportingAndMetricsProcess {
     private ProductionOrder buildOrderForIterator(IteratorTestOrder testOrder) {
         if (testOrder.isElectronic()) {
             return ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
-                    new OrderContext(testOrder.getId(), testOrder.getQty(), context.getSpecElectronic()));
+                    new OrderContext(testOrder.getId(), testOrder.getQuantity(), context.getElectronicBoardSpecification()));
         } else {
             return ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
-                    new OrderContext(testOrder.getId(), testOrder.getQty(), context.getSpecPcb()));
+                    new OrderContext(testOrder.getId(), testOrder.getQuantity(), context.getPcbSpecification()));
         }
     }
 

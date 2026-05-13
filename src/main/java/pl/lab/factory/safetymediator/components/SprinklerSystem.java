@@ -7,8 +7,8 @@ import pl.lab.factory.safetymediator.SafetyMediator;
 // Wzorzec Mediator 2 (Konkretny komponent)
 public class SprinklerSystem extends SafetyDevice{
     private boolean isActive = false;
-    public SprinklerSystem(SafetyMediator m){
-        super(m);
+    public SprinklerSystem(SafetyMediator safetyMediator){
+        super(safetyMediator);
     }
 
     public void startPumps(){

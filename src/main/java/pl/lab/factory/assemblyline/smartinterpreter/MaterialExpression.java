@@ -12,8 +12,8 @@ public class MaterialExpression implements BaseProducerExpression{
     }
 
     @Override
-    public boolean interpret(BaseBoard board) {
-        return board.getBoardMaterial() == expected;
+    public boolean interpret(BaseBoard baseBoard) {
+        return baseBoard.getBoardMaterial() == expected;
     }
 }
 

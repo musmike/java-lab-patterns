@@ -7,7 +7,7 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // wzorzec Visitor 3 - interfejs klas wizytujących
 // określa mechanizm odwiedzania płytki
 public interface BoardVisitor {
-    void visit(BaseBoard board);
+    void visit(BaseBoard baseBoard);
     void visit(BaseComponent component);
 }
 //visitor 3

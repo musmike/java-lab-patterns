@@ -9,7 +9,7 @@ import pl.lab.factory.pcbboards.BaseBoard;
 public class CostVisitor implements BoardVisitor {
     private double cost = 0;
     @Override
-    public void visit(BaseBoard board) {
+    public void visit(BaseBoard baseBoard) {
         // possible addition of future board cost
     }
 

@@ -6,10 +6,10 @@ import pl.lab.factory.pcbboards.QXCBoard;
 
 public class SuperElectronicBoardFactory {
     public static BaseElectronicBoard createBoard(ElectronicType type){
-        BaseElectronicBoard board = new BaseElectronicBoard();
-        board.setBoardType(type);
-        board.setBaseBoard(new QXCBoard());
+        BaseElectronicBoard electronicBoard = new BaseElectronicBoard();
+        electronicBoard.setBoardType(type);
+        electronicBoard.setBaseBoard(new QXCBoard());
 
-        return board;
+        return electronicBoard;
     }
 }

@@ -15,8 +15,8 @@ public class AutoMount implements MountingStrategy {
     }
 
     @Override
-    public void execute(BaseBoard board) throws InterruptedException {
-        mediator.requestMount(board, this);
+    public void execute(BaseBoard baseBoard) throws InterruptedException {
+        mediator.requestMount(baseBoard, this);
     }
 }
 //strategy 3

@@ -12,12 +12,12 @@ public class MachineAdjusterDecorator<T extends Machine> extends MachineDecorato
     }
 
     @Override
-    public void perform(BaseBoard board) {
+    public void perform(BaseBoard baseBoard) {
         System.out.println("Scanning for board parameters...");
-        System.out.println("-=- Board length: " + board.getLength() + "\n-=- Board width: " + board.getWidth()
-                + "\n-=- Board color: " + board.getBoardColor() + "\n-=- Board layers: " + board.getLayers());
+        System.out.println("-=- Board length: " + baseBoard.getLength() + "\n-=- Board width: " + baseBoard.getWidth()
+                + "\n-=- Board color: " + baseBoard.getBoardColor() + "\n-=- Board layers: " + baseBoard.getLayers());
         System.out.println("Machine readjusted to parameters!");
-        super.perform(board);
+        super.perform(baseBoard);
     }
 }
 // Koniec, Tydzień 3

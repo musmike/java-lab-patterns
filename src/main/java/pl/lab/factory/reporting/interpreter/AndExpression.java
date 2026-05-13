@@ -16,8 +16,8 @@ public class AndExpression implements AbstractExpression {
     }
 
     @Override
-    public List<ProductionOrder> interpret(ReportContext ctx) {
-        List<ProductionOrder> leftResult = left.interpret(ctx);
+    public List<ProductionOrder> interpret(ReportContext reportContext) {
+        List<ProductionOrder> leftResult = left.interpret(reportContext);
         ReportContext narrowedContext = new ReportContext(leftResult);
         return right.interpret(narrowedContext);
     }

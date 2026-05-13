@@ -18,14 +18,14 @@ import java.util.List;
 // Opakowywana przez dekoratory w celu rozszerzenia zachowania bez dziedziczenia.
 public class SimpleBoardProducer implements BoardProducer  {
     @Override
-    public void produce(BaseBoard board) throws InterruptedException {
+    public void produce(BaseBoard baseBoard) throws InterruptedException {
         MachineMediator mediator = new FactoryMachineMediator();
         AssemblyStepManufacturingFacade assembler = new AssemblyStepManufacturingFacade(List.of(
                 new MountStep(new AutoMount(mediator)),
                 new PrintStep(new PrintingProxy(new LaserPrint(mediator))),
                 new SolderStep(new SolderingProxy(new WaveSolder(mediator)))
         ));
-        assembler.manufacture(board);
+        assembler.manufacture(baseBoard);
     }
 }
 // Koniec, Tydzień 3

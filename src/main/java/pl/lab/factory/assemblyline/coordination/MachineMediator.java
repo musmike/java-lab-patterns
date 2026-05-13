@@ -8,9 +8,9 @@ import pl.lab.factory.pcbboards.BaseBoard;
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
 // Wzorzec Mediator 3 (Mediator – interfejs)
 public interface MachineMediator {
-    void requestPrint(BaseBoard board, PrintingStrategy strategy);
-    void requestMount(BaseBoard board, MountingStrategy strategy);
-    void requestSolder(BaseBoard board, SolderingStrategy strategy);
+    void requestPrint(BaseBoard baseBoard, PrintingStrategy strategy);
+    void requestMount(BaseBoard baseBoard, MountingStrategy strategy);
+    void requestSolder(BaseBoard baseBoard, SolderingStrategy strategy);
 }
 
 //mediator 3

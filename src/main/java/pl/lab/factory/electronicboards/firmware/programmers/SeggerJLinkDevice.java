@@ -16,9 +16,9 @@ public class SeggerJLinkDevice implements ProgrammingDevice {
     }
 
     @Override
-    public void writeFirmware(BaseElectronicBoard board, FirmwareAdapter firmwareAdapter) {
+    public void writeFirmware(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
         System.out.println("Preparing code...");
-        board.setFirmware(firmwareAdapter);
+        electronicBoard.setFirmware(firmwareAdapter);
         System.out.println("Code written!");
     }
 

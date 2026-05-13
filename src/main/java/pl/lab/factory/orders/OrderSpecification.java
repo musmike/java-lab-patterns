@@ -69,7 +69,7 @@ public class OrderSpecification implements Cloneable {
     }
 
     public void displayCertificates(String orderId) {
-        certificates.forEach(c -> c.display(orderId));
+        certificates.forEach(certificate -> certificate.display(orderId));
     }
     // Koniec, Tydzień 4
     // Wzorzec Flyweight 1

@@ -15,12 +15,16 @@ public class CustomerLoyaltyService {
     private static final TierConfig SILVER_TIER_CONFIG = new TierConfig(50, 100, 20);
     private static final TierConfig GOLD_TIER_CONFIG = new TierConfig(150, 50, 50);
 
+    public static final String TIER_BRONZE = "BRONZE";
+    public static final String TIER_SILVER = "SILVER";
+    public static final String TIER_GOLD = "GOLD";
+
     private final Map<String, TierConfig> tiers = new HashMap<>();
 
     public CustomerLoyaltyService() {
-        tiers.put("BRONZE", BRONZE_TIER_CONFIG);
-        tiers.put("SILVER", SILVER_TIER_CONFIG);
-        tiers.put("GOLD", GOLD_TIER_CONFIG);
+        tiers.put(TIER_BRONZE, BRONZE_TIER_CONFIG);
+        tiers.put(TIER_SILVER, SILVER_TIER_CONFIG);
+        tiers.put(TIER_GOLD, GOLD_TIER_CONFIG);
     }
 
     public void registerTier(String tierName, TierConfig config) {

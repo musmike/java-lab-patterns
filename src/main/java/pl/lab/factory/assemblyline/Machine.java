@@ -15,7 +15,7 @@ public abstract class Machine {
         state = new OffState();
     }
 
-    public void perform(BaseBoard board){
+    public void perform(BaseBoard baseBoard){
         if(state instanceof OffState){
             try {
                 state.call(this);

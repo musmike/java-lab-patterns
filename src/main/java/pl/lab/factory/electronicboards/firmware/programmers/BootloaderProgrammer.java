@@ -13,11 +13,11 @@ public class BootloaderProgrammer extends FirmwareProgrammer{
     }
 
     @Override
-    public void program(BaseElectronicBoard board, FirmwareAdapter firmwareAdapter) {
+    public void program(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
         device.start();
-        device.writeFirmware(board, firmwareAdapter);
+        device.writeFirmware(electronicBoard, firmwareAdapter);
         System.out.println("Preparing bootloader...\n.\n.\n.\nDone!");
-        board.programBoard();
+        electronicBoard.programBoard();
         System.out.println("Programming finished!");
         device.finish();
     }

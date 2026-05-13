@@ -9,8 +9,8 @@ import pl.lab.factory.safetymediator.SafetyMediator;
 public class FireGate extends SafetyDevice{
     private boolean isClosed = false;
 
-    public FireGate(SafetyMediator m){
-        super(m);
+    public FireGate(SafetyMediator safetyMediator){
+        super(safetyMediator);
     }
 
     public void close() {

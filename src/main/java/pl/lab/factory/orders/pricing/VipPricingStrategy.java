@@ -12,7 +12,7 @@ public class VipPricingStrategy extends StandardPricingStrategy {
     @Override
     public double calculatePrice(ProductionOrder order) {
         double basePrice = super.calculatePrice(order);
-        double discountAmount = basePrice * (VIP_DISCOUNT_PERCENTAGE / PricingStrategy.PERCENTAGE_DIVISOR);
+        double discountAmount = basePrice * (VIP_DISCOUNT_PERCENTAGE / PricingStrategy.PERCENT_CONVERSION_FACTOR);
         double finalPrice = basePrice - discountAmount;
 
         SystemLogger.INSTANCE.logInfo("PRICING", "Applied VIP discount of " + VIP_DISCOUNT_PERCENTAGE

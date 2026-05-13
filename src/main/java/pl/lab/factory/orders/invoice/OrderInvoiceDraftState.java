@@ -24,7 +24,7 @@ public class OrderInvoiceDraftState implements OrderInvoiceState {
     }
 
     private double calculateDeduction(double currentAmount, double percentage) {
-        return currentAmount * (percentage / PricingStrategy.PERCENTAGE_DIVISOR);
+        return currentAmount * (percentage / PricingStrategy.PERCENT_CONVERSION_FACTOR);
     }
 
     @Override

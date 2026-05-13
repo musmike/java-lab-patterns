@@ -15,9 +15,9 @@ public class AssemblyStepManufacturingFacade {
         this.steps = steps;
     }
 
-    public void manufacture(BaseBoard board) throws InterruptedException {
+    public void manufacture(BaseBoard baseBoard) throws InterruptedException {
         for (AssemblyStep step : steps) {
-            step.perform(board);
+            step.perform(baseBoard);
         }
     }
 }

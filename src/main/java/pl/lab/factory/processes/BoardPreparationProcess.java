@@ -29,44 +29,52 @@ public class BoardPreparationProcess {
     }
 
     public void execute() throws InterruptedException {
-        testSmartBoardAndFirmware();
+        testSuperBoardAndFirmware();
         testCreatingPrototypes();
     }
 
-    private void testSmartBoardAndFirmware() throws InterruptedException {
-        BaseElectronicBoard sqcEBoard = createSmartBoard();
-        observeAndProduceSmartBoard(sqcEBoard);
-        programFaultyDevice(sqcEBoard);
-        verifyBoardComponents(sqcEBoard);
+    private void testSuperBoardAndFirmware() throws InterruptedException {
+        BaseElectronicBoard superBoard = createSuperBoard();
+        
+        setupBoardObservation(superBoard);
+        generateBoardCostReport(superBoard);
+        produceSmartBoard(superBoard);
+        
+        programFaultyDevice(superBoard);
+        verifyBoardComponents(superBoard);
     }
 
-    private BaseElectronicBoard createSmartBoard() {
+    private BaseElectronicBoard createSuperBoard() {
         return SuperElectronicBoardFactory.createBoard(ElectronicType.NORMAL);
     }
 
-    private void observeAndProduceSmartBoard(BaseElectronicBoard board) throws InterruptedException {
+    private void setupBoardObservation(BaseElectronicBoard electronicBoard) {
         ProcessObserver observer = new ProcessObserver();
-        observer.setBoard(board.getBaseBoard());
-
-        CostReport costSummary = new CostReport();
-        costSummary.generate(board.getBaseBoard());
-
-        BoardProducer smartProducer = new SmartBoardProducer();
-        smartProducer.produce(board.getBaseBoard());
+        observer.setBoard(electronicBoard.getBaseBoard());
     }
 
-    private void programFaultyDevice(BaseElectronicBoard board) {
+    private void generateBoardCostReport(BaseElectronicBoard electronicBoard) {
+        CostReport costSummary = new CostReport();
+        costSummary.generate(electronicBoard.getBaseBoard());
+    }
+
+    private void produceSmartBoard(BaseElectronicBoard electronicBoard) throws InterruptedException {
+        BoardProducer smartProducer = new SmartBoardProducer();
+        smartProducer.produce(electronicBoard.getBaseBoard());
+    }
+
+    private void programFaultyDevice(BaseElectronicBoard electronicBoard) {
         FirmwareAdapter firmwareAdapter = new HighLevelFirmwareAdapter(new HighLevelFirmware(FIRMWARE_PROTOTYPE));
         ProgrammingDevice faultyDevice = new FaultyDevice();
         FirmwareProgrammer oldProgrammer = new OldFirmwareProgrammer(faultyDevice);
 
-        oldProgrammer.program(board, firmwareAdapter);
+        oldProgrammer.program(electronicBoard, firmwareAdapter);
     }
 
-    private void verifyBoardComponents(BaseElectronicBoard board) {
-        board.getBaseBoard().printComponentInfo();
+    private void verifyBoardComponents(BaseElectronicBoard electronicBoard) {
+        electronicBoard.getBaseBoard().printComponentInfo();
         CountingVisitor counter = new CountingVisitor();
-        board.getBaseBoard().accept(counter);
+        electronicBoard.getBaseBoard().accept(counter);
         System.out.println("[COMPONENT INFO] Board contains " + counter.getResistors() + " resistors.");
     }
 

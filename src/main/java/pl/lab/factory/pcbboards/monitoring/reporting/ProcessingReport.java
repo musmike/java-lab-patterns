@@ -8,9 +8,9 @@ import pl.lab.factory.pcbboards.monitoring.ProductionStateVisitor;
 public class ProcessingReport extends BoardSummaryTemplate {
 
     @Override
-    protected void body(BaseBoard board) {
+    protected void body(BaseBoard baseBoard) {
         ProductionStateVisitor visitor = new ProductionStateVisitor();
-        board.accept(visitor);
+        baseBoard.accept(visitor);
         System.out.println("Board is in the following state:\n" + visitor.getReport());
     }
 

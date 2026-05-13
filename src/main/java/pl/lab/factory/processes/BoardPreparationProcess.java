@@ -73,13 +73,13 @@ public class BoardPreparationProcess {
     private void testCreatingPrototypes() {
         BoardPrototypes prototypesRegistry = setupPrototypeRegistry();
 
-        BaseElectronicBoard electronicBoardA = createAndProgramReleaseClone(prototypesRegistry);
-        BaseElectronicBoard electronicBoardB = createAndProgramHotfixClone(prototypesRegistry);
+        BaseElectronicBoard releaseFirmwareBoard = createAndProgramReleaseClone(prototypesRegistry);
+        BaseElectronicBoard hotfixFirmwareBoard = createAndProgramHotfixClone(prototypesRegistry);
 
-        context.setElectronicBoardA(electronicBoardA);
-        context.setElectronicBoardB(electronicBoardB);
+        context.setHighlyDependentElectronicBoard(releaseFirmwareBoard);
+        context.setHotfixElectronicBoard(hotfixFirmwareBoard);
 
-        logPrototypeComparisons(prototypesRegistry.createFromPrototype(PROTOTYPE_DEPENDENT_V1), electronicBoardA, electronicBoardB);
+        logPrototypeComparisons(prototypesRegistry.createFromPrototype(PROTOTYPE_DEPENDENT_V1), releaseFirmwareBoard, hotfixFirmwareBoard);
     }
 
     private BoardPrototypes setupPrototypeRegistry() {
@@ -90,29 +90,30 @@ public class BoardPreparationProcess {
     }
 
     private BaseElectronicBoard createAndProgramReleaseClone(BoardPrototypes registry) {
-        BaseElectronicBoard cloneA = registry.createFromPrototype(PROTOTYPE_DEPENDENT_V1);
-        FirmwareAdapter adapterA = new HighLevelFirmwareAdapter(new HighLevelFirmware(FIRMWARE_RELEASE));
-        InternalProgrammer programmerA = new InternalProgrammer(new SeggerJLinkDevice());
+        BaseElectronicBoard releaseClone = registry.createFromPrototype(PROTOTYPE_DEPENDENT_V1);
+        FirmwareAdapter releaseFirmware = new HighLevelFirmwareAdapter(new HighLevelFirmware(FIRMWARE_RELEASE));
+        InternalProgrammer seggerProgrammer = new InternalProgrammer(new SeggerJLinkDevice());
 
-        programmerA.program(cloneA, adapterA);
-        return cloneA;
+        seggerProgrammer.program(releaseClone, releaseFirmware);
+        return releaseClone;
     }
 
     private BaseElectronicBoard createAndProgramHotfixClone(BoardPrototypes registry) {
-        BaseElectronicBoard cloneB = registry.createFromPrototype(PROTOTYPE_DEPENDENT_V1);
+        BaseElectronicBoard hotfixClone = registry.createFromPrototype(PROTOTYPE_DEPENDENT_V1);
         System.out.println("[COMPONENT INFO] Gathering information about boards components!");
-        verifyBoardComponents(cloneB);
+        verifyBoardComponents(hotfixClone);
 
-        FirmwareAdapter adapterB = new ProprietaryFirmwareAdapter(new ProprietaryFirmware(FIRMWARE_HOTFIX));
-        InternalProgrammer programmerB = new InternalProgrammer(new STLinkDevice());
+        FirmwareAdapter hotfixFirmware = new ProprietaryFirmwareAdapter(new ProprietaryFirmware(FIRMWARE_HOTFIX));
+        InternalProgrammer stLinkProgrammer = new InternalProgrammer(new STLinkDevice());
 
-        programmerB.program(cloneB, adapterB);
-        return cloneB;
+        stLinkProgrammer.program(hotfixClone, hotfixFirmware);
+        return hotfixClone;
     }
 
-    private void logPrototypeComparisons(BaseElectronicBoard proto, BaseElectronicBoard a, BaseElectronicBoard b) {
-        SystemLogger.INSTANCE.logInfo(LOG_CONTEXT, "Prototype: firmware=" + proto.getFirmware());
-        SystemLogger.INSTANCE.logInfo(LOG_CONTEXT, "Clone A:   firmware=" + a.getFirmware());
-        SystemLogger.INSTANCE.logInfo(LOG_CONTEXT, "Clone B:   firmware=" + b.getFirmware());
+    private void logPrototypeComparisons(BaseElectronicBoard sourcePrototype, BaseElectronicBoard releaseClone,
+                                         BaseElectronicBoard hotfixClone) {
+        SystemLogger.INSTANCE.logInfo(LOG_CONTEXT, "Prototype: firmware=" + sourcePrototype.getFirmware());
+        SystemLogger.INSTANCE.logInfo(LOG_CONTEXT, "Release clone firmware=" + releaseClone.getFirmware());
+        SystemLogger.INSTANCE.logInfo(LOG_CONTEXT, "Hotfix clone firmware="  + hotfixClone.getFirmware());
     }
 }

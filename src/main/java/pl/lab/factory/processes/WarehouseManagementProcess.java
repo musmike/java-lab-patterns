@@ -89,7 +89,7 @@ public class WarehouseManagementProcess {
     }
 
     private void validateContext() {
-        if (context.getWarehouse() == null || context.getOrderA() == null) {
+        if (context.getWarehouse() == null || context.getPcbOrder() == null) {
             throw new IllegalStateException("Warehouse & Orders must be initialized.");
         }
     }
@@ -102,7 +102,7 @@ public class WarehouseManagementProcess {
     }
 
     private void storeUnapprovedOrder() {
-        ProductionOrder unapprovedOrder = context.getOrderA().clone(UNAPPROVED_ORDER_ID);
+        ProductionOrder unapprovedOrder = context.getPcbOrder().clone(UNAPPROVED_ORDER_ID);
         try {
             context.getWarehouse().storeOrder(unapprovedOrder);
         } catch (SecurityException e) {
@@ -125,9 +125,9 @@ public class WarehouseManagementProcess {
         ShippingFacade shippingFacade = new ShippingFacade(context.getWarehouse());
         ShippingManager shippingManager = new ShippingManager();
 
-        shippingManager.addCommand(new ShipOrderCommand(shippingFacade, priorityShipping, context.getOrderB()));
-        shippingManager.addCommand(new ShipOrderCommand(shippingFacade, standardShipping, context.getOrderA()));
-        shippingManager.addCommand(new ShipOrderCommand(shippingFacade, standardShipping, context.getOrderC()));
+        shippingManager.addCommand(new ShipOrderCommand(shippingFacade, priorityShipping, context.getStandardElectronicOrder()));
+        shippingManager.addCommand(new ShipOrderCommand(shippingFacade, standardShipping, context.getPcbOrder()));
+        shippingManager.addCommand(new ShipOrderCommand(shippingFacade, standardShipping, context.getSuperElectronicOrder()));
 
         //Liskov
         shippingManager.setDispatcher(new PriorityFirstDispatcher());
@@ -170,10 +170,10 @@ public class WarehouseManagementProcess {
     }
 
     private void verifyMaintenanceNeeds(WarehouseAssetsManager manager) {
-        EquipmentIterator maintenanceIt = manager.getMaintenanceIterator();
+        EquipmentIterator maintenanceIterator = manager.getMaintenanceIterator();
         SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Devices requiring immediate service:");
-        while(maintenanceIt.hasNext()){
-            SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Check needed: " + maintenanceIt.next().toString());
+        while (maintenanceIterator.hasNext()) {
+            SystemLogger.INSTANCE.logInfo("MAINTENANCE", "Check needed: " + maintenanceIterator.next());
         }
     }
 
@@ -195,8 +195,8 @@ public class WarehouseManagementProcess {
     private WarehouseEquipment getEquipmentById(WarehouseAssetsManager manager, String id) {
         EquipmentIterator iterator = manager.getEquipmentIterator();
         while (iterator.hasNext()) {
-            WarehouseEquipment eq = iterator.next();
-            if (eq.getId().equals(id)) return eq;
+            WarehouseEquipment equipment = iterator.next();
+            if (equipment.getId().equals(id)) return equipment;
         }
         throw new NoSuchElementException("Equipment not found with id: " + id);
     }
@@ -232,12 +232,12 @@ public class WarehouseManagementProcess {
 
     private void triggerFireAlarmAndLockdown(SmokeDetector sensor) {
         sensor.detectFire();
-        context.getWarehouseAdapter().getZoneA().setState(new LockedState());
+        context.getWarehouseAdapter().getBaseBoardZone().setState(new LockedState());
     }
 
     private void dispatchFireOrder() {
         ProductionOrder fireOrder = ProductionOrderFactory.createOrder(
-                context.getBoardA(), new OrderContext(FIRE_ORDER_ID, FIRE_ORDER_QTY, context.getSpecPcb()));
+                context.getStandardPcbBoard(), new OrderContext(FIRE_ORDER_ID, FIRE_ORDER_QTY, context.getSpecPcb()));
         try {
             context.getWarehouse().storeOrder(fireOrder);
         } catch (IllegalStateException e) {
@@ -249,7 +249,7 @@ public class WarehouseManagementProcess {
             SafetySystemMemento lastState = history.undo();
         if (lastState != null) {
             center.restore(lastState);
-            context.getWarehouseAdapter().getZoneA().setState(new OpenState());
+            context.getWarehouseAdapter().getBaseBoardZone().setState(new OpenState());
         }
     }
 }

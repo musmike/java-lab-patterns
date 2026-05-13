@@ -7,7 +7,8 @@ import pl.lab.factory.orders.ProductionOrder;
 // Zasada podstawienia Liskov (LSP) 1
 // Klasa pochodna RushOrderPricingStrategy dziedzicząca po StandardPricingStrategy (konketnej)
 public class RushOrderPricingStrategy extends StandardPricingStrategy {
-    private static final double RUSH_ORDER_FEE_MULTIPLIER = 1.20;
+    private static final double RUSH_ORDER_FEE = 0.20;
+    private static final double RUSH_ORDER_FEE_MULTIPLIER = 1.0 + RUSH_ORDER_FEE;
 
     @Override
     public double calculatePrice(ProductionOrder order) {
@@ -15,7 +16,8 @@ public class RushOrderPricingStrategy extends StandardPricingStrategy {
         double rushPrice = basePrice * RUSH_ORDER_FEE_MULTIPLIER;
 
         SystemLogger.INSTANCE.logInfo("PRICING",
-                "Rush order fee applied (+20%). New price: $" + CurrencyFormatter.format((rushPrice)));
+            "Rush order fee applied (+" + (int)(RUSH_ORDER_FEE * PERCENTAGE_DIVISOR) + "%). New price: $"
+            + CurrencyFormatter.format(rushPrice));
 
         return rushPrice;
     }

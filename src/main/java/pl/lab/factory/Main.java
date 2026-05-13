@@ -4,7 +4,7 @@ import pl.lab.factory.processes.*;
 import pl.lab.factory.processes.context.FactoryContext;
 
 public class Main {
-    private static final String APP_CONTEXT = Main.class.getName();
+    private static final String APP_CONTEXT = Main.class.getSimpleName();
 
     public static void main(String[] args) {
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "This is the PCB/Electronic board factory!");

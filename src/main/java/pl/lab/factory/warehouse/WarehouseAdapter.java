@@ -1,4 +1,5 @@
 package pl.lab.factory.warehouse;
+
 import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.BaseElectronicBoardProductionOrder;
@@ -11,18 +12,18 @@ public class WarehouseAdapter implements WarehouseService {
 
     private final WarehouseSection mainWarehouse;
 
-    private final WarehouseSection zoneA; //BaseBoard
-    private final WarehouseSection zoneB; //ElectronicBoard
+    private final WarehouseSection baseBoardZone;
+    private final WarehouseSection electronicBoardZone;
 
     public WarehouseAdapter(LegacyWarehouseSystem legacyWarehouse){
         this.legacyWarehouse = legacyWarehouse;
 
         mainWarehouse = new WarehouseSection("Main Warehouse");
-        zoneA = new WarehouseSection("Zone A");
-        zoneB = new WarehouseSection("Zone B");
+        baseBoardZone = new WarehouseSection("Base Board Zone");
+        electronicBoardZone = new WarehouseSection("Electronic Board Zone");
 
-        mainWarehouse.add(zoneA);
-        mainWarehouse.add(zoneB);
+        mainWarehouse.add(baseBoardZone);
+        mainWarehouse.add(electronicBoardZone);
     }
 
     public void removeOrder(ProductionOrder order){
@@ -54,9 +55,9 @@ public class WarehouseAdapter implements WarehouseService {
 
     private WarehouseSection determineTargetSection(ProductionOrder order) {
         if(order instanceof BaseBoardProductionOrder){
-            return zoneA;
+            return baseBoardZone;
         } else if (order instanceof BaseElectronicBoardProductionOrder) {
-            return zoneB;
+            return electronicBoardZone;
         }
         return mainWarehouse;
     }
@@ -76,12 +77,12 @@ public class WarehouseAdapter implements WarehouseService {
         mainWarehouse.print("");
     }
 
-    public WarehouseSection getZoneA() {
-        return zoneA;
+    public WarehouseSection getBaseBoardZone() {
+        return baseBoardZone;
     }
 
-    public WarehouseSection getZoneB() {
-        return zoneB;
+    public WarehouseSection getElectronicBoardZone() {
+        return electronicBoardZone;
     }
 }
 // Koniec, Tydzień 3

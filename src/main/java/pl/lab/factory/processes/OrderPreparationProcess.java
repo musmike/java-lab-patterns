@@ -79,26 +79,26 @@ public class OrderPreparationProcess {
     }
 
     private void createFinalOrders() {
-        context.setBoardA(new StandardBoardFactory().createBoard());
+        context.setStandardPcbBoard(new StandardBoardFactory().createBoard());
 
         ProductionOrder orderA = ProductionOrderFactory.createOrder(
-                context.getBoardA(), new OrderContext(ORDER_1_ID, ORDER_1_QTY, context.getSpecPcb()));
+                context.getStandardPcbBoard(), new OrderContext(ORDER_1_ID, ORDER_1_QTY, context.getSpecPcb()));
 
         ProductionOrder orderB = ProductionOrderFactory.createOrder(
-                context.getElectronicBoardA(), new OrderContext(ORDER_2_ID, ORDER_2_QTY, context.getSpecElectronic()));
+                context.getHighlyDependentElectronicBoard(), new OrderContext(ORDER_2_ID, ORDER_2_QTY, context.getSpecElectronic()));
 
         ProductionOrder orderC = ProductionOrderFactory.createOrder(
-                context.getElectronicBoardB(), new OrderContext(ORDER_3_ID, ORDER_3_QTY, context.getSpecElectronic()));
+                context.getHotfixElectronicBoard(), new OrderContext(ORDER_3_ID, ORDER_3_QTY, context.getSpecElectronic()));
 
-        context.setOrderA(orderA);
-        context.setOrderB(orderB);
-        context.setOrderC(orderC);
+        context.setPcbOrder(orderA);
+        context.setStandardElectronicOrder(orderB);
+        context.setSuperElectronicOrder(orderC);
 
-        context.setOrderBaseClone(orderA.clone(ORDER_BASE_CLONE_ID));
-        context.setOrderElectronicClone(orderB.clone(ORDER_ELEC_CLONE_ID));
+        context.setClonedPcbOrder(orderA.clone(ORDER_BASE_CLONE_ID));
+        context.setClonedElectronicOrder(orderB.clone(ORDER_ELEC_CLONE_ID));
 
         context.setAllOrders(new ArrayList<>(List.of(
-                orderA, orderB, orderC, context.getOrderBaseClone(), context.getOrderElectronicClone()
+                orderA, orderB, orderC, context.getClonedPcbOrder(), context.getClonedElectronicOrder()
         )));
     }
 }

@@ -28,7 +28,7 @@ import pl.lab.factory.reporting.reportingsystem.SimpleReportGenerator;
 
 public class ReportingAndMetricsProcess {
 
-    private static final String APP_CONTEXT = ReportingAndMetricsProcess.class.getName();
+    private static final String APP_CONTEXT = ReportingAndMetricsProcess.class.getSimpleName();
     private static final String ORDER_6_ID = "ORD-006";
     private static final int ORDER_6_QTY = 5;
     private static final int QTY_LESS_VAL = 6;
@@ -67,7 +67,7 @@ public class ReportingAndMetricsProcess {
         // -- Reports --
         // not completed order example
         ProductionOrder orderD = ProductionOrderFactory.createOrder(
-                context.getBoardA(), new OrderContext(ORDER_6_ID, ORDER_6_QTY, context.getSpecPcb()));
+                context.getStandardPcbBoard(), new OrderContext(ORDER_6_ID, ORDER_6_QTY, context.getSpecPcb()));
         context.getAllOrders().add(orderD);
 
         runReportingFacade();
@@ -123,18 +123,24 @@ public class ReportingAndMetricsProcess {
     }
 
     private void populateIteratorQueue(OrderCollection collection) {
-        ProductionOrder orderE = ProductionOrderFactory.createOrder(context.getBoardA(), new OrderContext(ITER_1_ID, ITER_1_QTY, context.getSpecPcb()));
-        ProductionOrder orderF = ProductionOrderFactory.createOrder(context.getElectronicBoardB(), new OrderContext(ITER_2_ID, ITER_2_QTY, context.getSpecElectronic()));
-        ProductionOrder orderG = ProductionOrderFactory.createOrder(context.getBoardA(), new OrderContext(ITER_3_ID, ITER_3_QTY, context.getSpecPcb()));
-        ProductionOrder orderH = ProductionOrderFactory.createOrder(context.getElectronicBoardB(), new OrderContext(ITER_4_ID, ITER_4_QTY, context.getSpecElectronic()));
-        ProductionOrder orderI = ProductionOrderFactory.createOrder(context.getBoardA(), new OrderContext(ITER_5_ID, ITER_5_QTY, context.getSpecPcb()));
-        ProductionOrder orderJ = ProductionOrderFactory.createOrder(context.getElectronicBoardB(), new OrderContext(ITER_6_ID, ITER_6_QTY, context.getSpecElectronic()));
+        ProductionOrder completedPcbOrder = ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
+                new OrderContext(ITER_1_ID, ITER_1_QTY, context.getSpecPcb()));
+        ProductionOrder completedElectronicOrder = ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
+                new OrderContext(ITER_2_ID, ITER_2_QTY, context.getSpecElectronic()));
+        ProductionOrder pendingPcbOrderSmall = ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
+                new OrderContext(ITER_3_ID, ITER_3_QTY, context.getSpecPcb()));
+        ProductionOrder pendingElectronicOrderLarge = ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
+                new OrderContext(ITER_4_ID, ITER_4_QTY, context.getSpecElectronic()));
+        ProductionOrder pendingPcbOrderMedium = ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
+                new OrderContext(ITER_5_ID, ITER_5_QTY, context.getSpecPcb()));
+        ProductionOrder pendingElectronicOrderMid = ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
+                new OrderContext(ITER_6_ID, ITER_6_QTY, context.getSpecElectronic()));
 
-        orderE.setStatus(OrderStatus.COMPLETED);
-        orderF.setStatus(OrderStatus.COMPLETED);
+        completedPcbOrder.setStatus(OrderStatus.COMPLETED);
+        completedElectronicOrder.setStatus(OrderStatus.COMPLETED);
 
-        collection.addOrder(orderE); collection.addOrder(orderF); collection.addOrder(orderG);
-        collection.addOrder(orderH); collection.addOrder(orderI); collection.addOrder(orderJ);
+        collection.addOrder(completedPcbOrder); collection.addOrder(completedElectronicOrder); collection.addOrder(pendingPcbOrderSmall);
+        collection.addOrder(pendingElectronicOrderLarge); collection.addOrder(pendingPcbOrderMedium); collection.addOrder(pendingElectronicOrderMid);
     }
 
     private void testOrderIteratorSearches() {
@@ -166,13 +172,13 @@ public class ReportingAndMetricsProcess {
         ReportFormatter formatter = new SimpleReportFormatter();
         ReportDispatcher dispatcher = new SimpleReportDispatcher();
 
-        generator.generateReport(context.getOrderA());
+        generator.generateReport(context.getPcbOrder());
 
-        String csvData = formatter.formatAsCsv(context.getOrderA());
+        String csvData = formatter.formatAsCsv(context.getPcbOrder());
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "Formatted data: " + csvData);
 
-        dispatcher.archiveReport(context.getOrderA());
-        dispatcher.sendReportByEmail(context.getOrderA());
+        dispatcher.archiveReport(context.getPcbOrder());
+        dispatcher.sendReportByEmail(context.getPcbOrder());
 
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- ISP 1 TEST END ---");
     }

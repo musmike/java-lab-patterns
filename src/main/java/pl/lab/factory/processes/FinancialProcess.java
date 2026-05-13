@@ -25,7 +25,7 @@ import java.util.List;
 
 public class FinancialProcess {
 
-    private static final String APP_CONTEXT = FinancialProcess.class.getName();
+    private static final String APP_CONTEXT = FinancialProcess.class.getSimpleName();
 
     private static final String ORDER_Z_ID = "ORD-Z";
     private static final int ORDER_Z_QTY = 150;
@@ -54,7 +54,7 @@ public class FinancialProcess {
     }
 
     private void validateContext() {
-        if (context.getOrderA() == null || context.getOrderB() == null || context.getOrderC() == null) {
+        if (context.getPcbOrder() == null || context.getStandardElectronicOrder() == null || context.getSuperElectronicOrder() == null) {
             throw new IllegalStateException("Orders must be initialized prior to Financial Process.");
         }
     }
@@ -75,7 +75,7 @@ public class FinancialProcess {
 
     private OrderInvoice initializeDraftInvoice() {
         ProductionOrder orderZ = ProductionOrderFactory.createOrder(
-                context.getBoardA(), new OrderContext(ORDER_Z_ID, ORDER_Z_QTY, context.getSpecPcb()));
+                context.getStandardPcbBoard(), new OrderContext(ORDER_Z_ID, ORDER_Z_QTY, context.getSpecPcb()));
         OrderInvoice invoice = new OrderInvoice(orderZ, new StandardPricingStrategy());
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "Initial draft amount: $" + CurrencyFormatter.format(invoice.getAmount()));
         context.setInvoiceA(invoice);
@@ -119,7 +119,7 @@ public class FinancialProcess {
     }
 
     private void cancelAdditionalInvoice() {
-        OrderInvoice invoiceB = new OrderInvoice(context.getOrderB(), new StandardPricingStrategy());
+        OrderInvoice invoiceB = new OrderInvoice(context.getStandardElectronicOrder(), new StandardPricingStrategy());
         invoiceB.cancel();
         context.setInvoiceB(invoiceB);
     }
@@ -127,8 +127,8 @@ public class FinancialProcess {
     private void testRevenueCalculation() {
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== SRP 1 TEST (REVENUE CALCULATION) ===");
 
-        OrderInvoice invoiceC = createPaidInvoice(context.getOrderC());
-        OrderInvoice invoiceD = createPaidInvoice(context.getOrderBaseClone());
+        OrderInvoice paidSuperElectronicInvoice = createPaidInvoice(context.getSuperElectronicOrder());
+        OrderInvoice paidClonedPcbInvoice = createPaidInvoice(context.getClonedPcbOrder());
 
         RevenuePolicy policy = new PaidInvoiceRevenuePolicy();
         RevenueFilter filter = new RevenueFilter(policy);
@@ -136,7 +136,7 @@ public class FinancialProcess {
 
         RevenueService revenueService = new RevenueService(filter, calculator);
 
-        List<OrderInvoice> allInvoices = List.of(context.getInvoiceA(), context.getInvoiceB(), invoiceC, invoiceD);
+        List<OrderInvoice> allInvoices = List.of(context.getInvoiceA(), context.getInvoiceB(), paidSuperElectronicInvoice, paidClonedPcbInvoice);
         double totalRevenue = revenueService.calculateRevenue(allInvoices);
 
         SystemLogger.INSTANCE.logInfo("REVENUE-REPORT", "Calculated Total Revenue: $" + CurrencyFormatter.format(totalRevenue));
@@ -155,11 +155,11 @@ public class FinancialProcess {
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== OCP 1 TEST (CUSTOMER LOYALTY POINTS) ===");
 
         CustomerLoyaltyService loyaltyService = new CustomerLoyaltyService();
-        loyaltyService.calculateByStrategy(context.getOrderA(), new VolumeBonusStrategy());
-        loyaltyService.calculateByTier(context.getOrderB(), TIER_GOLD);
+        loyaltyService.calculateByStrategy(context.getPcbOrder(), new VolumeBonusStrategy());
+        loyaltyService.calculateByTier(context.getStandardElectronicOrder(), TIER_GOLD);
 
         loyaltyService.registerTier(TIER_PLATINUM, new TierConfig(PLATINUM_BASE_PTS, PLATINUM_THRESH, PLATINUM_BONUS));
-        loyaltyService.calculateByTier(context.getOrderC(), TIER_PLATINUM);
+        loyaltyService.calculateByTier(context.getSuperElectronicOrder(), TIER_PLATINUM);
 
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== END OF OCP 1 TEST ===");
     }
@@ -184,10 +184,10 @@ public class FinancialProcess {
         UsaCustomsVisitor usaVisitor = new UsaCustomsVisitor();
         EuVatVisitor euVisitor = new EuVatVisitor();
 
-        context.getOrderA().accept(usaVisitor);
-        context.getOrderA().accept(euVisitor);
-        context.getOrderB().accept(usaVisitor);
-        context.getOrderB().accept(euVisitor);
+        context.getPcbOrder().accept(usaVisitor);
+        context.getPcbOrder().accept(euVisitor);
+        context.getStandardElectronicOrder().accept(usaVisitor);
+        context.getStandardElectronicOrder().accept(euVisitor);
 
         SystemLogger.INSTANCE.logInfo("TAX-SUMMARY", "Total USA Customs expected: $" + CurrencyFormatter.format(usaVisitor.getTotalCustomsTax()));
         SystemLogger.INSTANCE.logInfo("TAX-SUMMARY", "Total EU VAT expected: $" + CurrencyFormatter.format(euVisitor.getTotalVat()));
@@ -201,10 +201,10 @@ public class FinancialProcess {
         RushOrderPricingStrategy rushPricingDerived = new RushOrderPricingStrategy();
         StandardPricingStrategy rushPricingBaseType = new RushOrderPricingStrategy();
 
-        testPriceCalculation(standardPricing, context.getOrderA());
-        testPriceCalculation(holidayPricing, context.getOrderA());
-        testPriceCalculation(rushPricingDerived, context.getOrderA());
-        testPriceCalculation(rushPricingBaseType, context.getOrderA());
+        testPriceCalculation(standardPricing, context.getPcbOrder());
+        testPriceCalculation(holidayPricing, context.getPcbOrder());
+        testPriceCalculation(rushPricingDerived, context.getPcbOrder());
+        testPriceCalculation(rushPricingBaseType, context.getPcbOrder());
     }
 
     private void testPriceCalculation(StandardPricingStrategy strategy, ProductionOrder order) {

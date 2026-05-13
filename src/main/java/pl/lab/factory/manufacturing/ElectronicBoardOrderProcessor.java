@@ -8,24 +8,24 @@ import pl.lab.factory.orders.ProductionOrder;
 
 public class ElectronicBoardOrderProcessor extends OrderProcessor {
 
-    private final BoardProducer pcbProducer;
+    private final BoardProducer boardProducer;
 
     public ElectronicBoardOrderProcessor() {
-        this.pcbProducer = BoardProducerFactory.createStandardProducer();
+        this.boardProducer = BoardProducerFactory.createStandardProducer();
     }
 
     @Override
     protected void produceUnit(ProductionOrder order) throws InterruptedException {
-        BaseElectronicBoard eb = ((BaseElectronicBoardProductionOrder) order).getBaseElectronicBoard();
+        BaseElectronicBoard electronicBoard = ((BaseElectronicBoardProductionOrder) order).getBaseElectronicBoard();
 
-        buildBaseBoard(eb);
-        solderComponents(eb);
-        assembleBoard(eb);
-        installFirmware(eb);
+        buildBaseBoard(electronicBoard);
+        solderComponents(electronicBoard);
+        assembleBoard(electronicBoard);
+        installFirmware(electronicBoard);
     }
 
     private void buildBaseBoard(BaseElectronicBoard board) throws InterruptedException {
-        pcbProducer.produce(board.getBaseBoard());
+        boardProducer.produce(board.getBaseBoard());
         SystemLogger.INSTANCE.logInfo("ElectronicBoardProcessor",
                 "    Building Base Board: " + board.getBaseBoard());
     }

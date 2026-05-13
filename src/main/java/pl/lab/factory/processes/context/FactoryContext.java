@@ -14,33 +14,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FactoryContext {
-    private BaseBoard boardA;
-    private BaseElectronicBoard electronicBoardA;
-    private BaseElectronicBoard electronicBoardB;
+
+    private BaseBoard standardPcbBoard;
+    private BaseElectronicBoard highlyDependentElectronicBoard;
+    private BaseElectronicBoard hotfixElectronicBoard;
+
     private OrderSpecification specPcb;
     private OrderSpecification specElectronic;
-    private ProductionOrder orderA;
-    private ProductionOrder orderB;
-    private ProductionOrder orderC;
-    private ProductionOrder orderBaseClone;
-    private ProductionOrder orderElectronicClone;
+
+    private ProductionOrder pcbOrder;
+    private ProductionOrder standardElectronicOrder;
+    private ProductionOrder superElectronicOrder;
+    private ProductionOrder clonedPcbOrder;
+    private ProductionOrder clonedElectronicOrder;
+
     private List<ProductionOrder> allOrders = new ArrayList<>();
+
     private OrderInvoice invoiceA;
     private OrderInvoice invoiceB;
+
     private OrderProcessor pcbProcessor;
     private OrderProcessor electronicBoardProcessor;
+
     private WarehouseAdapter warehouseAdapter;
     private WarehouseService warehouse;
+
     private ProductionDepartment productionDepartment;
 
-    public BaseBoard getBoardA() { return boardA; }
-    public void setBoardA(BaseBoard boardA) { this.boardA = boardA; }
+    public BaseBoard getStandardPcbBoard() { return standardPcbBoard; }
+    public void setStandardPcbBoard(BaseBoard standardPcbBoard) { this.standardPcbBoard = standardPcbBoard; }
 
-    public BaseElectronicBoard getElectronicBoardA() { return electronicBoardA; }
-    public void setElectronicBoardA(BaseElectronicBoard electronicBoardA) { this.electronicBoardA = electronicBoardA; }
+    public BaseElectronicBoard getHighlyDependentElectronicBoard() { return highlyDependentElectronicBoard; }
+    public void setHighlyDependentElectronicBoard(BaseElectronicBoard highlyDependentElectronicBoard) { this.highlyDependentElectronicBoard = highlyDependentElectronicBoard; }
 
-    public BaseElectronicBoard getElectronicBoardB() { return electronicBoardB; }
-    public void setElectronicBoardB(BaseElectronicBoard electronicBoardB) { this.electronicBoardB = electronicBoardB; }
+    public BaseElectronicBoard getHotfixElectronicBoard() { return hotfixElectronicBoard; }
+    public void setHotfixElectronicBoard(BaseElectronicBoard hotfixElectronicBoard) { this.hotfixElectronicBoard = hotfixElectronicBoard; }
 
     public OrderSpecification getSpecPcb() { return specPcb; }
     public void setSpecPcb(OrderSpecification specPcb) { this.specPcb = specPcb; }
@@ -48,20 +56,20 @@ public class FactoryContext {
     public OrderSpecification getSpecElectronic() { return specElectronic; }
     public void setSpecElectronic(OrderSpecification specElectronic) { this.specElectronic = specElectronic; }
 
-    public ProductionOrder getOrderA() { return orderA; }
-    public void setOrderA(ProductionOrder orderA) { this.orderA = orderA; }
+    public ProductionOrder getPcbOrder() { return pcbOrder; }
+    public void setPcbOrder(ProductionOrder pcbOrder) { this.pcbOrder = pcbOrder; }
 
-    public ProductionOrder getOrderB() { return orderB; }
-    public void setOrderB(ProductionOrder orderB) { this.orderB = orderB; }
+    public ProductionOrder getStandardElectronicOrder() { return standardElectronicOrder; }
+    public void setStandardElectronicOrder(ProductionOrder standardElectronicOrder) { this.standardElectronicOrder = standardElectronicOrder; }
 
-    public ProductionOrder getOrderC() { return orderC; }
-    public void setOrderC(ProductionOrder orderC) { this.orderC = orderC; }
+    public ProductionOrder getSuperElectronicOrder() { return superElectronicOrder; }
+    public void setSuperElectronicOrder(ProductionOrder superElectronicOrder) { this.superElectronicOrder = superElectronicOrder; }
 
-    public ProductionOrder getOrderBaseClone() { return orderBaseClone; }
-    public void setOrderBaseClone(ProductionOrder orderBaseClone) { this.orderBaseClone = orderBaseClone; }
+    public ProductionOrder getClonedPcbOrder() { return clonedPcbOrder; }
+    public void setClonedPcbOrder(ProductionOrder clonedPcbOrder) { this.clonedPcbOrder = clonedPcbOrder; }
 
-    public ProductionOrder getOrderElectronicClone() { return orderElectronicClone; }
-    public void setOrderElectronicClone(ProductionOrder orderElectronicClone) { this.orderElectronicClone = orderElectronicClone; }
+    public ProductionOrder getClonedElectronicOrder() { return clonedElectronicOrder; }
+    public void setClonedElectronicOrder(ProductionOrder clonedElectronicOrder) { this.clonedElectronicOrder = clonedElectronicOrder; }
 
     public List<ProductionOrder> getAllOrders() { return allOrders; }
     public void setAllOrders(List<ProductionOrder> allOrders) { this.allOrders = allOrders; }

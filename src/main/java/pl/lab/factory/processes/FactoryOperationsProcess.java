@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 public class FactoryOperationsProcess {
 
-    private static final String APP_CONTEXT = FactoryOperationsProcess.class.getName();
+    private static final String APP_CONTEXT = FactoryOperationsProcess.class.getSimpleName();
     private static final String UNAPPROVED_ORD_1 = "ORD-999";
     private static final String UNAPPROVED_ORD_2 = "ORD-888";
     private static final String CLIENT_EMAIL = "contact@acmecorp.com";
@@ -49,7 +49,7 @@ public class FactoryOperationsProcess {
     }
 
     private void validateContext() {
-        if (context.getPcbProcessor() == null || context.getOrderA() == null) {
+        if (context.getPcbProcessor() == null || context.getPcbOrder() == null) {
             throw new IllegalStateException("Required processors and orders must be present.");
         }
     }
@@ -95,8 +95,8 @@ public class FactoryOperationsProcess {
         OrderObserver emailNotifier = new ClientEmailNotifier(CLIENT_EMAIL);
         OrderObserver globalErpSync = new ErpSystemUpdater();
 
-        context.getOrderA().addObserver(emailNotifier);
-        context.getOrderA().addObserver(globalErpSync);
+        context.getPcbOrder().addObserver(emailNotifier);
+        context.getPcbOrder().addObserver(globalErpSync);
     }
 
     private void testOrderQueue() throws InterruptedException {
@@ -115,11 +115,11 @@ public class FactoryOperationsProcess {
 
     private void executeQueueUndoRedo(ProductionQueue queue, QueueCommandInvoker invoker) {
         // Invoker & Concrete Commands
-        invoker.executeCommand(new AddOrderCommand(context.getOrderA()));
-        invoker.executeCommand(new AddOrderCommand(context.getOrderB()));
+        invoker.executeCommand(new AddOrderCommand(context.getPcbOrder()));
+        invoker.executeCommand(new AddOrderCommand(context.getStandardElectronicOrder()));
         queue.printQueue(); // State: [ orderA, orderB]
 
-        invoker.executeCommand(new RemoveOrderCommand(context.getOrderA()));
+        invoker.executeCommand(new RemoveOrderCommand(context.getPcbOrder()));
         queue.printQueue(); // State:[ orderB ]
 
         invoker.undo();

@@ -6,9 +6,13 @@ import pl.lab.factory.orders.ProductionOrder;
 // Wzorzec Bridge 1 (Konkretny Implementor — konsola)
 // Formatuje raport jako czytelny tekst na standardowe wyjście.
 public class ConsoleReportFormatter implements ReportFormatter {
-
     private static final String REPORT_SEPARATOR = "========================================";
     private static final String REPORT_SUB_SEPARATOR = "----------------------------------------";
+    
+    private static final int ORDER_ID_WIDTH = 10;
+    private static final int ORDER_TYPE_WIDTH = 45;
+    private static final int ORDER_QTY_WIDTH = 3;
+    private static final String ORDER_FORMAT = "  [%-" + ORDER_ID_WIDTH + "s] %-" + ORDER_TYPE_WIDTH + "s qty: %" + ORDER_QTY_WIDTH + "d  status: %s%n";
 
     @Override
     public void writeHeader(String title) {
@@ -19,8 +23,7 @@ public class ConsoleReportFormatter implements ReportFormatter {
 
     @Override
     public void writeOrder(ProductionOrder order) {
-        System.out.printf("  [%-10s] %-45s qty: %3d  status: %s%n",
-                order.getId(), order.getClass().getSimpleName(), order.getQuantity(), order.getStatus());
+        System.out.printf(ORDER_FORMAT, order.getId(), order.getClass().getSimpleName(), order.getQuantity(), order.getStatus());
     }
 
     @Override

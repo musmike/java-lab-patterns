@@ -94,11 +94,11 @@ public class ComponentGroup implements BaseComponent, SignalProcessorComponent, 
     }
 
     @Override
-    public void accept(BoardVisitor v) {
-        v.visit(this);
-        for(BaseComponent c : components){
-            if(c instanceof VisitableComponent vc){
-                vc.accept(v);
+    public void accept(BoardVisitor boardVisitor) {
+        boardVisitor.visit(this);
+        for(BaseComponent component : components){
+            if(component instanceof VisitableComponent visitableComponent){
+                visitableComponent.accept(boardVisitor);
             }
         }
     }

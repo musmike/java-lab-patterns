@@ -51,56 +51,40 @@ public class QXCBoard extends BaseBoard {
 
     private void buildComponentsTopology() {
         ComponentGroup mainGroup = new ComponentGroup("SCQ");
-
-        mainGroup.add(new Resistor(
-                ComponentDefinitionFactory.getResistorDefinition(MAIN_RESISTOR_1_OHMS, MAIN_RESISTOR_1_COST),
-                MAIN_RESISTOR_1_POS
-        ));
-        mainGroup.add(new Capacitor(
-                ComponentDefinitionFactory.getCapacitorDefinition(MAIN_CAPACITOR_FARADS, MAIN_CAPACITOR_COST),
-                MAIN_CAPACITOR_POS
-        ));
-        mainGroup.add(new Resistor(
-                ComponentDefinitionFactory.getResistorDefinition(MAIN_RESISTOR_2_OHMS, MAIN_RESISTOR_2_COST),
-                MAIN_RESISTOR_2_POS
-        ));
+        addMainResistors(mainGroup);
+        addMainCapacitors(mainGroup);
 
         ComponentGroup subGroup = new ComponentGroup("sub CAWD");
-        subGroup.add(new Inductor(
-                ComponentDefinitionFactory.getInductorDefinition(SUB_INDUCTOR_HENRIES, SUB_INDUCTOR_COST),
-                SUB_INDUCTOR_POS
-        ));
+        addSubInductors(subGroup);
 
         mainGroup.add(subGroup);
         this.components.add(mainGroup);
     }
 
-    @Override
-    public double getWorkingVoltage() { return workingVoltage; }
+    private void addMainResistors(ComponentGroup group) {
+        group.add(new Resistor(
+                ComponentDefinitionFactory.getResistorDefinition(MAIN_RESISTOR_1_OHMS, MAIN_RESISTOR_1_COST),
+                MAIN_RESISTOR_1_POS
+        ));
+        group.add(new Resistor(
+                ComponentDefinitionFactory.getResistorDefinition(MAIN_RESISTOR_2_OHMS, MAIN_RESISTOR_2_COST),
+                MAIN_RESISTOR_2_POS
+        ));
+    }
 
-    @Override
-    public BoardMaterials getBoardMaterial() { return boardMaterial; }
+    private void addMainCapacitors(ComponentGroup group) {
+        group.add(new Capacitor(
+                ComponentDefinitionFactory.getCapacitorDefinition(MAIN_CAPACITOR_FARADS, MAIN_CAPACITOR_COST),
+                MAIN_CAPACITOR_POS
+        ));
+    }
 
-    @Override
-    public SolderMaterials getSolderType() { return solderType; }
-
-    @Override
-    public double getThickness() { return thickness; }
-
-    @Override
-    public int getWidth() { return width; }
-
-    @Override
-    public int getLength() { return length; }
-
-    @Override
-    public int getBoardColor() { return boardColor; }
-
-    @Override
-    public int getLayers() { return layers; }
-
-    @Override
-    public boolean isReady() { return circuitsPrinted && soldered; }
+    private void addSubInductors(ComponentGroup group) {
+        group.add(new Inductor(
+                ComponentDefinitionFactory.getInductorDefinition(SUB_INDUCTOR_HENRIES, SUB_INDUCTOR_COST),
+                SUB_INDUCTOR_POS
+        ));
+    }
 
     @Override
     public String toString() {

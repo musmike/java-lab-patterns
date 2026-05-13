@@ -1,5 +1,7 @@
 package pl.lab.factory.warehouse.shipping;
 
+import pl.lab.factory.SystemLogger;
+import pl.lab.factory.orders.OrderStatus;
 import pl.lab.factory.orders.ProductionOrder;
 import pl.lab.factory.warehouse.packing.PackageImplementor;
 
@@ -15,7 +17,14 @@ public abstract class ShippingStrategy {
         this.implementor = implementor;
     }
 
-    public abstract void shipOrder(ProductionOrder order);
+    public void shipOrder(ProductionOrder order) {
+        SystemLogger.INSTANCE.logInfo(getShippingLogPrefix(), "Processing order " + order.getId());
+        implementor.packOrder(order);
+        order.setStatus(OrderStatus.SHIPPED);
+        SystemLogger.INSTANCE.logInfo(getShippingLogPrefix(), "Order " + order.getId() + " sent.");
+    }
+
+    protected abstract String getShippingLogPrefix();
 }
 // Koniec, Tydzień 8
 // Zasada odwracania zależności (DIP)

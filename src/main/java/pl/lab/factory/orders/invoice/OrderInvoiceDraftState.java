@@ -17,11 +17,14 @@ public class OrderInvoiceDraftState implements OrderInvoiceState {
 
     @Override
     public void applyDiscount(OrderInvoice invoice, double percentage) {
-        double currentAmount = invoice.getAmount();
-        double deduction = currentAmount * (percentage / PricingStrategy.PERCENTAGE_DIVISOR);
-        invoice.setAmount(currentAmount - deduction);
+        double deduction = calculateDeduction(invoice.getAmount(), percentage);
+        invoice.setAmount(invoice.getAmount() - deduction);
         SystemLogger.INSTANCE.logInfo("INVOICE",
-                "Discount of " + percentage + "% applied to draft. New amount: $" + CurrencyFormatter.format(invoice.getAmount()));
+            "Discount of " + percentage + "% applied to draft. New amount: $" + CurrencyFormatter.format(invoice.getAmount()));
+    }
+
+    private double calculateDeduction(double currentAmount, double percentage) {
+        return currentAmount * (percentage / PricingStrategy.PERCENTAGE_DIVISOR);
     }
 
     @Override

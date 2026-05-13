@@ -10,18 +10,9 @@ import pl.lab.factory.warehouse.packing.PackageImplementor;
 
 // Tydzień 8 - Stosowanie podstawienia Liskov i odwracania zależności, segregacja iterfejsów
 // Zasada odwracania zależności (DIP) (klasa pochodna)
-public class PriorityShipping extends ShippingStrategy{
-    public PriorityShipping(PackageImplementor implementor){
-        super(implementor);
-    }
-
-    @Override
-    public void shipOrder(ProductionOrder order){
-        SystemLogger.INSTANCE.logInfo("[PRIORITY SHIPPING]", "Processing order " + order.getId());
-        implementor.packOrder(order);
-        order.setStatus(OrderStatus.SHIPPED);
-        SystemLogger.INSTANCE.logInfo("[PRIORITY SHIPPING]", "Order " + order.getId() + " sent.");
-    }
+public class PriorityShipping extends ShippingStrategy {
+    public PriorityShipping(PackageImplementor implementor) { super(implementor); }
+    @Override protected String getShippingLogPrefix() { return "[PRIORITY SHIPPING]"; }
 }
 // Koniec, Tydzień 8
 // Zasada odwracania zależności (DIP)

@@ -56,33 +56,6 @@ public class StandardBoard extends BaseBoard {
     }
 
     @Override
-    public double getWorkingVoltage() { return workingVoltage; }
-
-    @Override
-    public BoardMaterials getBoardMaterial() { return boardMaterial; }
-
-    @Override
-    public SolderMaterials getSolderType() { return solderType; }
-
-    @Override
-    public double getThickness() { return thickness; }
-
-    @Override
-    public int getWidth() { return width; }
-
-    @Override
-    public int getLength() { return length; }
-
-    @Override
-    public int getBoardColor() { return boardColor; }
-
-    @Override
-    public int getLayers() { return layers; }
-
-    @Override
-    public boolean isReady() { return circuitsPrinted && soldered; }
-
-    @Override
     public String toString() {
         return "StandardBoard{" + width + "x" + length + "mm, " + layers + " layers, " + boardMaterial + "}";
     }

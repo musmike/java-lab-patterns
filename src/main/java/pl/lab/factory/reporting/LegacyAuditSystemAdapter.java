@@ -15,12 +15,13 @@ public class LegacyAuditSystemAdapter implements BoardReporter {
 
     @Override
     public void report(ProductionOrder order) {
-        AuditData data = new AuditData(
-                order.getId(),
-                order.getClass().getSimpleName(),
-                order.getQuantity(),
-                order.getStatus().name()
-        );
+        AuditData data = new AuditData.Builder()
+                .orderId(order.getId())
+                .boardType(order.getClass().getSimpleName())
+                .quantity(order.getQuantity())
+                .statusCode(order.getStatus().name())
+                .build();
+                
         legacyAuditSystem.logProduction(data);
     }
 }

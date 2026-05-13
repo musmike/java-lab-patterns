@@ -3,7 +3,7 @@ package pl.lab.factory.pcbboards.monitoring;
 // wzorzec Visitor 3 - interfest klas wizytowanych
 // pozwala określić proces wizytacji klasy
 public interface VisitableBoard {
-    void accept(BoardVisitor v);
+    void accept(BoardVisitor boardVisitor);
 }
 //visitor 3
 //koniec tydzien 6

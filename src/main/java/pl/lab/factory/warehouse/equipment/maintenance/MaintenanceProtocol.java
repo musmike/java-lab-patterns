@@ -27,29 +27,40 @@ public abstract class MaintenanceProtocol {
         serviceDurations.put(type, minutes);
     }
 
-    public final void executeService(WarehouseEquipment equipment, String serviceType){
-        int duration = serviceDurations.getOrDefault(serviceType, DEFAULT_SERVICE_DURATION_MINUTES);
+    public final void executeService(WarehouseEquipment equipment, String serviceType) {
+        prepareForService(equipment, serviceType);
+        performServiceSafely(equipment);
+    }
 
+    private void prepareForService(WarehouseEquipment equipment, String serviceType) {
+        int duration = serviceDurations.getOrDefault(serviceType, DEFAULT_SERVICE_DURATION_MINUTES);
         SystemLogger.INSTANCE.logInfo("MAINTENANCE",
                 "Starting maintenance for: " + equipment.getName() + " (Est. time: " + duration + "min)");
-
+        
         equipment.setOperational(false);
+    }
 
-
-        try{
-            performDiagnostics(equipment);
-            applyTechnicalService(equipment);
-
-            equipment.resetMaintenance();
-
-            SystemLogger.INSTANCE.logInfo("SERVICE", equipment.getName() + " " + equipment.getId() + " stats reset and verified.");
-        }catch (Exception e){
+    private void performServiceSafely(WarehouseEquipment equipment) {
+        try {
+            executeServiceSteps(equipment);
+        } catch (Exception e) {
             SystemLogger.INSTANCE.logError("SERVICE", "Critical failure during service of " + equipment.getId());
-        }finally {
-            equipment.setOperational(true);
-            SystemLogger.INSTANCE.logInfo("SERVICE", equipment.getName() + " " + equipment.getId() + " has been returned.");
+        } finally {
+            finalizeService(equipment);
         }
+    }
 
+    private void executeServiceSteps(WarehouseEquipment equipment) {
+        performDiagnostics(equipment);
+        applyTechnicalService(equipment);
+        equipment.resetMaintenance();
+        
+        SystemLogger.INSTANCE.logInfo("SERVICE", equipment.getName() + " " + equipment.getId() + " stats reset and verified.");
+    }
+
+    private void finalizeService(WarehouseEquipment equipment) {
+        equipment.setOperational(true);
+        SystemLogger.INSTANCE.logInfo("SERVICE", equipment.getName() + " " + equipment.getId() + " has been returned.");
     }
 
     protected abstract void performDiagnostics(WarehouseEquipment e);

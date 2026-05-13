@@ -61,11 +61,11 @@ public class FactoryOperationsProcess {
     }
 
     private WarehouseService createWarehouseProxy() {
-        Set<String> unapproved = Set.of(UNAPPROVED_ORDER_1, UNAPPROVED_ORDER_2);
+        Set<String> unapprovedOrders = Set.of(UNAPPROVED_ORDER_1, UNAPPROVED_ORDER_2);
         LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
-        WarehouseAdapter adapter = new WarehouseAdapter(legacyWarehouse);
-        context.setWarehouseAdapter(adapter);
-        return new WarehouseAccessProxy(adapter, unapproved);
+        WarehouseAdapter warehouseAdapter = new WarehouseAdapter(legacyWarehouse);
+        context.setWarehouseAdapter(warehouseAdapter);
+        return new WarehouseAccessProxy(warehouseAdapter, unapprovedOrders);
     }
 
     private BoardReporter createBoardReporter() {
@@ -77,84 +77,88 @@ public class FactoryOperationsProcess {
     private void wireMediatorWithDepartments(WarehouseService proxyWarehouse, BoardReporter boardReporter) {
         CentralControlMediator mediator = new CentralControlMediator();
 
-        ProductionDepartment productionDept = new ProductionDepartment(mediator, context.getPcbProcessor(), context.getElectronicBoardProcessor());
-        WarehouseDepartment warehouseDept = new WarehouseDepartment(mediator, proxyWarehouse);
-        ReportingDepartment reportingDept = new ReportingDepartment(mediator, boardReporter);
+        ProductionDepartment productionDepartment = new ProductionDepartment(mediator, context.getPcbProcessor(), context.getElectronicBoardProcessor());
+        WarehouseDepartment warehouseDepartment = new WarehouseDepartment(mediator, proxyWarehouse);
+        ReportingDepartment reportingDepartment = new ReportingDepartment(mediator, boardReporter);
 
-        mediator.setProductionDepartment(productionDept);
-        mediator.setWarehouseDepartment(warehouseDept);
-        mediator.setReportingDepartment(reportingDept);
+        mediator.setProductionDepartment(productionDepartment);
+        mediator.setWarehouseDepartment(warehouseDepartment);
+        mediator.setReportingDepartment(reportingDepartment);
 
         context.setWarehouse(proxyWarehouse);
-        context.setProductionDepartment(productionDept);
+        context.setProductionDepartment(productionDepartment);
     }
 
     private void testOrderObservers() {
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== ORDER OBSERVER 1 PATTERN TEST ===");
         OrderObserver emailNotifier = new ClientEmailNotifier(CLIENT_EMAIL);
-        OrderObserver globalErpSync = new ErpSystemUpdater();
+        OrderObserver globalErpSynchronizer = new ErpSystemUpdater();
 
         context.getPcbOrder().addObserver(emailNotifier);
-        context.getPcbOrder().addObserver(globalErpSync);
+        context.getPcbOrder().addObserver(globalErpSynchronizer);
     }
 
     private void testOrderQueue() throws InterruptedException {
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== COMMAND PATTERN TEST (UNDO/REDO FOR QUEUE) ===");
 
-        ProductionQueue queue = ProductionQueue.getInstance();
-        QueueCommandInvoker invoker = new QueueCommandInvoker();
+        ProductionQueue productionQueue = ProductionQueue.getInstance();
+        QueueCommandInvoker queueCommandInvoker = new QueueCommandInvoker();
 
-        executeQueueUndoRedo(queue, invoker);
-        populateQueueWithAllOrders(queue, invoker);
+        executeQueueUndoRedo(productionQueue, queueCommandInvoker);
+        populateQueueWithAllOrders(productionQueue, queueCommandInvoker);
 
         TimeUnit.SECONDS.sleep(QUEUE_SLEEP_SECONDS);
-        executeWeeklyPlan(queue);
+        executeWeeklyPlan(productionQueue);
     }
 
-    private void executeQueueUndoRedo(ProductionQueue queue, QueueCommandInvoker invoker) {
-        demonstrateAddAndRemove(queue, invoker);
-        demonstrateClearAndUndo(queue, invoker);
+    private void executeQueueUndoRedo(ProductionQueue productionQueue, QueueCommandInvoker queueCommandInvoker) {
+        demonstrateAddAndRemove(productionQueue, queueCommandInvoker);
+        demonstrateClearAndUndo(productionQueue, queueCommandInvoker);
     }
 
-    private void demonstrateAddAndRemove(ProductionQueue queue, QueueCommandInvoker invoker) {
-        invoker.executeCommand(new AddOrderCommand(context.getPcbOrder()));
-        invoker.executeCommand(new AddOrderCommand(context.getStandardElectronicOrder()));
-        queue.printQueue();
+    private void demonstrateAddAndRemove(ProductionQueue productionQueue, QueueCommandInvoker queueCommandInvoker) {
+        queueCommandInvoker.executeCommand(new AddOrderCommand(context.getPcbOrder()));
+        queueCommandInvoker.executeCommand(new AddOrderCommand(context.getStandardElectronicOrder()));
+        assertQueueState(productionQueue);
 
-        invoker.executeCommand(new RemoveOrderCommand(context.getPcbOrder()));
-        queue.printQueue();
+        queueCommandInvoker.executeCommand(new RemoveOrderCommand(context.getPcbOrder()));
+        assertQueueState(productionQueue);
 
-        invoker.undo();
-        queue.printQueue();
+        queueCommandInvoker.undo();
+        assertQueueState(productionQueue);
     }
 
-    private void demonstrateClearAndUndo(ProductionQueue queue, QueueCommandInvoker invoker) {
-        OrderQueueCommand clearAll = new ClearQueueCommand();
+    private void demonstrateClearAndUndo(ProductionQueue productionQueue, QueueCommandInvoker queueCommandInvoker) {
+        OrderQueueCommand clearAllCommand = new ClearQueueCommand();
 
-        invoker.executeCommand(clearAll);
-        queue.printQueue();
+        queueCommandInvoker.executeCommand(clearAllCommand);
+        assertQueueState(productionQueue);
 
-        invoker.undo();
-        queue.printQueue();
+        queueCommandInvoker.undo();
+        assertQueueState(productionQueue);
 
-        invoker.executeCommand(clearAll);
-        queue.printQueue();
+        queueCommandInvoker.executeCommand(clearAllCommand);
+        assertQueueState(productionQueue);
+    }
+    
+    private void assertQueueState(ProductionQueue productionQueue) {
+        productionQueue.printQueue();
     }
 
-    private void populateQueueWithAllOrders(ProductionQueue queue, QueueCommandInvoker invoker) {
-        invoker.executeCommand(new AddMultipleOrdersCommand(context.getAllOrders()));
-        queue.printQueue(); // State: allOrders
+    private void populateQueueWithAllOrders(ProductionQueue productionQueue, QueueCommandInvoker queueCommandInvoker) {
+        queueCommandInvoker.executeCommand(new AddMultipleOrdersCommand(context.getAllOrders()));
+        assertQueueState(productionQueue); 
     }
 
-    private void executeWeeklyPlan(ProductionQueue queue) throws InterruptedException {
-        ProductionBatch weeklyPlan = new ProductionBatch(BATCH_PLAN_NAME);
+    private void executeWeeklyPlan(ProductionQueue productionQueue) throws InterruptedException {
+        ProductionBatch productionBatch = new ProductionBatch(BATCH_PLAN_NAME);
 
-        while (!queue.isEmpty()) {
-            ProductionOrder order = queue.nextOrder();
-            weeklyPlan.add(new SingleOrderTask(order, context.getProductionDepartment()));
+        while (!productionQueue.isEmpty()) {
+            ProductionOrder order = productionQueue.nextOrder();
+            productionBatch.add(new SingleOrderTask(order, context.getProductionDepartment()));
         }
 
-        System.out.println(weeklyPlan.getDescription(""));
-        weeklyPlan.execute();
+        System.out.println(productionBatch.getDescription(""));
+        productionBatch.execute();
     }
 }

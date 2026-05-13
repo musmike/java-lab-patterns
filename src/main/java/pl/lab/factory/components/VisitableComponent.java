@@ -5,7 +5,7 @@ import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
 //Tydzien 8 - Segregacja interfejsów
 //interfejs powstaly przez rozbicie duzego interfejsu bazowego komponentow
 public interface VisitableComponent {
-    public abstract void accept(BoardVisitor v);
+    public abstract void accept(BoardVisitor boardVisitor);
 }
 // Koniec, Tydzień 8
 // Wzorzec ISP 3

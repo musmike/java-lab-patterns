@@ -40,14 +40,17 @@ public class OrderPreparationProcess {
     }
 
     public void execute() {
+        initializeProcessors();
         createOrderSpecifications();
         createFinalOrders();
     }
 
-    private void createOrderSpecifications() {
+    private void initializeProcessors() {
         context.setPcbProcessor(new BaseBoardOrderProcessor());
         context.setElectronicBoardProcessor(new ElectronicBoardOrderProcessor());
+    }
 
+    private void createOrderSpecifications() {
         OrderSpecification baseSpec = createBaseSpec();
         context.setSpecPcb(createPcbSpec(baseSpec));
         context.setSpecElectronic(createElectronicSpec(baseSpec));
@@ -85,23 +88,32 @@ public class OrderPreparationProcess {
     }
 
     private void createBaseOrders() {
+        createPcbOrder();
+        createStandardElectronicOrder();
+        createSuperElectronicOrder();
+    }
+
+    private void createPcbOrder() {
         ProductionOrder pcbOrder = ProductionOrderFactory.createOrder(
             context.getStandardPcbBoard(),
             new OrderContext(PCB_ORDER_ID, PCB_ORDER_QUANTITY, context.getSpecPcb())
         );
+        context.setPcbOrder(pcbOrder);
+    }
 
+    private void createStandardElectronicOrder() {
         ProductionOrder standardElectronicOrder = ProductionOrderFactory.createOrder(
             context.getHighlyDependentElectronicBoard(),
             new OrderContext(STANDARD_ELECTRONIC_ORDER_ID, STANDARD_ELECTRONIC_ORDER_QUANTITY, context.getSpecElectronic())
         );
+        context.setStandardElectronicOrder(standardElectronicOrder);
+    }
 
+    private void createSuperElectronicOrder() {
         ProductionOrder superElectronicOrder = ProductionOrderFactory.createOrder(
             context.getHotfixElectronicBoard(),
             new OrderContext(SUPER_ELECTRONIC_ORDER_ID, SUPER_ELECTRONIC_ORDER_QUANTITY, context.getSpecElectronic())
         );
-
-        context.setPcbOrder(pcbOrder);
-        context.setStandardElectronicOrder(standardElectronicOrder);
         context.setSuperElectronicOrder(superElectronicOrder);
     }
 

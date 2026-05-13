@@ -8,18 +8,18 @@ import pl.lab.factory.pcbboards.monitoring.reporting.ProcessingReport;
 // obserwator otrzymujący zmiany przy każdym etapie produkcji płytki
 public class ProcessObserver implements BoardObserver {
     ProcessingReport reportGenerator = new ProcessingReport();
-    BaseBoard b;
+    BaseBoard baseBoard;
 
     @Override
     public void update() {
-        reportGenerator.generate(b);
+        reportGenerator.generate(baseBoard);
     }
 
     @Override
     public void setBoard(BaseBoard board) {
-        b = board;
+        baseBoard = board;
         try{
-            b.register(this);
+            baseBoard.register(this);
         } catch (Exception e){
             System.out.println(e.getMessage());
         }

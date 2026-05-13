@@ -115,8 +115,8 @@ public class WarehouseManagementProcess {
     }
 
     private void executeShippingCommands() {
-        PackageImplementor cardboardBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PACKAGE_CARDBOARD)));
-        PackageImplementor plasticBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PACKAGE_PLASTIC)));
+        PackageImplementor cardboardBoxPackaging = createCardboardPackaging();
+        PackageImplementor plasticBoxPackaging = createPlasticPackaging();
 
         ShippingStrategy standardShipping = new StandardShipping(cardboardBoxPackaging);
         ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);
@@ -135,6 +135,15 @@ public class WarehouseManagementProcess {
         shippingManager.undoLastAction();
         context.getWarehouse().printWarehouse();
     }
+
+    private PackageImplementor createCardboardPackaging() {
+        return new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PACKAGE_CARDBOARD)));
+    }
+
+    private PackageImplementor createPlasticPackaging() {
+        return new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PACKAGE_PLASTIC)));
+    }
+
 
     private void testWarehouseFiltering() {
         OrderExpression isCompleted = new OrderStatusExpression(OrderStatus.COMPLETED);

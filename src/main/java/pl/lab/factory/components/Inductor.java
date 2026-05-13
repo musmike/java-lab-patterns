@@ -50,8 +50,8 @@ public class Inductor implements BaseComponent, PositionableComponent, SignalPro
         return definition.getCost();
     }
     @Override
-    public void accept(BoardVisitor v) {
-        v.visit(this);
+    public void accept(BoardVisitor boardVisitor) {
+        boardVisitor.visit(this);
     }
 }
 // Koniec, Tydzień 3

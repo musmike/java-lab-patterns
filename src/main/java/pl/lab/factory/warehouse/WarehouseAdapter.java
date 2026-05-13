@@ -8,15 +8,18 @@ import pl.lab.factory.orders.ProductionOrder;
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Adapter 2 (Konkretny Adapter)
 public class WarehouseAdapter implements WarehouseService {
-    private final LegacyWarehouseSystem legacyWarehouse;
+
+    private static final String LOG_CONTEXT = "WAREHOUSE";
+
+    private final LegacyWarehouseSystem legacyWarehouseSystem;
 
     private final WarehouseSection mainWarehouse;
 
     private final WarehouseSection baseBoardZone;
     private final WarehouseSection electronicBoardZone;
 
-    public WarehouseAdapter(LegacyWarehouseSystem legacyWarehouse){
-        this.legacyWarehouse = legacyWarehouse;
+    public WarehouseAdapter(LegacyWarehouseSystem legacyWarehouseSystem){
+        this.legacyWarehouseSystem = legacyWarehouseSystem;
 
         mainWarehouse = new WarehouseSection("Main Warehouse");
         baseBoardZone = new WarehouseSection("Base Board Zone");
@@ -36,20 +39,27 @@ public class WarehouseAdapter implements WarehouseService {
     }
 
     @Override
-    public void storeOrder(ProductionOrder order){
+    public void storeOrder(ProductionOrder order) {
+        updateLegacySystem(order);
+        WarehouseItem item = createWarehouseItem(order);
+        storeInTargetSection(order, item);
+    }
+
+    private void updateLegacySystem(ProductionOrder order) {
         String itemName = order.getClass().getSimpleName();
-        int quantity = order.getQuantity();
+        legacyWarehouseSystem.storeItem(itemName, order.getQuantity());
+    }
 
-        legacyWarehouse.storeItem(itemName, quantity);
+    private WarehouseItem createWarehouseItem(ProductionOrder order) {
+        String itemName = order.getClass().getSimpleName();
+        String formattedName = String.format("%s (%s)", itemName, order.getId());
+        
+        return new WarehouseItem(formattedName, order.getQuantity(), order.getId());
+    }
 
-        WarehouseItem item = new WarehouseItem(itemName + " (" + order.getId() + ")", quantity, order.getId());
-
+    private void storeInTargetSection(ProductionOrder order, WarehouseItem item) {
         WarehouseSection targetSection = determineTargetSection(order);
-
-        SystemLogger.INSTANCE.logInfo(
-                "WAREHOUSE",
-                "Sending order " + order.getId() + " to "+targetSection.getName()
-        );
+        SystemLogger.INSTANCE.logInfo(LOG_CONTEXT, "Sending order " + order.getId() + " to " + targetSection.getName());
         targetSection.add(item);
     }
 
@@ -63,10 +73,10 @@ public class WarehouseAdapter implements WarehouseService {
     }
 
     public void printLegacyWarehouse(){
-        SystemLogger.INSTANCE.logInfo("WAREHOUSE", "Current warehouse state:");
+        SystemLogger.INSTANCE.logInfo(LOG_CONTEXT, "Current warehouse state:");
 
         // Pobieramy dane z klasy Legacy i logujemy je tutaj (Zachowanie SRP dla Legacy)
-        legacyWarehouse.getStorage().forEach((item, qty) ->
+        legacyWarehouseSystem.getStorage().forEach((item, qty) ->
                 SystemLogger.INSTANCE.logInfo(
                         "[LEGACY WAREHOUSE]",
                         item + " -> " + qty

@@ -52,8 +52,8 @@ public class Capacitor implements BaseComponent, PositionableComponent, SignalPr
     }
 
     @Override
-    public void accept(BoardVisitor v) {
-        v.visit(this);
+    public void accept(BoardVisitor boardVisitor) {
+        boardVisitor.visit(this);
     }
 }
 // Koniec, Tydzień 3

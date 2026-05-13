@@ -27,8 +27,8 @@ public class FinancialProcess {
 
     private static final String APP_CONTEXT = FinancialProcess.class.getSimpleName();
 
-    private static final String ORDER_Z_ID = "ORD-Z";
-    private static final int ORDER_Z_QTY = 150;
+    private static final String PRODUCTION_ORDER_ID = "ORD-Z";
+    private static final int PRODUCTION_ORDER_QUANTITY = 150;
     private static final double VIP_DISCOUNT_PERCENT = 10.0;
 
     private static final String TIER_GOLD = "GOLD";
@@ -61,20 +61,20 @@ public class FinancialProcess {
 
     private void testInvoiceLifecycle() {
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== STATE 1 AND STRATEGY 1 PATTERNS TEST (INVOICE LIFECYCLE) ===");
-        OrderInvoice invoiceA = initializeDraftInvoice();
-        verifyDraftRestrictions(invoiceA);
-        applyDiscountsAndConfirm(invoiceA);
-        verifyConfirmedRestrictions(invoiceA);
-        payAndGenerateReceipt(invoiceA);
+        OrderInvoice orderInvoice = initializeDraftInvoice();
+        verifyDraftRestrictions(orderInvoice);
+        applyDiscountsAndConfirm(orderInvoice);
+        verifyConfirmedRestrictions(orderInvoice);
+        payAndGenerateReceipt(orderInvoice);
         cancelAdditionalInvoice();
 
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== END OF STATE 1 AND STRATEGY 1 PATTERNS TEST ===");
     }
 
     private OrderInvoice initializeDraftInvoice() {
-        ProductionOrder orderZ = ProductionOrderFactory.createOrder(
-                context.getStandardPcbBoard(), new OrderContext(ORDER_Z_ID, ORDER_Z_QTY, context.getSpecPcb()));
-        OrderInvoice invoice = new OrderInvoice(orderZ, new StandardPricingStrategy());
+        ProductionOrder productionOrder = ProductionOrderFactory.createOrder(
+                context.getStandardPcbBoard(), new OrderContext(PRODUCTION_ORDER_ID, PRODUCTION_ORDER_QUANTITY, context.getSpecPcb()));
+        OrderInvoice invoice = new OrderInvoice(productionOrder, new StandardPricingStrategy());
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "Initial draft amount: $" + CurrencyFormatter.format(invoice.getAmount()));
         context.setInvoiceA(invoice);
         return invoice;
@@ -85,8 +85,9 @@ public class FinancialProcess {
             action.run();
         } catch (IllegalStateException e) {
             SystemLogger.INSTANCE.logError("INVOICE", e.getMessage());
+        }
     }
-}
+
 
     private void verifyDraftRestrictions(OrderInvoice invoice) {
         // Can't pay and generate receipt before confirming
@@ -128,17 +129,22 @@ public class FinancialProcess {
         OrderInvoice paidSuperElectronicInvoice = createPaidInvoice(context.getSuperElectronicOrder());
         OrderInvoice paidClonedPcbInvoice = createPaidInvoice(context.getClonedPcbOrder());
 
-        RevenuePolicy policy = new PaidInvoiceRevenuePolicy();
-        RevenueFilter filter = new RevenueFilter(policy);
-        RevenueCalculator calculator = new RevenueCalculator();
-
-        RevenueService revenueService = new RevenueService(filter, calculator);
-
-        List<OrderInvoice> allInvoices = List.of(context.getInvoiceA(), context.getInvoiceB(), paidSuperElectronicInvoice, paidClonedPcbInvoice);
-        double totalRevenue = revenueService.calculateRevenue(allInvoices);
+        double totalRevenue = getTotalRevenue(paidSuperElectronicInvoice, paidClonedPcbInvoice);
 
         SystemLogger.INSTANCE.logInfo("REVENUE-REPORT", "Calculated Total Revenue: $" + CurrencyFormatter.format(totalRevenue));
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== END OF SRP 1 TEST ===");
+    }
+
+    private double getTotalRevenue(OrderInvoice paidSuperElectronicInvoice, OrderInvoice paidClonedPcbInvoice) {
+        RevenuePolicy revenuePolicy = new PaidInvoiceRevenuePolicy();
+        RevenueFilter revenueFilter = new RevenueFilter(revenuePolicy);
+        RevenueCalculator revenueCalculator = new RevenueCalculator();
+
+        RevenueService revenueService = new RevenueService(revenueFilter, revenueCalculator);
+
+        List<OrderInvoice> allInvoices = List.of(context.getInvoiceA(), context.getInvoiceB(), paidSuperElectronicInvoice, paidClonedPcbInvoice);
+        double totalRevenue = revenueService.calculateRevenue(allInvoices);
+        return totalRevenue;
     }
 
     private OrderInvoice createPaidInvoice(ProductionOrder order) {

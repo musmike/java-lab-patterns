@@ -26,20 +26,57 @@ import pl.lab.factory.reporting.reportingsystem.SimpleReportDispatcher;
 import pl.lab.factory.reporting.reportingsystem.SimpleReportFormatter;
 import pl.lab.factory.reporting.reportingsystem.SimpleReportGenerator;
 
+import java.util.List;
+
 public class ReportingAndMetricsProcess {
 
     private static final String APP_CONTEXT = ReportingAndMetricsProcess.class.getSimpleName();
     private static final String NOT_COMPLETED_ORDER_ID = "ORD-006";
     private static final int NOT_COMPLETED_ORDER_QUANTITY = 5;
-    private static final int QUANTITY_LESS_THAN_VAL = 6;
+    private static final int SEARCH_QUANTITY_THRESHOLD = 6;
     private static final String BASE_BOARD_TYPE = "BaseBoardProductionOrder";
 
-    private static final String ITERATION_1_ID = "ITER-01"; private static final int ITERATION_1_QUANTITY = 2;
-    private static final String ITERATION_2_ID = "ITER-02"; private static final int ITERATION_2_QUANTITY = 8;
-    private static final String ITERATION_3_ID = "ITER-03"; private static final int ITERATION_3_QUANTITY = 5;
-    private static final String ITERATION_4_ID = "ITER-04"; private static final int ITERATION_4_QUANTITY = 9;
-    private static final String ITERATION_5_ID = "ITER-05"; private static final int ITERATION_5_QUANTITY = 6;
-    private static final String ITERATION_6_ID = "ITER-06"; private static final int ITERATION_6_QUANTITY = 7;
+    private static class IteratorTestOrder {
+        private final String id;
+        private final int qty;
+        private final OrderStatus status;
+        private final boolean isElectronic;
+
+        private IteratorTestOrder(Builder builder) {
+            this.id = builder.id;
+            this.qty = builder.qty;
+            this.status = builder.status;
+            this.isElectronic = builder.isElectronic;
+        }
+
+        public String getId() { return id; }
+        public int getQty() { return qty; }
+        public OrderStatus getStatus() { return status; }
+        public boolean isElectronic() { return isElectronic; }
+
+        public static class Builder {
+            private String id;
+            private int qty;
+            private OrderStatus status;
+            private boolean isElectronic;
+
+            public Builder id(String id) { this.id = id; return this; }
+            public Builder qty(int qty) { this.qty = qty; return this; }
+            public Builder status(OrderStatus status) { this.status = status; return this; }
+            public Builder isElectronic(boolean isElectronic) { this.isElectronic = isElectronic; return this; }
+
+            public IteratorTestOrder build() { return new IteratorTestOrder(this); }
+        }
+    }
+
+    private static final List<IteratorTestOrder> ITERATOR_TEST_ORDERS = List.of(
+            new IteratorTestOrder.Builder().id("ITER-01").qty(2).status(OrderStatus.COMPLETED).isElectronic(false).build(),
+            new IteratorTestOrder.Builder().id("ITER-02").qty(8).status(OrderStatus.COMPLETED).isElectronic(true).build(),
+            new IteratorTestOrder.Builder().id("ITER-03").qty(5).status(OrderStatus.PENDING).isElectronic(false).build(),
+            new IteratorTestOrder.Builder().id("ITER-04").qty(9).status(OrderStatus.PENDING).isElectronic(true).build(),
+            new IteratorTestOrder.Builder().id("ITER-05").qty(6).status(OrderStatus.PENDING).isElectronic(false).build(),
+            new IteratorTestOrder.Builder().id("ITER-06").qty(7).status(OrderStatus.PENDING).isElectronic(true).build()
+    );
 
     private final FactoryContext context;
 
@@ -64,13 +101,16 @@ public class ReportingAndMetricsProcess {
     }
 
     private void testReports() {
+        createOrderNotCompletedOrder();
+        runReportingFacade();
+        runReportingInterpreter();
+    }
+
+    private void createOrderNotCompletedOrder() {
         ProductionOrder notCompletedOrder = ProductionOrderFactory.createOrder(
                 context.getStandardPcbBoard(), new OrderContext(NOT_COMPLETED_ORDER_ID, 
                     NOT_COMPLETED_ORDER_QUANTITY, context.getSpecPcb()));
         context.getAllOrders().add(notCompletedOrder);
-
-        runReportingFacade();
-        runReportingInterpreter();
     }
 
     private void runReportingFacade() {
@@ -84,7 +124,7 @@ public class ReportingAndMetricsProcess {
         AbstractExpression completedOrdersQuery = new StatusExpression(OrderStatus.COMPLETED);
         AbstractExpression pendingSmallQuantityOrdersQuery = new AndExpression(
                 new StatusExpression(OrderStatus.PENDING),
-                new QuantityExpression(QuantityOperator.LESS_THAN, QUANTITY_LESS_THAN_VAL)
+                new QuantityExpression(QuantityOperator.LESS_THAN, SEARCH_QUANTITY_THRESHOLD)
         );
         AbstractExpression boardTypeOrCompletedOrdersQuery = new OrExpression(
                 new TypeExpression(BASE_BOARD_TYPE),
@@ -119,62 +159,59 @@ public class ReportingAndMetricsProcess {
     }
 
     private void populateIteratorQueue(OrderCollection collection) {
-        ProductionOrder completedPcbOrder = ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
-                new OrderContext(ITERATION_1_ID, ITERATION_1_QUANTITY, context.getSpecPcb()));
-        ProductionOrder completedElectronicOrder = ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
-                new OrderContext(ITERATION_2_ID, ITERATION_2_QUANTITY, context.getSpecElectronic()));
-        ProductionOrder pendingPcbOrderSmall = ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
-                new OrderContext(ITERATION_3_ID, ITERATION_3_QUANTITY, context.getSpecPcb()));
-        ProductionOrder pendingElectronicOrderLarge = ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
-                new OrderContext(ITERATION_4_ID, ITERATION_4_QUANTITY, context.getSpecElectronic()));
-        ProductionOrder pendingPcbOrderMedium = ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
-                new OrderContext(ITERATION_5_ID, ITERATION_5_QUANTITY, context.getSpecPcb()));
-        ProductionOrder pendingElectronicOrderMid = ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
-                new OrderContext(ITERATION_6_ID, ITERATION_6_QUANTITY, context.getSpecElectronic()));
+        for (IteratorTestOrder testOrder : ITERATOR_TEST_ORDERS) {
+            ProductionOrder order = buildOrderForIterator(testOrder);
+            order.setStatus(testOrder.getStatus());
+            collection.addOrder(order);
+        }
+    }
 
-        completedPcbOrder.setStatus(OrderStatus.COMPLETED);
-        completedElectronicOrder.setStatus(OrderStatus.COMPLETED);
-
-        collection.addOrder(completedPcbOrder); collection.addOrder(completedElectronicOrder); collection.addOrder(pendingPcbOrderSmall);
-        collection.addOrder(pendingElectronicOrderLarge); collection.addOrder(pendingPcbOrderMedium); collection.addOrder(pendingElectronicOrderMid);
+    private ProductionOrder buildOrderForIterator(IteratorTestOrder testOrder) {
+        if (testOrder.isElectronic()) {
+            return ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
+                    new OrderContext(testOrder.getId(), testOrder.getQty(), context.getSpecElectronic()));
+        } else {
+            return ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
+                    new OrderContext(testOrder.getId(), testOrder.getQty(), context.getSpecPcb()));
+        }
     }
 
     private void testOrderIteratorSearches() {
         OrderCollection orderCollection = ProductionQueue.getInstance();
 
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- Searching for all orders with status: COMPLETED ---");
-        OrderIterator completedOrdersIterator = orderCollection.statusIterator(OrderStatus.COMPLETED);
-        while (completedOrdersIterator.hasNext()) {
-            SystemLogger.INSTANCE.logInfo("ITERATOR-RESULT", completedOrdersIterator.next().toString());
-        }
+        printIteratorResults(orderCollection.statusIterator(OrderStatus.COMPLETED));
 
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- Searching for all orders with status: PENDING ---");
-        OrderIterator pendingOrdersIterator = orderCollection.statusIterator(OrderStatus.PENDING);
-        while (pendingOrdersIterator.hasNext()) {
-            SystemLogger.INSTANCE.logInfo("ITERATOR-RESULT", pendingOrdersIterator.next().toString());
-        }
+        printIteratorResults(orderCollection.statusIterator(OrderStatus.PENDING));
 
-        SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- Searching for PENDING orders with quantity > 6 ---");
-        pendingOrdersIterator.reset();
-        while (pendingOrdersIterator.hasNextByQuantity(QuantityOperator.GREATER_THAN, 6)) {
+        SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- Searching for PENDING orders with quantity > " + SEARCH_QUANTITY_THRESHOLD + " ---");
+        OrderIterator pendingOrdersIterator = orderCollection.statusIterator(OrderStatus.PENDING);
+        while (pendingOrdersIterator.hasNextByQuantity(QuantityOperator.GREATER_THAN, SEARCH_QUANTITY_THRESHOLD)) {
             SystemLogger.INSTANCE.logInfo("ITERATOR-RESULT", pendingOrdersIterator.nextByQuantity().toString());
+        }
+    }
+
+    private void printIteratorResults(OrderIterator iterator) {
+        while (iterator.hasNext()) {
+            SystemLogger.INSTANCE.logInfo("ITERATOR-RESULT", iterator.next().toString());
         }
     }
 
     private void testIspReporting() {
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- ISP 1 TEST ---");
 
-        ReportGenerator generator = new SimpleReportGenerator();
-        ReportFormatter formatter = new SimpleReportFormatter();
-        ReportDispatcher dispatcher = new SimpleReportDispatcher();
+        ReportGenerator reportGenerator = new SimpleReportGenerator();
+        ReportFormatter reportFormatter = new SimpleReportFormatter();
+        ReportDispatcher reportDispatcher = new SimpleReportDispatcher();
 
-        generator.generateReport(context.getPcbOrder());
+        reportGenerator.generateReport(context.getPcbOrder());
 
-        String csvData = formatter.formatAsCsv(context.getPcbOrder());
+        String csvData = reportFormatter.formatAsCsv(context.getPcbOrder());
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "Formatted data: " + csvData);
 
-        dispatcher.archiveReport(context.getPcbOrder());
-        dispatcher.sendReportByEmail(context.getPcbOrder());
+        reportDispatcher.archiveReport(context.getPcbOrder());
+        reportDispatcher.sendReportByEmail(context.getPcbOrder());
 
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- ISP 1 TEST END ---");
     }

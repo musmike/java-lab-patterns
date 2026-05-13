@@ -32,14 +32,14 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     protected boolean componentsMounted = false;
     protected boolean soldered = false;
 
-    public abstract double getWorkingVoltage();
-    public abstract BoardMaterials getBoardMaterial();
-    public abstract SolderMaterials getSolderType();
-    public abstract double getThickness();
-    public abstract int getWidth();
-    public abstract int getLength();
-    public abstract int getBoardColor();
-    public abstract int getLayers();
+    public double getWorkingVoltage() { return workingVoltage; }
+    public BoardMaterials getBoardMaterial() { return boardMaterial; }
+    public SolderMaterials getSolderType() { return solderType; }
+    public double getThickness() { return thickness; }
+    public int getWidth() { return width; }
+    public int getLength() { return length; }
+    public int getBoardColor() { return boardColor; }
+    public int getLayers() { return layers; }
 
     public boolean isCircuitsPrinted() {
         return circuitsPrinted;
@@ -53,7 +53,9 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
         return soldered;
     }
 
-    public abstract boolean isReady();
+    public boolean isReady() { 
+        return circuitsPrinted && soldered; 
+    }
 
     protected void markAsChangedAndNotify(int changeIndex) {
         changed[changeIndex] = true;
@@ -66,8 +68,8 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     }
 
     public void mountComponents(){
-        for (BaseComponent c : components){
-            c.mount();
+        for (BaseComponent component : components){
+            component.mount();
         }
         componentsMounted = true;
         markAsChangedAndNotify(MOUNTING_CHANGE);
@@ -75,15 +77,15 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
 
     public double getComponentCost(){
         double cost = 0;
-        for(BaseComponent c : components){
-            cost += c.getCost();
+        for(BaseComponent component : components){
+            cost += component.getCost();
         }
         return cost;
     }
 
     public double getValue(double value){
-        for(BaseComponent c : components){
-            if(c instanceof SignalProcessorComponent spc){
+        for(BaseComponent component : components){
+            if(component instanceof SignalProcessorComponent spc){
                 value = spc.modifyResult(value);
             }
         }
@@ -91,8 +93,8 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     }
 
     public void printComponentInfo(){
-        for (BaseComponent c : components) {
-            c.print();
+        for (BaseComponent component : components) {
+            component.print();
         }
     }
 
@@ -151,8 +153,8 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     @Override
     public void accept(BoardVisitor boardVisitor) {
         boardVisitor.visit(this);
-        for (BaseComponent c : components) {
-            if (c instanceof VisitableComponent visitableComponent) {
+        for (BaseComponent component : components) {
+            if (component instanceof VisitableComponent visitableComponent) {
                 visitableComponent.accept(boardVisitor);
             }
         }

@@ -45,9 +45,9 @@ import java.util.NoSuchElementException;
 public class WarehouseManagementProcess {
 
     private static final String UNAPPROVED_ORDER_ID = "ORD-999";
-    private static final String PKG_CARDBOARD = "cardboard";
-    private static final String PKG_PLASTIC = "plastic";
-    private static final int LARGE_QTY_THRESHOLD = 5;
+    private static final String PACKAGE_CARDBOARD = "cardboard";
+    private static final String PACKAGE_PLASTIC = "plastic";
+    private static final int LARGE_QUANTITY_THRESHOLD = 5;
 
     private static final String FORKLIFT_ID = "FORK-001";
     private static final String FORKLIFT_NAME = "Toyota Forklift";
@@ -72,7 +72,7 @@ public class WarehouseManagementProcess {
     private static final String TERM_NAME = "Logistics Terminal";
 
     private static final String FIRE_ORDER_ID = "FIRE-01";
-    private static final int FIRE_ORDER_QTY = 1;
+    private static final int FIRE_ORDER_QUANTITY = 1;
 
     private final FactoryContext context;
 
@@ -95,7 +95,6 @@ public class WarehouseManagementProcess {
     }
 
     private void testWarehouseAndShipping() {
-        // -- Warehouse --
         storeUnapprovedOrder();
         printWarehouseStates();
         executeShippingCommands();
@@ -116,8 +115,8 @@ public class WarehouseManagementProcess {
     }
 
     private void executeShippingCommands() {
-        PackageImplementor cardboardBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PKG_CARDBOARD)));
-        PackageImplementor plasticBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PKG_PLASTIC)));
+        PackageImplementor cardboardBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PACKAGE_CARDBOARD)));
+        PackageImplementor plasticBoxPackaging = new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PACKAGE_PLASTIC)));
 
         ShippingStrategy standardShipping = new StandardShipping(cardboardBoxPackaging);
         ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);
@@ -138,20 +137,18 @@ public class WarehouseManagementProcess {
     }
 
     private void testWarehouseFiltering() {
-        // Filtering
         OrderExpression isCompleted = new OrderStatusExpression(OrderStatus.COMPLETED);
-        OrderExpression isLarge = new OrderMinQuantityExpression(LARGE_QTY_THRESHOLD);
+        OrderExpression isLarge = new OrderMinQuantityExpression(LARGE_QUANTITY_THRESHOLD);
 
         OrderExpression complexRule = new OrderAndExpression(isCompleted, isLarge);
 
-        SystemLogger.INSTANCE.logInfo("INTERPRETER", "Filtering completed orders with quantity >= " + LARGE_QTY_THRESHOLD);
+        SystemLogger.INSTANCE.logInfo("INTERPRETER", "Filtering completed orders with quantity >= " + LARGE_QUANTITY_THRESHOLD);
         context.getAllOrders().stream()
                 .filter(complexRule::interpret)
                 .forEach(o -> SystemLogger.INSTANCE.logInfo("[FILTERING]", "Match found: " + o.getId()));
     }
 
     private void testWarehouseEquipmentAndMaintenance() {
-        //Equipment
         WarehouseAssetsManager assetsManager = setupWarehouseEquipment();
         verifyMaintenanceNeeds(assetsManager);
         executeMaintenanceProtocols(assetsManager);
@@ -202,7 +199,6 @@ public class WarehouseManagementProcess {
     }
 
     private void testFireAlarm() {
-        // Fire Alarm
         WarehouseSafetyCenter warehouseSafetyCenter = new WarehouseSafetyCenter();
         SafetyHistory history = new SafetyHistory();
 
@@ -237,7 +233,7 @@ public class WarehouseManagementProcess {
 
     private void dispatchFireOrder() {
         ProductionOrder fireOrder = ProductionOrderFactory.createOrder(
-                context.getStandardPcbBoard(), new OrderContext(FIRE_ORDER_ID, FIRE_ORDER_QTY, context.getSpecPcb()));
+                context.getStandardPcbBoard(), new OrderContext(FIRE_ORDER_ID, FIRE_ORDER_QUANTITY, context.getSpecPcb()));
         try {
             context.getWarehouse().storeOrder(fireOrder);
         } catch (IllegalStateException e) {

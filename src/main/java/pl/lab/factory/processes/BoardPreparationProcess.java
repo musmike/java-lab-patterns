@@ -19,7 +19,7 @@ public class BoardPreparationProcess {
     private static final String FIRMWARE_PROTOTYPE = "v0.0.1-prototype";
     private static final String FIRMWARE_RELEASE = "v1.0.0-release";
     private static final String FIRMWARE_HOTFIX = "v1.1.0-hotfix";
-    private static final String PROTOTYPE_DEPENDENT_V1 = "highly-dependant-v1";
+    private static final String PROTOTYPE_DEPENDANT_V1 = "highly-dependant-v1";
     private static final String LOG_CONTEXT = "PROTOTYPE";
 
     private final FactoryContext context;
@@ -79,18 +79,18 @@ public class BoardPreparationProcess {
         context.setHighlyDependentElectronicBoard(releaseFirmwareBoard);
         context.setHotfixElectronicBoard(hotfixFirmwareBoard);
 
-        logPrototypeComparisons(prototypesRegistry.createFromPrototype(PROTOTYPE_DEPENDENT_V1), releaseFirmwareBoard, hotfixFirmwareBoard);
+        logPrototypeComparisons(prototypesRegistry.createFromPrototype(PROTOTYPE_DEPENDANT_V1), releaseFirmwareBoard, hotfixFirmwareBoard);
     }
 
     private BoardPrototypes setupPrototypeRegistry() {
         BaseElectronicBoard prototype = ElectronicBoardFactory.createBoard(ElectronicType.HIGHLY_DEPENDANT);
         BoardPrototypes registry = new BoardPrototypes();
-        registry.registerPrototype(PROTOTYPE_DEPENDENT_V1, prototype);
+        registry.registerPrototype(PROTOTYPE_DEPENDANT_V1, prototype);
         return registry;
     }
 
     private BaseElectronicBoard createAndProgramReleaseClone(BoardPrototypes registry) {
-        BaseElectronicBoard releaseClone = registry.createFromPrototype(PROTOTYPE_DEPENDENT_V1);
+        BaseElectronicBoard releaseClone = registry.createFromPrototype(PROTOTYPE_DEPENDANT_V1);
         FirmwareAdapter releaseFirmware = new HighLevelFirmwareAdapter(new HighLevelFirmware(FIRMWARE_RELEASE));
         InternalProgrammer seggerProgrammer = new InternalProgrammer(new SeggerJLinkDevice());
 
@@ -99,7 +99,7 @@ public class BoardPreparationProcess {
     }
 
     private BaseElectronicBoard createAndProgramHotfixClone(BoardPrototypes registry) {
-        BaseElectronicBoard hotfixClone = registry.createFromPrototype(PROTOTYPE_DEPENDENT_V1);
+        BaseElectronicBoard hotfixClone = registry.createFromPrototype(PROTOTYPE_DEPENDANT_V1);
         System.out.println("[COMPONENT INFO] Gathering information about boards components!");
         verifyBoardComponents(hotfixClone);
 

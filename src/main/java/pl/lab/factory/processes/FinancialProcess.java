@@ -61,8 +61,6 @@ public class FinancialProcess {
 
     private void testInvoiceLifecycle() {
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== STATE 1 AND STRATEGY 1 PATTERNS TEST (INVOICE LIFECYCLE) ===");
-
-        // -- Order Invoice --
         OrderInvoice invoiceA = initializeDraftInvoice();
         verifyDraftRestrictions(invoiceA);
         applyDiscountsAndConfirm(invoiceA);
@@ -165,7 +163,6 @@ public class FinancialProcess {
     }
 
     private void testInvoiceDispatch() {
-        // -- Invoice Dispatch --
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== TEMPLATE METHOD 1 PATTERN TEST (INVOICE DISPATCH) ===");
 
         InvoiceDispatcher emailDispatcher = new EmailInvoiceDispatcher();

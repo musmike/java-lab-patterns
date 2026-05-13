@@ -29,17 +29,17 @@ import pl.lab.factory.reporting.reportingsystem.SimpleReportGenerator;
 public class ReportingAndMetricsProcess {
 
     private static final String APP_CONTEXT = ReportingAndMetricsProcess.class.getSimpleName();
-    private static final String ORDER_6_ID = "ORD-006";
-    private static final int ORDER_6_QTY = 5;
-    private static final int QTY_LESS_VAL = 6;
+    private static final String NOT_COMPLETED_ORDER_ID = "ORD-006";
+    private static final int NOT_COMPLETED_ORDER_QUANTITY = 5;
+    private static final int QUANTITY_LESS_THAN_VAL = 6;
     private static final String BASE_BOARD_TYPE = "BaseBoardProductionOrder";
 
-    private static final String ITER_1_ID = "ITER-01"; private static final int ITER_1_QTY = 2;
-    private static final String ITER_2_ID = "ITER-02"; private static final int ITER_2_QTY = 8;
-    private static final String ITER_3_ID = "ITER-03"; private static final int ITER_3_QTY = 5;
-    private static final String ITER_4_ID = "ITER-04"; private static final int ITER_4_QTY = 9;
-    private static final String ITER_5_ID = "ITER-05"; private static final int ITER_5_QTY = 6;
-    private static final String ITER_6_ID = "ITER-06"; private static final int ITER_6_QTY = 7;
+    private static final String ITERATION_1_ID = "ITER-01"; private static final int ITERATION_1_QUANTITY = 2;
+    private static final String ITERATION_2_ID = "ITER-02"; private static final int ITERATION_2_QUANTITY = 8;
+    private static final String ITERATION_3_ID = "ITER-03"; private static final int ITERATION_3_QUANTITY = 5;
+    private static final String ITERATION_4_ID = "ITER-04"; private static final int ITERATION_4_QUANTITY = 9;
+    private static final String ITERATION_5_ID = "ITER-05"; private static final int ITERATION_5_QUANTITY = 6;
+    private static final String ITERATION_6_ID = "ITER-06"; private static final int ITERATION_6_QUANTITY = 7;
 
     private final FactoryContext context;
 
@@ -64,18 +64,16 @@ public class ReportingAndMetricsProcess {
     }
 
     private void testReports() {
-        // -- Reports --
-        // not completed order example
-        ProductionOrder orderD = ProductionOrderFactory.createOrder(
-                context.getStandardPcbBoard(), new OrderContext(ORDER_6_ID, ORDER_6_QTY, context.getSpecPcb()));
-        context.getAllOrders().add(orderD);
+        ProductionOrder notCompletedOrder = ProductionOrderFactory.createOrder(
+                context.getStandardPcbBoard(), new OrderContext(NOT_COMPLETED_ORDER_ID, 
+                    NOT_COMPLETED_ORDER_QUANTITY, context.getSpecPcb()));
+        context.getAllOrders().add(notCompletedOrder);
 
         runReportingFacade();
         runReportingInterpreter();
     }
 
     private void runReportingFacade() {
-        // Reporting Facade
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CONSOLE, context.getAllOrders());
         ReportingFacade.generate(ReportType.SUMMARY, ReportFormat.CSV, context.getAllOrders());
         ReportingFacade.generate(ReportType.COMPLETED_ONLY, ReportFormat.CONSOLE, context.getAllOrders());
@@ -83,24 +81,22 @@ public class ReportingAndMetricsProcess {
     }
 
     private void runReportingInterpreter() {
-        // Reporting Interpreter
-        AbstractExpression query1 = new StatusExpression(OrderStatus.COMPLETED);
-        AbstractExpression query2 = new AndExpression(
+        AbstractExpression completedOrdersQuery = new StatusExpression(OrderStatus.COMPLETED);
+        AbstractExpression pendingSmallQuantityOrdersQuery = new AndExpression(
                 new StatusExpression(OrderStatus.PENDING),
-                new QuantityExpression(QuantityOperator.LESS_THAN, QTY_LESS_VAL)
+                new QuantityExpression(QuantityOperator.LESS_THAN, QUANTITY_LESS_THAN_VAL)
         );
-        AbstractExpression query3 = new OrExpression(
+        AbstractExpression boardTypeOrCompletedOrdersQuery = new OrExpression(
                 new TypeExpression(BASE_BOARD_TYPE),
                 new StatusExpression(OrderStatus.COMPLETED)
         );
 
-        ReportingFacade.generateDynamic(query1, ReportFormat.CONSOLE, context.getAllOrders());
-        ReportingFacade.generateDynamic(query2, ReportFormat.CONSOLE, context.getAllOrders());
-        ReportingFacade.generateDynamic(query3, ReportFormat.CSV, context.getAllOrders());
+        ReportingFacade.generateDynamic(completedOrdersQuery, ReportFormat.CONSOLE, context.getAllOrders());
+        ReportingFacade.generateDynamic(pendingSmallQuantityOrdersQuery, ReportFormat.CONSOLE, context.getAllOrders());
+        ReportingFacade.generateDynamic(boardTypeOrCompletedOrdersQuery, ReportFormat.CSV, context.getAllOrders());
     }
 
     private void testOrderStatusMemento() {
-        // Order Status Memento
         ProductionOrder targetOrder = context.getAllOrders().get(context.getAllOrders().size() - 1);
 
         targetOrder.setStatus(OrderStatus.COMPLETED);
@@ -124,17 +120,17 @@ public class ReportingAndMetricsProcess {
 
     private void populateIteratorQueue(OrderCollection collection) {
         ProductionOrder completedPcbOrder = ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
-                new OrderContext(ITER_1_ID, ITER_1_QTY, context.getSpecPcb()));
+                new OrderContext(ITERATION_1_ID, ITERATION_1_QUANTITY, context.getSpecPcb()));
         ProductionOrder completedElectronicOrder = ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
-                new OrderContext(ITER_2_ID, ITER_2_QTY, context.getSpecElectronic()));
+                new OrderContext(ITERATION_2_ID, ITERATION_2_QUANTITY, context.getSpecElectronic()));
         ProductionOrder pendingPcbOrderSmall = ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
-                new OrderContext(ITER_3_ID, ITER_3_QTY, context.getSpecPcb()));
+                new OrderContext(ITERATION_3_ID, ITERATION_3_QUANTITY, context.getSpecPcb()));
         ProductionOrder pendingElectronicOrderLarge = ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
-                new OrderContext(ITER_4_ID, ITER_4_QTY, context.getSpecElectronic()));
+                new OrderContext(ITERATION_4_ID, ITERATION_4_QUANTITY, context.getSpecElectronic()));
         ProductionOrder pendingPcbOrderMedium = ProductionOrderFactory.createOrder(context.getStandardPcbBoard(),
-                new OrderContext(ITER_5_ID, ITER_5_QTY, context.getSpecPcb()));
+                new OrderContext(ITERATION_5_ID, ITERATION_5_QUANTITY, context.getSpecPcb()));
         ProductionOrder pendingElectronicOrderMid = ProductionOrderFactory.createOrder(context.getHotfixElectronicBoard(),
-                new OrderContext(ITER_6_ID, ITER_6_QTY, context.getSpecElectronic()));
+                new OrderContext(ITERATION_6_ID, ITERATION_6_QUANTITY, context.getSpecElectronic()));
 
         completedPcbOrder.setStatus(OrderStatus.COMPLETED);
         completedElectronicOrder.setStatus(OrderStatus.COMPLETED);

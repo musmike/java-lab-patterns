@@ -17,11 +17,11 @@ public class PriorityFirstDispatcher implements ShippingDispatcher{
     @Override
     public List<ShippingCommand> sortForShipping(List<ShippingCommand> pending){
         SystemLogger.INSTANCE.logInfo("SHIPPING STRATEGY", "Applying Priority-First strategy...");
-        pending.sort((c1, c2) ->{
-           int p1 = c1.accept(priorityVisitor);
-           int p2 = c2.accept(priorityVisitor);
+        pending.sort((command1, command2) ->{
+           int priority1 = command1.accept(priorityVisitor);
+           int priority2 = command2.accept(priorityVisitor);
 
-           return Integer.compare(p2, p1);
+           return Integer.compare(priority2, priority1);
         });
         return pending;
     }

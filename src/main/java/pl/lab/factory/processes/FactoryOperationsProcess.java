@@ -29,8 +29,8 @@ import java.util.concurrent.TimeUnit;
 public class FactoryOperationsProcess {
 
     private static final String APP_CONTEXT = FactoryOperationsProcess.class.getSimpleName();
-    private static final String UNAPPROVED_ORD_1 = "ORD-999";
-    private static final String UNAPPROVED_ORD_2 = "ORD-888";
+    private static final String UNAPPROVED_ORDER_1 = "ORD-999";
+    private static final String UNAPPROVED_ORDER_2 = "ORD-888";
     private static final String CLIENT_EMAIL = "contact@acmecorp.com";
     private static final String BATCH_PLAN_NAME = "Weekly plan";
     private static final int QUEUE_SLEEP_SECONDS = 1;
@@ -61,7 +61,7 @@ public class FactoryOperationsProcess {
     }
 
     private WarehouseService createWarehouseProxy() {
-        Set<String> unapproved = Set.of(UNAPPROVED_ORD_1, UNAPPROVED_ORD_2);
+        Set<String> unapproved = Set.of(UNAPPROVED_ORDER_1, UNAPPROVED_ORDER_2);
         LegacyWarehouseSystem legacyWarehouse = new LegacyWarehouseSystem();
         WarehouseAdapter adapter = new WarehouseAdapter(legacyWarehouse);
         context.setWarehouseAdapter(adapter);
@@ -90,7 +90,6 @@ public class FactoryOperationsProcess {
     }
 
     private void testOrderObservers() {
-        // -- Order Observers --
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== ORDER OBSERVER 1 PATTERN TEST ===");
         OrderObserver emailNotifier = new ClientEmailNotifier(CLIENT_EMAIL);
         OrderObserver globalErpSync = new ErpSystemUpdater();
@@ -100,7 +99,6 @@ public class FactoryOperationsProcess {
     }
 
     private void testOrderQueue() throws InterruptedException {
-        // -- Order queue --
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "=== COMMAND PATTERN TEST (UNDO/REDO FOR QUEUE) ===");
 
         ProductionQueue queue = ProductionQueue.getInstance();
@@ -114,26 +112,33 @@ public class FactoryOperationsProcess {
     }
 
     private void executeQueueUndoRedo(ProductionQueue queue, QueueCommandInvoker invoker) {
-        // Invoker & Concrete Commands
+        demonstrateAddAndRemove(queue, invoker);
+        demonstrateClearAndUndo(queue, invoker);
+    }
+
+    private void demonstrateAddAndRemove(ProductionQueue queue, QueueCommandInvoker invoker) {
         invoker.executeCommand(new AddOrderCommand(context.getPcbOrder()));
         invoker.executeCommand(new AddOrderCommand(context.getStandardElectronicOrder()));
-        queue.printQueue(); // State: [ orderA, orderB]
+        queue.printQueue();
 
         invoker.executeCommand(new RemoveOrderCommand(context.getPcbOrder()));
-        queue.printQueue(); // State:[ orderB ]
+        queue.printQueue();
 
         invoker.undo();
-        queue.printQueue(); // State:[ orderA, orderB ]
+        queue.printQueue();
+    }
 
+    private void demonstrateClearAndUndo(ProductionQueue queue, QueueCommandInvoker invoker) {
         OrderQueueCommand clearAll = new ClearQueueCommand();
+
         invoker.executeCommand(clearAll);
-        queue.printQueue(); // State: empty
+        queue.printQueue();
 
         invoker.undo();
-        queue.printQueue(); // State: [ orderA, orderB ]
+        queue.printQueue();
 
         invoker.executeCommand(clearAll);
-        queue.printQueue(); // State: empty
+        queue.printQueue();
     }
 
     private void populateQueueWithAllOrders(ProductionQueue queue, QueueCommandInvoker invoker) {

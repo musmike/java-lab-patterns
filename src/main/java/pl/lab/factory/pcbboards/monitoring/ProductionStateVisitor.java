@@ -10,13 +10,13 @@ public class ProductionStateVisitor implements BoardVisitor{
     private StringBuilder report = new StringBuilder();
     @Override
     public void visit(BaseBoard board) {
-        if (board.is_componentsMounted())
+        if (board.isComponentsMounted())
             report.append("[VIS] Components mounted\n");
 
-        if (board.is_circuitsPrinted())
+        if (board.isCircuitsPrinted())
             report.append("[VIS] Circuits printed\n");
 
-        if (board.is_soldered())
+        if (board.isSoldered())
             report.append("[VIS] Soldered\n");
 
         if (!board.isReady())

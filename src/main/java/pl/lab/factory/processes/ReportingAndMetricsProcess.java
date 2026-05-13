@@ -15,12 +15,7 @@ import pl.lab.factory.reporting.CompletedOnlyProductionReport;
 import pl.lab.factory.reporting.ConsoleReportFormatter;
 import pl.lab.factory.reporting.ProductionReport;
 import pl.lab.factory.reporting.SummaryProductionReport;
-import pl.lab.factory.reporting.interpreter.AbstractExpression;
-import pl.lab.factory.reporting.interpreter.AndExpression;
-import pl.lab.factory.reporting.interpreter.OrExpression;
-import pl.lab.factory.reporting.interpreter.QuantityExpression;
-import pl.lab.factory.reporting.interpreter.StatusExpression;
-import pl.lab.factory.reporting.interpreter.TypeExpression;
+import pl.lab.factory.reporting.interpreter.*;
 import pl.lab.factory.reporting.reportingfacade.ReportFormat;
 import pl.lab.factory.reporting.reportingfacade.ReportType;
 import pl.lab.factory.reporting.reportingfacade.ReportingFacade;
@@ -36,8 +31,6 @@ public class ReportingAndMetricsProcess {
     private static final String APP_CONTEXT = ReportingAndMetricsProcess.class.getName();
     private static final String ORDER_6_ID = "ORD-006";
     private static final int ORDER_6_QTY = 5;
-
-    private static final String QTY_LESS_OP = "<";
     private static final int QTY_LESS_VAL = 6;
     private static final String BASE_BOARD_TYPE = "BaseBoardProductionOrder";
 
@@ -94,7 +87,7 @@ public class ReportingAndMetricsProcess {
         AbstractExpression query1 = new StatusExpression(OrderStatus.COMPLETED);
         AbstractExpression query2 = new AndExpression(
                 new StatusExpression(OrderStatus.PENDING),
-                new QuantityExpression(QTY_LESS_OP, QTY_LESS_VAL)
+                new QuantityExpression(QuantityOperator.LESS_THAN, QTY_LESS_VAL)
         );
         AbstractExpression query3 = new OrExpression(
                 new TypeExpression(BASE_BOARD_TYPE),
@@ -161,7 +154,7 @@ public class ReportingAndMetricsProcess {
 
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "--- Searching for PENDING orders with quantity > 6 ---");
         pendingOrdersIterator.reset();
-        while (pendingOrdersIterator.hasNextByQuantity(">", 6)) {
+        while (pendingOrdersIterator.hasNextByQuantity(QuantityOperator.GREATER_THAN, 6)) {
             SystemLogger.INSTANCE.logInfo("ITERATOR-RESULT", pendingOrdersIterator.nextByQuantity().toString());
         }
     }

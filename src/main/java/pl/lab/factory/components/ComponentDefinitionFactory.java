@@ -13,18 +13,23 @@ import java.util.Map;
 public class ComponentDefinitionFactory {
     private static final Map<String, ComponentDefinition> cache = new HashMap<>();
 
-    public static CapacitorDefinition getCapacitorDefinition(int capacitance, double cost){
-        String key = "C/" + capacitance + "/" + cost;
+    private static final String PREFIX_CAPACITOR = "C/";
+    private static final String PREFIX_RESISTOR = "R/";
+    private static final String PREFIX_INDUCTOR = "I/";
+    private static final String SEPARATOR = "/";
+
+    public static CapacitorDefinition getCapacitorDefinition(int capacitance, double cost) {
+        String key = PREFIX_CAPACITOR + capacitance + SEPARATOR + cost;
         return (CapacitorDefinition) cache.computeIfAbsent(key, k -> new CapacitorDefinition(capacitance, cost));
     }
 
-    public static ResistorDefinition getResistorDefinition(int resistance, double cost){
-        String key = "R/" + resistance + "/" + cost;
+    public static ResistorDefinition getResistorDefinition(int resistance, double cost) {
+        String key = PREFIX_RESISTOR + resistance + SEPARATOR + cost;
         return (ResistorDefinition) cache.computeIfAbsent(key, k -> new ResistorDefinition(resistance, cost));
     }
 
-    public static InductorDefinition getInductorDefinition(int inductance, double cost){
-        String key = "I/" + inductance + "/" + cost;
+    public static InductorDefinition getInductorDefinition(int inductance, double cost) {
+        String key = PREFIX_INDUCTOR + inductance + SEPARATOR + cost;
         return (InductorDefinition) cache.computeIfAbsent(key, k -> new InductorDefinition(inductance, cost));
     }
 }

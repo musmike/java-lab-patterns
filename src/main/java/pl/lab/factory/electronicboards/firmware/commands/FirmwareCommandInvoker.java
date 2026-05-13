@@ -1,5 +1,7 @@
 package pl.lab.factory.electronicboards.firmware.commands;
 
+import pl.lab.factory.SystemLogger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,23 +15,33 @@ public class FirmwareCommandInvoker {
         commandList.add(command);
     }
 
-    public void executeAll(){
+    public void executeAll() {
+        for (FirmwareCommand command : commandList) {
+            executeWithRetry(command);
+        }
+    }
 
-        for(FirmwareCommand command : commandList){
-            boolean success = false;
-            int attempts = 0;
-            while(!success && attempts < MAX_ATTEMPTS){
-                try {
-                    command.execute();
-                    success=true;
-                } catch (RuntimeException e){
-                    attempts++;
-                    System.out.println("[Firmware Invoker] Command failed, retrying... (" + attempts + ")");
-                    if(attempts >= MAX_ATTEMPTS){
-                        System.out.println("[Firmware Invoker] Command failed completely after " + MAX_ATTEMPTS + " tries!!!");
-                    }
-                }
+    private void executeWithRetry(FirmwareCommand command) {
+        int attempts = 0;
+
+        while (attempts < MAX_ATTEMPTS) {
+            try {
+                command.execute();
+                return;
+            } catch (RuntimeException e) {
+                attempts++;
+                handleRetryFailure(attempts, e);
             }
+        }
+    }
+
+    private void handleRetryFailure(int attempts, RuntimeException e) {
+        SystemLogger.INSTANCE.logError("[Firmware Invoker]",
+                "Command failed, retrying... (" + attempts + ")");
+
+        if (attempts >= MAX_ATTEMPTS) {
+            SystemLogger.INSTANCE.logError("[Firmware Invoker]",
+                    "Command failed completely after " + MAX_ATTEMPTS + " tries!!!");
         }
     }
 }

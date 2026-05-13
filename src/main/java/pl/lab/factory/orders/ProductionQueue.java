@@ -3,6 +3,8 @@ package pl.lab.factory.orders;
 import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.iterator.OrderCollection;
 import pl.lab.factory.orders.iterator.OrderIterator;
+import pl.lab.factory.reporting.interpreter.QuantityOperator;
+
 import java.util.*;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
@@ -131,7 +133,7 @@ public class ProductionQueue implements OrderCollection {
 
         // --- Tryb 2: Iteracja po statusie ORAZ ilości ---
         @Override
-        public boolean hasNextByQuantity(String operator, int value) {
+        public boolean hasNextByQuantity(QuantityOperator operator, int value) {
             while (quantityPosition < orderList.size()) {
                 if (matchesStatusAndQuantity(orderList.get(quantityPosition), operator, value)) {
                     return true;
@@ -141,15 +143,15 @@ public class ProductionQueue implements OrderCollection {
             return false;
         }
 
-        private boolean matchesStatusAndQuantity(ProductionOrder order, String operator, int value) {
+        private boolean matchesStatusAndQuantity(ProductionOrder order, QuantityOperator operator, int value) {
             return matchesStatus(order) && isQuantityMatch(order.getQuantity(), operator, value);
         }
 
-        private boolean isQuantityMatch(int orderQuantity, String operator, int value) {
+        private boolean isQuantityMatch(int orderQuantity, QuantityOperator operator, int value) {
             return switch (operator) {
-                case ">" -> orderQuantity > value;
-                case "<" -> orderQuantity < value;
-                default -> orderQuantity == value;
+                case GREATER_THAN -> orderQuantity > value;
+                case LESS_THAN    -> orderQuantity < value;
+                case EQUAL        -> orderQuantity == value;
             };
         }
 

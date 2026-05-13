@@ -1,6 +1,7 @@
 package pl.lab.factory.mediator;
 
 import pl.lab.factory.orders.ProductionOrder;
+import pl.lab.factory.safetymediator.FactoryEvent;
 import pl.lab.factory.warehouse.WarehouseManagementService;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
@@ -19,7 +20,7 @@ public class WarehouseDepartment extends Department {
         warehouseService.storeOrder(order);
 
         if (mediator != null) {
-            mediator.notify(this, "ORDER_STORED", order);
+            mediator.notify(this, FactoryEvent.ORDER_STORED, order);
         }
     }
 }

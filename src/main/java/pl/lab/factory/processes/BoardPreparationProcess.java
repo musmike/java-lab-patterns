@@ -64,7 +64,7 @@ public class BoardPreparationProcess {
     }
 
     private void verifyBoardComponents(BaseElectronicBoard board) {
-        board.getBaseBoard().getComponentInfo();
+        board.getBaseBoard().printComponentInfo();
         CountingVisitor counter = new CountingVisitor();
         board.getBaseBoard().accept(counter);
         System.out.println("[COMPONENT INFO] Board contains " + counter.getResistors() + " resistors.");

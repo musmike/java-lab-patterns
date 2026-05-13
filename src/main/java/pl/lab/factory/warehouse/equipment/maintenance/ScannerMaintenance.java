@@ -7,14 +7,14 @@ import pl.lab.factory.warehouse.equipment.WarehouseEquipment;
 // Wzorzec Template 2 (Concrete Class)
 public class ScannerMaintenance extends MaintenanceProtocol{
     @Override
-    protected void performDiagnostics(WarehouseEquipment e){
-        SystemLogger.INSTANCE.logInfo("SERVICE", "[Checking Optics] Cleaning laser lens on " + e.getName());
+    protected void performDiagnostics(WarehouseEquipment warehouseEquipment){
+        SystemLogger.INSTANCE.logInfo("SERVICE", "[Checking Optics] Cleaning laser lens on " + warehouseEquipment.getName());
         SystemLogger.INSTANCE.logInfo("SERVICE", "[Checking Battery] Testing Li-ion cycle health.");
     }
 
     @Override
-    protected void applyTechnicalService(WarehouseEquipment e){
-        SystemLogger.INSTANCE.logInfo("SERVICE", "[Action] Scanner " + e.getId() + ": Firmware flashing... New version installed." );
+    protected void applyTechnicalService(WarehouseEquipment warehouseEquipment){
+        SystemLogger.INSTANCE.logInfo("SERVICE", "[Action] Scanner " + warehouseEquipment.getId() + ": Firmware flashing... New version installed." );
         SystemLogger.INSTANCE.logInfo("SERVICE", "[Action] Calibrating scan engine and updating firmware.");
     }
 }

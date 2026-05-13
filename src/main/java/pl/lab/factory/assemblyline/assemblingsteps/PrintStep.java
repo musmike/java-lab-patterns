@@ -1,8 +1,8 @@
 package pl.lab.factory.assemblyline.assemblingsteps;
 
-import pl.lab.factory.assemblyline.assemblingstrategies.AssemblingStrategy;
 import pl.lab.factory.assemblyline.assemblingstrategies.PrintingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
+
 //Tydzien 8 - Podstawienie Liskov
 //klasa którą można podstawić pod klasę dziedziczoną w dowolnym miejscu
 public class PrintStep extends AssemblyStep{

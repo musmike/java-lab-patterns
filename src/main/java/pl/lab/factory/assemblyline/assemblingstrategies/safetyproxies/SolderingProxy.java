@@ -14,7 +14,7 @@ public class SolderingProxy implements SolderingStrategy {
 
     @Override
     public void execute(BaseBoard board) throws InterruptedException {
-        if(!board.is_circuitsPrinted() || !board.is_componentsMounted()){
+        if(!board.isCircuitsPrinted() || !board.isComponentsMounted()){
             System.out.println("[MACHINE SAFETY ERROR] - Soldering cannot commence; board not ready for soldering!");
             throw new InterruptedException("Board not printed and mounted, while attempting soldering.");
         }

@@ -16,6 +16,14 @@ public class StandardBoard extends BaseBoard {
     private static final int DEFAULT_COLOR = 0x007700;
     private static final int DEFAULT_LAYERS = 2;
 
+    private static final int MAIN_RESISTOR_OHMS = 20;
+    private static final double MAIN_RESISTOR_COST = 0.2;
+    private static final Pair<Integer, Integer> MAIN_RESISTOR_POS = new Pair<>(1, 1);
+
+    private static final int MAIN_CAPACITOR_FARADS = 5;
+    private static final double MAIN_CAPACITOR_COST = 0.2;
+    private static final Pair<Integer, Integer> MAIN_CAPACITOR_POS = new Pair<>(3, 1);
+
     public StandardBoard() {
         configurePhysicalProperties();
         buildComponentsTopology();
@@ -34,8 +42,16 @@ public class StandardBoard extends BaseBoard {
 
     private void buildComponentsTopology() {
         ComponentGroup mainGroup = new ComponentGroup("Main group");
-        mainGroup.add(new Resistor(ComponentDefinitionFactory.getResistorDefinition(20, 0.2), new Pair<>(1,1)));
-        mainGroup.add(new Capacitor(ComponentDefinitionFactory.getCapacitorDefinition(5, 0.2), new Pair<>(3, 1)));
+
+        mainGroup.add(new Resistor(
+                ComponentDefinitionFactory.getResistorDefinition(MAIN_RESISTOR_OHMS, MAIN_RESISTOR_COST),
+                MAIN_RESISTOR_POS
+        ));
+        mainGroup.add(new Capacitor(
+                ComponentDefinitionFactory.getCapacitorDefinition(MAIN_CAPACITOR_FARADS, MAIN_CAPACITOR_COST),
+                MAIN_CAPACITOR_POS
+        ));
+
         this.components.add(mainGroup);
     }
 
@@ -64,7 +80,7 @@ public class StandardBoard extends BaseBoard {
     public int getLayers() { return layers; }
 
     @Override
-    public boolean isReady() { return _circuitsPrinted && _soldered; }
+    public boolean isReady() { return circuitsPrinted && soldered; }
 
     @Override
     public String toString() {

@@ -2,6 +2,7 @@ package pl.lab.factory.mediator;
 
 import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.ProductionOrder;
+import pl.lab.factory.safetymediator.FactoryEvent;
 
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
@@ -24,15 +25,13 @@ public class CentralControlMediator implements FactoryMediator {
     }
 
     @Override
-    public void notify(Department sender, String event, ProductionOrder order) {
-        if (sender == this.productionDepartment && event.equals("ORDER_COMPLETED")) {
-            SystemLogger.INSTANCE.logInfo("MEDIATOR", "Order " + order.getId()
-                    + " produced. Triggering reporting and storage.");
+    public void notify(Department sender, FactoryEvent event, ProductionOrder order) {
+        if (sender == this.productionDepartment && event == FactoryEvent.ORDER_COMPLETED) {
+            SystemLogger.INSTANCE.logInfo("MEDIATOR", "Order " + order.getId() + " produced. Triggering reporting and storage.");
             if (reportingDepartment != null) reportingDepartment.report(order);
             if (warehouseDepartment != null) warehouseDepartment.store(order);
-        } else if (sender == this.warehouseDepartment && event.equals("ORDER_STORED")) {
-            SystemLogger.INSTANCE.logInfo("MEDIATOR", "Order "
-                    + order.getId() + " is safely stored in warehouse.");
+        } else if (sender == this.warehouseDepartment && event == FactoryEvent.ORDER_STORED) {
+            SystemLogger.INSTANCE.logInfo("MEDIATOR", "Order " + order.getId() + " is safely stored in warehouse.");
         }
     }
 }

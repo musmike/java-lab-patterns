@@ -1,6 +1,7 @@
 package pl.lab.factory.safetymediator.components;
 
 import pl.lab.factory.SystemLogger;
+import pl.lab.factory.safetymediator.SafetyEvent;
 import pl.lab.factory.safetymediator.SafetyMediator;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
@@ -12,7 +13,7 @@ public class SmokeDetector extends SafetyDevice{
 
     public void detectFire(){
         SystemLogger.INSTANCE.logInfo("SENSOR", "Fire detected!");
-        mediator.notify(this, "FIRE_ALARM");
+        mediator.notify(this, SafetyEvent.FIRE_ALARM);
     }
 }
 // Koniec, Tydzień 5

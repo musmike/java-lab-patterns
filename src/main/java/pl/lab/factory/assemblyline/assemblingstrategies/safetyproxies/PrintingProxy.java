@@ -15,7 +15,7 @@ public class PrintingProxy implements PrintingStrategy {
 
     @Override
     public void execute(BaseBoard board) throws InterruptedException {
-        if(!board.is_componentsMounted()){
+        if(!board.isComponentsMounted()){
             System.out.println("[MACHINE SAFETY ERROR] - Printing cannot commence; components not mounted!");
             throw new InterruptedException("Board not mounted, while attempting printing.");
         }

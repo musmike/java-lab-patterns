@@ -28,9 +28,9 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     protected int length;
     protected int boardColor;
     protected int layers;
-    protected boolean _circuitsPrinted = false;
-    protected boolean _componentsMounted = false;
-    protected boolean _soldered = false;
+    protected boolean circuitsPrinted = false;
+    protected boolean componentsMounted = false;
+    protected boolean soldered = false;
 
     public abstract double getWorkingVoltage();
     public abstract BoardMaterials getBoardMaterial();
@@ -41,16 +41,16 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     public abstract int getBoardColor();
     public abstract int getLayers();
 
-    public boolean is_circuitsPrinted() {
-        return _circuitsPrinted;
+    public boolean isCircuitsPrinted() {
+        return circuitsPrinted;
     }
 
-    public boolean is_componentsMounted() {
-        return _componentsMounted;
+    public boolean isComponentsMounted() {
+        return componentsMounted;
     }
 
-    public boolean is_soldered() {
-        return _soldered;
+    public boolean isSoldered() {
+        return soldered;
     }
 
     public abstract boolean isReady();
@@ -61,7 +61,7 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     }
 
     public void printCircuits(){
-        _circuitsPrinted = true;
+        circuitsPrinted = true;
         markAsChangedAndNotify(PRINTING_CHANGE);
     }
 
@@ -69,7 +69,7 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
         for (BaseComponent c : components){
             c.mount();
         }
-        _componentsMounted = true;
+        componentsMounted = true;
         markAsChangedAndNotify(MOUNTING_CHANGE);
     }
 
@@ -90,14 +90,14 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
         return value;
     }
 
-    public void getComponentInfo(){
-        for(BaseComponent c : components){
+    public void printComponentInfo(){
+        for (BaseComponent c : components) {
             c.print();
         }
     }
 
     public void solder(){
-        _soldered = true;
+        soldered = true;
         markAsChangedAndNotify(SOLDERING_CHANGE);
     }
 
@@ -110,18 +110,18 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     }
 
     @Override
-    public void register(BoardObserver o) throws RuntimeException{
-        if(o == null)
+    public void register(BoardObserver boardObserver) throws RuntimeException{
+        if(boardObserver == null)
             throw new RuntimeException("Observer not found!");
 
-        if(!observers.contains(o))
-            observers.add(o);
+        if(!observers.contains(boardObserver))
+            observers.add(boardObserver);
 
     }
 
     @Override
-    public void unregister(BoardObserver o) {
-        observers.remove(o);
+    public void unregister(BoardObserver boardObserver) {
+        observers.remove(boardObserver);
     }
 
     @Override
@@ -137,7 +137,7 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     }
 
     @Override
-    public String getUpdate(BoardObserver o) {
+    public String getUpdate(BoardObserver boardObserver) {
         if(!changed[MOUNTING_CHANGE] && !changed[PRINTING_CHANGE] && !changed[SOLDERING_CHANGE])
             return "Nothing changed!";
 
@@ -149,11 +149,11 @@ public abstract class BaseBoard implements ManufacturableProduct, Cloneable, Obs
     }
 
     @Override
-    public void accept(BoardVisitor v) {
-        v.visit(this);
-        for(BaseComponent c : components){
-            if(c instanceof VisitableComponent vc){
-                vc.accept(v);
+    public void accept(BoardVisitor boardVisitor) {
+        boardVisitor.visit(this);
+        for (BaseComponent c : components) {
+            if (c instanceof VisitableComponent visitableComponent) {
+                visitableComponent.accept(boardVisitor);
             }
         }
     }

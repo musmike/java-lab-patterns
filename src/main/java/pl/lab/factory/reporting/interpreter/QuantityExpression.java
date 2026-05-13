@@ -8,10 +8,10 @@ import java.util.List;
 // Interpretuje warunek QUANTITY >/</= <wartość>
 // Operator przekazywany jako String do konstruktora.
 public class QuantityExpression implements AbstractExpression {
-    private final String operator;
+    private final QuantityOperator operator;
     private final int value;
 
-    public QuantityExpression(String operator, int value) {
+    public QuantityExpression(QuantityOperator operator, int value) {
         this.operator = operator;
         this.value = value;
     }
@@ -20,9 +20,9 @@ public class QuantityExpression implements AbstractExpression {
     public List<ProductionOrder> interpret(ReportContext ctx) {
         ctx.setFilter(order -> {
             return switch (operator) {
-                case ">" -> order.getQuantity() > value;
-                case "<" -> order.getQuantity() < value;
-                default  -> order.getQuantity() == value;
+                case GREATER_THAN -> order.getQuantity() > value;
+                case LESS_THAN    -> order.getQuantity() < value;
+                case EQUAL        -> order.getQuantity() == value;
             };
         });
         return ctx.search();

@@ -7,14 +7,14 @@ import pl.lab.factory.warehouse.equipment.WarehouseEquipment;
 // Wzorzec Template 2 (Concrete Class)
 public class ForkliftMaintenance extends MaintenanceProtocol {
     @Override
-    protected void performDiagnostics(WarehouseEquipment e){
-        SystemLogger.INSTANCE.logInfo("SERVICE", "[Checking Hydraulic] Testing lift cylinders on " + e.getName() + " " + e.getId());
+    protected void performDiagnostics(WarehouseEquipment warehouseEquipment){
+        SystemLogger.INSTANCE.logInfo("SERVICE", "[Checking Hydraulic] Testing lift cylinders on " + warehouseEquipment.getName() + " " + warehouseEquipment.getId());
         SystemLogger.INSTANCE.logInfo("SERVICE", "[Checking Brakes] Verifying brake pad thickness.");
     }
 
     @Override
-    protected void applyTechnicalService(WarehouseEquipment e){
-        SystemLogger.INSTANCE.logInfo("SERVICE", "[Action] Forklift " + e.getId() + ": Tank refilled to 100%.");
+    protected void applyTechnicalService(WarehouseEquipment warehouseEquipment){
+        SystemLogger.INSTANCE.logInfo("SERVICE", "[Action] Forklift " + warehouseEquipment.getId() + ": Tank refilled to 100%.");
         SystemLogger.INSTANCE.logInfo("SERVICE", "[Action] Changing oil and refilling fuel tank.");
     }
 }

@@ -4,6 +4,7 @@ import pl.lab.factory.manufacturing.OrderProcessor;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.OrderStatus;
 import pl.lab.factory.orders.ProductionOrder;
+import pl.lab.factory.safetymediator.FactoryEvent;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
 // Wzorzec Mediator 1 (Konkretny Colleague — produkcja)
@@ -33,7 +34,7 @@ public class ProductionDepartment extends Department {
         processor.process(order);
 
         if (mediator != null && order.getStatus() == OrderStatus.COMPLETED) {
-            mediator.notify(this, "ORDER_COMPLETED", order);
+            mediator.notify(this, FactoryEvent.ORDER_COMPLETED, order);
         }
     }
 }

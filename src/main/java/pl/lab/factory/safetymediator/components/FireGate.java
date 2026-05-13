@@ -1,6 +1,7 @@
 package pl.lab.factory.safetymediator.components;
 
 import pl.lab.factory.SystemLogger;
+import pl.lab.factory.safetymediator.SafetyEvent;
 import pl.lab.factory.safetymediator.SafetyMediator;
 
 // Tydzień 5 - Stosowanie czynnościowych wzorców projektowych cz. 1
@@ -12,10 +13,10 @@ public class FireGate extends SafetyDevice{
         super(m);
     }
 
-    public void close(){
+    public void close() {
         this.isClosed = true;
         SystemLogger.INSTANCE.logInfo("GATE", "Closing heavy fire gate to block oxygen...");
-        mediator.notify(this, "GATE_CLOSED");
+        mediator.notify(this, SafetyEvent.GATE_CLOSED);
     }
 
     public void open(){

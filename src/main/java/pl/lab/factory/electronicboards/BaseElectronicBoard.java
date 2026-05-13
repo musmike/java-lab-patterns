@@ -64,5 +64,6 @@ public class BaseElectronicBoard implements Cloneable, ManufacturableProduct {
     public void restoreFirmware(FirmwareMemento memento){
         this.firmware = memento.getFirmware();
         this.programmed = memento.isProgrammed();
+        System.out.println("Returned to old firmware state.");
     }
 }

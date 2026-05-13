@@ -1,9 +1,7 @@
 package pl.lab.factory.pcbboards;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 
 import pl.lab.factory.components.BaseComponent;
 import pl.lab.factory.components.SignalProcessorComponent;

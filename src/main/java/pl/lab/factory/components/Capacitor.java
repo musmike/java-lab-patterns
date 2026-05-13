@@ -7,7 +7,7 @@ import pl.lab.factory.components.definitions.CapacitorDefinition;
 // Wzorzec Composite 3
 // Liść komponentu
 public class Capacitor extends AbstractComponent implements SignalProcessorComponent {
-    private static final short VOLTAGE_COMPARATOR = 5;
+    private static final short VOLTAGE_THRESHOLD = 5;
     private final CapacitorDefinition definition;
 
     public Capacitor(CapacitorDefinition definition, Pair<Integer, Integer> position) {
@@ -22,7 +22,7 @@ public class Capacitor extends AbstractComponent implements SignalProcessorCompo
 
     @Override
     public double modifyResult(double value) {
-        return value + VOLTAGE_COMPARATOR > definition.getCapacitance()
+        return value + VOLTAGE_THRESHOLD > definition.getCapacitance()
                 ? value - definition.getCapacitance()
                 : value + definition.getCapacitance();
     }

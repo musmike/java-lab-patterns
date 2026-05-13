@@ -1,5 +1,6 @@
 package pl.lab.factory.assemblyline;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.assemblyline.assemblingsteps.*;
 import pl.lab.factory.assemblyline.assemblingstrategies.*;
 import pl.lab.factory.assemblyline.assemblingstrategies.safetyproxies.PrintingProxy;
@@ -21,15 +22,15 @@ public class SmartBoardProducer implements BoardProducer {
     public void produce(BaseBoard baseBoard) throws InterruptedException {
         MachineMediator machineMediator = new FactoryMachineMediator();
 
-        AssemblyStep printStep = createPrintStep(machineMediator);
-        AssemblyStep mountStep = createMountStep(machineMediator, baseBoard);
+        AssemblyStep printStep  = createPrintStep(machineMediator);
+        AssemblyStep mountStep  = createMountStep(machineMediator, baseBoard);
         AssemblyStep solderStep = createSolderStep(machineMediator, baseBoard);
 
         AssemblyStepManufacturingFacade assembler = new AssemblyStepManufacturingFacade(
                 List.of(mountStep, printStep, solderStep)
         );
-        
-        System.out.println("[BOARD PRODUCTION] Manufacturing board using smart producer...");
+
+        SystemLogger.INSTANCE.logInfo("BOARD PRODUCTION", "Manufacturing board using smart producer...");
         assembler.manufacture(baseBoard);
     }
 

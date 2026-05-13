@@ -9,7 +9,7 @@ import pl.lab.factory.orders.ProductionOrder;
 // Wzorzec Adapter 2 (Konkretny Adapter)
 public class WarehouseAdapter implements WarehouseService {
 
-    private static final String LOG_CONTEXT = "WAREHOUSE";
+    private static final String LOG_CONTEXT = WarehouseAdapter.class.getSimpleName();
 
     private final LegacyWarehouseSystem legacyWarehouseSystem;
 
@@ -31,10 +31,7 @@ public class WarehouseAdapter implements WarehouseService {
 
     public void removeOrder(ProductionOrder order){
 
-        SystemLogger.INSTANCE.logInfo(
-                "WAREHOUSE",
-                "Removing order " + order.getId() + " from warehouse"
-        );
+        SystemLogger.INSTANCE.logInfo("WAREHOUSE", "Removing order " + order.getId() + " from warehouse");
         mainWarehouse.removeOrder(order.getId());
     }
 
@@ -77,10 +74,7 @@ public class WarehouseAdapter implements WarehouseService {
 
         // Pobieramy dane z klasy Legacy i logujemy je tutaj (Zachowanie SRP dla Legacy)
         legacyWarehouseSystem.getStorage().forEach((item, quantity) ->
-                SystemLogger.INSTANCE.logInfo(
-                        "[LEGACY WAREHOUSE]",
-                        item + " -> " + quantity
-                ));
+            SystemLogger.INSTANCE.logInfo("LEGACY WAREHOUSE", item + " -> " + quantity));
     }
 
     public void printWarehouse() {

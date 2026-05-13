@@ -31,7 +31,6 @@ public class FinancialProcess {
     private static final int PRODUCTION_ORDER_QUANTITY = 150;
     private static final double VIP_DISCOUNT_PERCENT = 10.0;
 
-    private static final String TIER_GOLD = "GOLD";
     private static final String TIER_PLATINUM = "PLATINUM";
     private static final int PLATINUM_BASE_PTS = 500;
     private static final int PLATINUM_THRESH = 5;
@@ -160,7 +159,7 @@ public class FinancialProcess {
 
         CustomerLoyaltyService loyaltyService = new CustomerLoyaltyService();
         loyaltyService.calculateByStrategy(context.getPcbOrder(), new VolumeBonusStrategy());
-        loyaltyService.calculateByTier(context.getStandardElectronicOrder(), TIER_GOLD);
+        loyaltyService.calculateByTier(context.getStandardElectronicOrder(), CustomerLoyaltyService.TIER_GOLD);
 
         loyaltyService.registerTier(TIER_PLATINUM, new TierConfig(PLATINUM_BASE_PTS, PLATINUM_THRESH, PLATINUM_BONUS));
         loyaltyService.calculateByTier(context.getSuperElectronicOrder(), TIER_PLATINUM);

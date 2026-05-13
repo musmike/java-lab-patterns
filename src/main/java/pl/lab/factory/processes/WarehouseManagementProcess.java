@@ -44,6 +44,8 @@ import java.util.NoSuchElementException;
 
 public class WarehouseManagementProcess {
 
+    private static final String LOG_CONTEXT = WarehouseManagementProcess.class.getSimpleName();
+
     private static final String UNAPPROVED_ORDER_ID = "ORD-999";
     private static final String PACKAGE_CARDBOARD = "cardboard";
     private static final String PACKAGE_PLASTIC = "plastic";
@@ -115,8 +117,8 @@ public class WarehouseManagementProcess {
     }
 
     private void executeShippingCommands() {
-        PackageImplementor cardboardBoxPackaging = createCardboardPackaging();
-        PackageImplementor plasticBoxPackaging = createPlasticPackaging();
+        PackageImplementor cardboardBoxPackaging = createPackaging(PACKAGE_CARDBOARD);
+        PackageImplementor plasticBoxPackaging   = createPackaging(PACKAGE_PLASTIC);
 
         ShippingStrategy standardShipping = new StandardShipping(cardboardBoxPackaging);
         ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);
@@ -136,14 +138,11 @@ public class WarehouseManagementProcess {
         context.getWarehouse().printWarehouse();
     }
 
-    private PackageImplementor createCardboardPackaging() {
-        return new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PACKAGE_CARDBOARD)));
+    private PackageImplementor createPackaging(String packageType) {
+        return new FoamProtectionDecorator(
+                new AntiStaticBagDecorator(PackageFactory.getPackage(packageType))
+        );
     }
-
-    private PackageImplementor createPlasticPackaging() {
-        return new FoamProtectionDecorator(new AntiStaticBagDecorator(PackageFactory.getPackage(PACKAGE_PLASTIC)));
-    }
-
 
     private void testWarehouseFiltering() {
         OrderExpression isCompleted = new OrderStatusExpression(OrderStatus.COMPLETED);
@@ -246,7 +245,7 @@ public class WarehouseManagementProcess {
         try {
             context.getWarehouse().storeOrder(fireOrder);
         } catch (IllegalStateException e) {
-            SystemLogger.INSTANCE.logError("WAREHOUSE", e.getMessage());
+            SystemLogger.INSTANCE.logError(LOG_CONTEXT, e.getMessage());
         }
     }
 

@@ -2,7 +2,6 @@ package pl.lab.factory.components;
 
 import pl.lab.factory.Pair;
 import pl.lab.factory.components.definitions.ResistorDefinition;
-import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
 // Wzorzec Composite 3

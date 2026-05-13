@@ -1,5 +1,6 @@
 package pl.lab.factory.pcbboards.monitoring;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.pcbboards.monitoring.reporting.ProcessingReport;
 
@@ -18,10 +19,15 @@ public class ProcessObserver implements BoardObserver {
     @Override
     public void setBoard(BaseBoard baseBoard) {
         this.baseBoard = baseBoard;
-        try{
+        registerAsObserver();
+    }
+
+    private void registerAsObserver() {
+        try {
             this.baseBoard.register(this);
-        } catch (Exception e){
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            SystemLogger.INSTANCE.logError("ProcessObserver", e.getMessage());
+            throw new IllegalStateException("Failed to register observer on board.", e);
         }
     }
 

@@ -1,6 +1,7 @@
 package pl.lab.factory.components;
 
 import pl.lab.factory.Pair;
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.components.definitions.CapacitorDefinition;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
@@ -17,7 +18,7 @@ public class Capacitor extends AbstractComponent implements SignalProcessorCompo
 
     @Override
     public void print() {
-        System.out.println("->[COMPONENT] - Capacitor -> " + definition.getCapacitance() + "F -> Cost: " + definition.getCost());
+        SystemLogger.INSTANCE.log("", "->[COMPONENT] - Capacitor -> " + definition.getCapacitance() + "F -> Cost: " + definition.getCost());
     }
 
     @Override

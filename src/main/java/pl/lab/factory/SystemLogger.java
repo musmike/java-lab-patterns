@@ -24,7 +24,11 @@ public enum SystemLogger {
     }
 
     public void log(String context, String message) {
-        printLogLine(context, "", message);
+        if (context == null || context.isBlank()) {
+            System.out.println(message);
+        } else {
+            System.out.println(context + " " + message);
+        }
     }
 
     public void logInfo(String context, String message) {
@@ -38,7 +42,7 @@ public enum SystemLogger {
     private void printLogLine(String context, String prefix, String message) {
         String paddedContext = padRight(context, CONTEXT_WIDTH);
         String paddedType = padRight(prefix, TYPE_WIDTH);
-        System.out.println(paddedType + paddedContext + "\t" + message);
+        SystemLogger.INSTANCE.log("", paddedType + paddedContext + "\t" + message);
     }
 }
 // Koniec, Tydzień 2

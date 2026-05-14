@@ -1,5 +1,6 @@
 package pl.lab.factory.assemblyline.machinestates;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.assemblyline.Machine;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz.2
@@ -8,7 +9,7 @@ public class IdleState implements MachineState {
 
     @Override
     public void call(Machine machine) throws InterruptedException {
-        System.out.println("Machine  idling. Resuming!");
+        SystemLogger.INSTANCE.log("", "Machine  idling. Resuming!");
     }
 
 }

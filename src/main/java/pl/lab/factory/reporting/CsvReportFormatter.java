@@ -1,5 +1,6 @@
 package pl.lab.factory.reporting;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.ProductionOrder;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
@@ -13,8 +14,8 @@ public class CsvReportFormatter implements ReportFormatter {
 
     @Override
     public void writeHeader(String title) {
-        System.out.println("\n# " + title);
-        System.out.println("orderId,type,quantity,status");
+        SystemLogger.INSTANCE.log("", "\n# " + title);
+        SystemLogger.INSTANCE.log("", "orderId,type,quantity,status");
     }
 
     @Override

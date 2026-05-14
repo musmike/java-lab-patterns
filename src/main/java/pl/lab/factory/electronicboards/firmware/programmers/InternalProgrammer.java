@@ -1,5 +1,6 @@
 package pl.lab.factory.electronicboards.firmware.programmers;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
@@ -15,7 +16,7 @@ public class InternalProgrammer extends FirmwareProgrammer {
 
     @Override
     public void program(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
-        System.out.println("Internal programming device engaged...");
+        SystemLogger.INSTANCE.log("", "Internal programming device engaged...");
         device.start();
         device.writeFirmware(electronicBoard, firmwareAdapter);
         electronicBoard.programBoard();

@@ -153,7 +153,7 @@ public class FactoryOperationsProcess {
     private void executeProductionBatch(ProductionQueue productionQueue) throws InterruptedException {
         ProductionBatch productionBatch = createBatchFromQueue(productionQueue);
         
-        System.out.println(productionBatch.getDescription(""));
+        SystemLogger.INSTANCE.log("", productionBatch.getDescription(""));
         productionBatch.execute();
     }
 

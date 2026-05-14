@@ -9,6 +9,8 @@ import pl.lab.factory.orders.pricing.CurrencyFormatter;
 // Implementacja dla klientów hurtowych/B2B: generuje JSON i symuluje wysyłkę do zewnętrznego systemu poprzez API
 public class B2bApiInvoiceDispatcher extends InvoiceDispatcher {
 
+    private static final String HTTP_CREATED = "201 Created";
+
     @Override
     protected String renderDocument(OrderInvoice invoice) {
         SystemLogger.INSTANCE.logInfo("DISPATCH-API", "Serializing invoice to JSON format...");
@@ -20,7 +22,7 @@ public class B2bApiInvoiceDispatcher extends InvoiceDispatcher {
     protected void deliverToClient(String document, OrderInvoice invoice) {
         SystemLogger.INSTANCE.logInfo("DISPATCH-API",
                 "POST /api/v1/invoices/receive Payload: " + document);
-        SystemLogger.INSTANCE.logInfo("DISPATCH-API", "Response: 201 Created");
+        SystemLogger.INSTANCE.logInfo("DISPATCH-API", "Response: " + HTTP_CREATED);
     }
 }
 // Koniec, Tydzień 6

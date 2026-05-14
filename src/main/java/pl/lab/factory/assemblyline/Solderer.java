@@ -1,5 +1,6 @@
 package pl.lab.factory.assemblyline;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
@@ -27,8 +28,8 @@ public class Solderer extends Machine{
     @Override
     public void perform(BaseBoard baseBoard) {
         super.perform(baseBoard);
-        System.out.println("[SOLDERER] Soldering board!");
-        System.out.println("[SOLDERER] Using " + (reflowMode ? "reflow " : "wave ") + "mode");
+        SystemLogger.INSTANCE.log("[SOLDERER]", "Soldering board!");
+        SystemLogger.INSTANCE.log("[SOLDERER]", "Using " + (reflowMode ? "reflow " : "wave ") + "mode");
         solderBoard(baseBoard);
     }
 }

@@ -1,5 +1,6 @@
 package pl.lab.factory.electronicboards.firmware.programmers;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
@@ -16,9 +17,9 @@ public class BootloaderProgrammer extends FirmwareProgrammer{
     public void program(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
         device.start();
         device.writeFirmware(electronicBoard, firmwareAdapter);
-        System.out.println("Preparing bootloader...\n.\n.\n.\nDone!");
+        SystemLogger.INSTANCE.log("", "Preparing bootloader...\n.\n.\n.\nDone!");
         electronicBoard.programBoard();
-        System.out.println("Programming finished!");
+        SystemLogger.INSTANCE.log("", "Programming finished!");
         device.finish();
     }
 }

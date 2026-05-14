@@ -75,7 +75,7 @@ public class BoardPreparationProcess {
         electronicBoard.getBaseBoard().printComponentInfo();
         CountingVisitor counter = new CountingVisitor();
         electronicBoard.getBaseBoard().accept(counter);
-        System.out.println("[COMPONENT INFO] Board contains " + counter.getResistors() + " resistors.");
+        SystemLogger.INSTANCE.log("[COMPONENT INFO]", "Board contains " + counter.getResistors() + " resistors.");
     }
 
     private void testCreatingPrototypes() {
@@ -108,7 +108,7 @@ public class BoardPreparationProcess {
 
     private BaseElectronicBoard createAndProgramHotfixClone(BoardPrototypes registry) {
         BaseElectronicBoard hotfixClone = registry.createFromPrototype(PROTOTYPE_DEPENDANT_V1);
-        System.out.println("[COMPONENT INFO] Gathering information about boards components!");
+        SystemLogger.INSTANCE.log("[COMPONENT INFO]", "Gathering information about boards components!");
         verifyBoardComponents(hotfixClone);
 
         FirmwareAdapter hotfixFirmware = new ProprietaryFirmwareAdapter(new ProprietaryFirmware(FIRMWARE_HOTFIX));

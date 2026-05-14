@@ -1,6 +1,7 @@
 package pl.lab.factory.components;
 
 import pl.lab.factory.Pair;
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.components.definitions.InductorDefinition;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
@@ -16,7 +17,7 @@ public class Inductor extends AbstractComponent implements SignalProcessorCompon
 
     @Override
     public void print() {
-        System.out.println("->[COMPONENT] - Inductor -> " + definition.getInductance() + "H -> Cost: " + definition.getCost());
+        SystemLogger.INSTANCE.log("", "->[COMPONENT] - Inductor -> " + definition.getInductance() + "H -> Cost: " + definition.getCost());
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.components.iteration.CompositeIterator;
 import pl.lab.factory.pcbboards.monitoring.BoardVisitor;
 
@@ -40,11 +41,11 @@ public class ComponentGroup implements BaseComponent, SignalProcessorComponent, 
         Iterator<BaseComponent> it = iterator();
         while(it.hasNext()){
             if(!it.next().isMounted()){
-                System.out.println("Iterator found unmounted components!");
+                SystemLogger.INSTANCE.log("", "Iterator found unmounted components!");
                 return false;
             }
         }
-        System.out.println("Iterator found no unmounted components. Ready for further production!");
+        SystemLogger.INSTANCE.log("", "Iterator found no unmounted components. Ready for further production!");
         return true;
     }
 
@@ -58,12 +59,12 @@ public class ComponentGroup implements BaseComponent, SignalProcessorComponent, 
 
     @Override
     public void print() {
-        System.out.println("[COMPONENT GROUP] - " + name);
+        SystemLogger.INSTANCE.log("", "[COMPONENT GROUP] - " + name);
         Iterator<BaseComponent> it = iterator();
         while(it.hasNext()){
             it.next().print();
         }
-        System.out.println("[COMPONENT GROUP] - " + name + " [END]");
+        SystemLogger.INSTANCE.log("[COMPONENT GROUP]", "- " + name + " [END]");
     }
 
     @Override

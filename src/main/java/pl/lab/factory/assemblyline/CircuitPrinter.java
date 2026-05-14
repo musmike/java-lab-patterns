@@ -1,5 +1,6 @@
 package pl.lab.factory.assemblyline;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 // Tydzień 2 - Stosowanie konstrukcyjnych wzorców projektowych
@@ -29,7 +30,7 @@ public class CircuitPrinter extends Machine{
     @Override
     public void perform(BaseBoard baseBoard) {
         super.perform(baseBoard);
-        System.out.println("[PRINTER] Printing board!");
+        SystemLogger.INSTANCE.log("[PRINTER]", "Printing board!");
         printCircuits(baseBoard);
     }
 }

@@ -1,7 +1,7 @@
 package pl.lab.factory.assemblyline.assemblingsteps;
 
 import pl.lab.factory.assemblyline.assemblingstrategies.MountingStrategy;
-import pl.lab.factory.pcbboards.BaseBoard;
+
 //Tydzien 8 - Podstawienie Liskov
 //klasa którą można podstawić pod klasę dziedziczoną w dowolnym miejscu
 public class MountStep extends AssemblyStep{
@@ -10,9 +10,8 @@ public class MountStep extends AssemblyStep{
     }
 
     @Override
-    public void perform(BaseBoard baseBoard) throws InterruptedException {
-        System.out.println("Mounting components...");
-        strategy.execute(baseBoard);
+    protected String getStepDescription() {
+        return "Mounting components...";
     }
 }
 //LSP 3

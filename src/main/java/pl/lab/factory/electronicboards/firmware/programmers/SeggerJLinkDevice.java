@@ -1,5 +1,6 @@
 package pl.lab.factory.electronicboards.firmware.programmers;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
@@ -12,19 +13,19 @@ public class SeggerJLinkDevice implements ProgrammingDevice {
 
     @Override
     public void start() {
-        System.out.println("Engaging with SeggerJLink!");
+        SystemLogger.INSTANCE.log("", "Engaging with SeggerJLink!");
     }
 
     @Override
     public void writeFirmware(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
-        System.out.println("Preparing code...");
+        SystemLogger.INSTANCE.log("", "Preparing code...");
         electronicBoard.setFirmware(firmwareAdapter);
-        System.out.println("Code written!");
+        SystemLogger.INSTANCE.log("", "Code written!");
     }
 
     @Override
     public void finish() {
-        System.out.println("SeggerJLink disengaged!");
+        SystemLogger.INSTANCE.log("", "SeggerJLink disengaged!");
     }
 }
 // Koniec, Tydzień 3

@@ -1,5 +1,6 @@
 package pl.lab.factory.assemblyline.coordination;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.assemblyline.CircuitPrinter;
 import pl.lab.factory.assemblyline.Machine;
 import pl.lab.factory.assemblyline.Mounter;
@@ -25,7 +26,7 @@ public class FactoryMachineMediator implements MachineMediator{
 
     @Override
     public void requestPrint(BaseBoard baseBoard, PrintingStrategy strategy) {
-        System.out.println("Printing the circuit using laser!");
+        SystemLogger.INSTANCE.log("", "Printing the circuit using laser!");
         printer.perform(baseBoard);
     }
 
@@ -47,7 +48,7 @@ public class FactoryMachineMediator implements MachineMediator{
                         )
                 );
         decorated.perform(baseBoard);
-        System.out.println("Automatically mounting components!");
+        SystemLogger.INSTANCE.log("", "Automatically mounting components!");
     }
 
     private void executeManualMount(BaseBoard baseBoard) {
@@ -57,21 +58,21 @@ public class FactoryMachineMediator implements MachineMediator{
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        System.out.println("Manually mounting components!");
+        SystemLogger.INSTANCE.log("", "Manually mounting components!");
     }
 
     @Override
     public void requestSolder(BaseBoard baseBoard, SolderingStrategy strategy) {
-        System.out.println("Soldering components...");
+        SystemLogger.INSTANCE.log("", "Soldering components...");
 
         if (strategy instanceof ReflowSolder) {
             solderer.setReflowMode(true);
-            System.out.println("Using reflow soldering method!");
+            SystemLogger.INSTANCE.log("", "Using reflow soldering method!");
         }
 
         else if (strategy instanceof WaveSolder) {
             solderer.setReflowMode(false);
-            System.out.println("Using wave soldering method!");
+            SystemLogger.INSTANCE.log("", "Using wave soldering method!");
         }
 
         solderer.perform(baseBoard);

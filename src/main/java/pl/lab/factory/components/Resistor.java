@@ -1,6 +1,7 @@
 package pl.lab.factory.components;
 
 import pl.lab.factory.Pair;
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.components.definitions.ResistorDefinition;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
@@ -16,7 +17,7 @@ public class Resistor extends AbstractComponent implements SignalProcessorCompon
 
     @Override
     public void print() {
-        System.out.println("->[COMPONENT] - Resistor -> " + definition.getResistance() + "Ω -> Cost: " + definition.getCost());
+        SystemLogger.INSTANCE.log("", "->[COMPONENT] - Resistor -> " + definition.getResistance() + "Ω -> Cost: " + definition.getCost());
     }
 
     @Override

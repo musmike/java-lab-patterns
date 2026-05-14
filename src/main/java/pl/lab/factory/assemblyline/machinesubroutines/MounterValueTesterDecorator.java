@@ -1,5 +1,6 @@
 package pl.lab.factory.assemblyline.machinesubroutines;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.assemblyline.Mounter;
 import pl.lab.factory.pcbboards.BaseBoard;
 
@@ -18,9 +19,9 @@ public class MounterValueTesterDecorator extends MachineDecorator<Mounter> {
     public void perform(BaseBoard baseBoard) {
         super.perform(baseBoard);
         if(decorated != null) {
-            System.out.println("Testing final value of " + value + " for mounted circuits.");
+            SystemLogger.INSTANCE.log("", "Testing final value of " + value + " for mounted circuits.");
             double finalValue = baseBoard.getValue(value);
-            System.out.println("Final value of board for " + value + ": " + finalValue);
+            SystemLogger.INSTANCE.log("", "Final value of board for " + value + ": " + finalValue);
         }
     }
 }

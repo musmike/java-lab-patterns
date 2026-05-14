@@ -12,7 +12,12 @@ public abstract class AssemblyStep {
         this.strategy = strategy;
     }
 
-    public abstract void perform(BaseBoard baseBoard) throws InterruptedException;
+    public final void perform(BaseBoard baseBoard) throws InterruptedException {
+        System.out.println(getStepDescription());
+        strategy.execute(baseBoard);
+    }
+
+    protected abstract String getStepDescription();
 }
 //LSP 3
 //koniec tydzien 8

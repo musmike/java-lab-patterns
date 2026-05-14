@@ -1,5 +1,6 @@
 package pl.lab.factory.electronicboards.firmware.programmers;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
@@ -10,7 +11,7 @@ public class FaultyDevice implements ProgrammingDevice{
 
     @Override
     public void start() {
-        System.out.println("--->Device started<---");
+        SystemLogger.INSTANCE.log("", "--->Device started<---");
     }
 
     @Override
@@ -23,7 +24,7 @@ public class FaultyDevice implements ProgrammingDevice{
     }
 
     private void simulateFailure(BaseElectronicBoard electronicBoard) {
-        System.out.println("Writing firmware...");
+        SystemLogger.INSTANCE.log("", "Writing firmware...");
         first = false;
         applyCorruptedFirmware(electronicBoard);
         throw new RuntimeException("Failed to write");
@@ -36,17 +37,17 @@ public class FaultyDevice implements ProgrammingDevice{
                 return "#^#@^";
             }
         });
-        System.out.println("--->Write failed!<---");
+        SystemLogger.INSTANCE.log("", "--->Write failed!<---");
     }
 
     private void performSuccessfulWrite(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
         electronicBoard.setFirmware(firmwareAdapter);
-        System.out.println("Writing firmware...\n" + firmwareAdapter.getFirmwareString() + "...");
+        SystemLogger.INSTANCE.log("", "Writing firmware...\n" + firmwareAdapter.getFirmwareString() + "...");
     }
 
     @Override
     public void finish() {
-        System.out.println("--->Device stopped<---");
+        SystemLogger.INSTANCE.log("", "--->Device stopped<---");
     }
 }
 //koniec DIP 3

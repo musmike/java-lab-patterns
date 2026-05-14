@@ -1,5 +1,6 @@
 package pl.lab.factory.electronicboards.firmware.programmers;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.electronicboards.BaseElectronicBoard;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 
@@ -13,18 +14,18 @@ public class STLinkDevice implements ProgrammingDevice {
 
     @Override
     public void start() {
-        System.out.println("Connecting using ST-Link");
+        SystemLogger.INSTANCE.log("", "Connecting using ST-Link");
     }
 
     @Override
     public void writeFirmware(BaseElectronicBoard electronicBoard, FirmwareAdapter firmwareAdapter) {
-        System.out.println("Writing firmware onto flash...");
+        SystemLogger.INSTANCE.log("", "Writing firmware onto flash...");
         electronicBoard.setFirmware(firmwareAdapter);
     }
 
     @Override
     public void finish() {
-        System.out.println("Disconnected!");
+        SystemLogger.INSTANCE.log("", "Disconnected!");
     }
 }
 // Koniec, Tydzień 3

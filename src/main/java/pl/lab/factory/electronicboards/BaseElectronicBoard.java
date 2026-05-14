@@ -1,5 +1,6 @@
 package pl.lab.factory.electronicboards;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.electronicboards.firmware.FirmwareAdapter;
 import pl.lab.factory.electronicboards.firmware.memento.FirmwareMemento;
 import pl.lab.factory.manufacturing.ManufacturableProduct;
@@ -64,6 +65,6 @@ public class BaseElectronicBoard implements Cloneable, ManufacturableProduct {
     public void restoreFirmware(FirmwareMemento memento){
         this.firmware = memento.getFirmware();
         this.programmed = memento.isProgrammed();
-        System.out.println("Returned to old firmware state.");
+        SystemLogger.INSTANCE.log("", "Returned to old firmware state.");
     }
 }

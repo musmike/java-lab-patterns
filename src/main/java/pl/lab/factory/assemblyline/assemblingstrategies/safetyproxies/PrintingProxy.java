@@ -1,5 +1,6 @@
 package pl.lab.factory.assemblyline.assemblingstrategies.safetyproxies;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.assemblyline.assemblingstrategies.PrintingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
 
@@ -16,7 +17,7 @@ public class PrintingProxy implements PrintingStrategy {
     @Override
     public void execute(BaseBoard baseBoard) throws InterruptedException {
         if(!baseBoard.isComponentsMounted()){
-            System.out.println("[MACHINE SAFETY ERROR] - Printing cannot commence; components not mounted!");
+            SystemLogger.INSTANCE.log("[MACHINE SAFETY ERROR]", "- Printing cannot commence; components not mounted!");
             throw new InterruptedException("Board not mounted, while attempting printing.");
         }
         strategy.execute(baseBoard);

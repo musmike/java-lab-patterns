@@ -1,5 +1,6 @@
 package pl.lab.factory.assemblyline;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 public class Mounter extends Machine{
@@ -21,7 +22,7 @@ public class Mounter extends Machine{
     @Override
     public void perform(BaseBoard baseBoard) {
         super.perform(baseBoard);
-        System.out.println("[MOUNTER] Mounting board!");
+        SystemLogger.INSTANCE.log("[MOUNTER]", "Mounting board!");
         mountBoard(baseBoard);
     }
 }

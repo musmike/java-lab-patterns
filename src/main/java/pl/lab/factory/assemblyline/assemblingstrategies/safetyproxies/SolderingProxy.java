@@ -1,5 +1,6 @@
 package pl.lab.factory.assemblyline.assemblingstrategies.safetyproxies;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.assemblyline.assemblingstrategies.SolderingStrategy;
 import pl.lab.factory.pcbboards.BaseBoard;
 
@@ -15,7 +16,7 @@ public class SolderingProxy implements SolderingStrategy {
     @Override
     public void execute(BaseBoard baseBoard) throws InterruptedException {
         if(!baseBoard.isCircuitsPrinted() || !baseBoard.isComponentsMounted()){
-            System.out.println("[MACHINE SAFETY ERROR] - Soldering cannot commence; board not ready for soldering!");
+            SystemLogger.INSTANCE.log("[MACHINE SAFETY ERROR]", "- Soldering cannot commence; board not ready for soldering!");
             throw new InterruptedException("Board not printed and mounted, while attempting soldering.");
         }
 

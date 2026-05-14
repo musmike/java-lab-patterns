@@ -1,5 +1,6 @@
 package pl.lab.factory.pcbboards.monitoring.reporting;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.pcbboards.BaseBoard;
 import pl.lab.factory.pcbboards.monitoring.ProductionStateVisitor;
 
@@ -11,7 +12,7 @@ public class ProcessingReport extends BoardSummaryTemplate {
     protected void body(BaseBoard baseBoard) {
         ProductionStateVisitor visitor = new ProductionStateVisitor();
         baseBoard.accept(visitor);
-        System.out.println("Board is in the following state:\n" + visitor.getReport());
+        SystemLogger.INSTANCE.log("", "Board is in the following state:\n" + visitor.getReport());
     }
 
 }

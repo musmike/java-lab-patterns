@@ -1,5 +1,6 @@
 package pl.lab.factory.reporting;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.orders.ProductionOrder;
 
 // Tydzień 3 - Stosowanie strukturalnych wzorców projektowych cz. 1
@@ -16,9 +17,9 @@ public class ConsoleReportFormatter implements ReportFormatter {
 
     @Override
     public void writeHeader(String title) {
-        System.out.println("\n" + REPORT_SEPARATOR);
-        System.out.println("  REPORT: " + title);
-        System.out.println(REPORT_SEPARATOR);
+        SystemLogger.INSTANCE.log("", "\n" + REPORT_SEPARATOR);
+        SystemLogger.INSTANCE.log("", "  REPORT: " + title);
+        SystemLogger.INSTANCE.log("", REPORT_SEPARATOR);
     }
 
     @Override
@@ -28,9 +29,9 @@ public class ConsoleReportFormatter implements ReportFormatter {
 
     @Override
     public void writeFooter(int totalOrders, long totalUnits) {
-        System.out.println(REPORT_SUB_SEPARATOR);
+        SystemLogger.INSTANCE.log("", REPORT_SUB_SEPARATOR);
         System.out.printf("  Total orders: %d  |  Total units: %d%n", totalOrders, totalUnits);
-        System.out.println(REPORT_SEPARATOR);
+        SystemLogger.INSTANCE.log("", REPORT_SEPARATOR);
     }
 }
 // Koniec, Tydzień 3

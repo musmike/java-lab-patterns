@@ -35,7 +35,7 @@ public class ShipOrderCommand implements ShippingCommand {
             executed = false;
             SystemLogger.INSTANCE.logInfo("COMMAND", "Undo: Order " + order.getId() + " is back in warehouse");
         }else{
-            System.out.println("Command was not executed, nothing to undo");
+            SystemLogger.INSTANCE.log("", "Command was not executed, nothing to undo");
         }
     }
 

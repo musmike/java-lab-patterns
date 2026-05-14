@@ -1,5 +1,6 @@
 package pl.lab.factory.pcbboards.monitoring.reporting;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.pcbboards.BaseBoard;
 
 // Tydzień 6 - Stosowanie czynnościowych wzorców projektowych cz.2
@@ -12,10 +13,10 @@ public abstract class BoardSummaryTemplate {
     }
 
     protected void header(BaseBoard baseBoard){
-        System.out.println("--> Board summary start:");
+        SystemLogger.INSTANCE.log("", "--> Board summary start:");
     }
     protected void footer(BaseBoard baseBoard){
-        System.out.println(":<-- Board summary end");
+        SystemLogger.INSTANCE.log("", ":<-- Board summary end");
     }
     protected abstract void body(BaseBoard baseBoard);
 }

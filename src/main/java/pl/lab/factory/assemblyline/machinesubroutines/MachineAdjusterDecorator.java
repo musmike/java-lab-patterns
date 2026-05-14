@@ -1,5 +1,6 @@
 package pl.lab.factory.assemblyline.machinesubroutines;
 
+import pl.lab.factory.SystemLogger;
 import pl.lab.factory.assemblyline.Machine;
 import pl.lab.factory.pcbboards.BaseBoard;
 
@@ -13,10 +14,10 @@ public class MachineAdjusterDecorator<T extends Machine> extends MachineDecorato
 
     @Override
     public void perform(BaseBoard baseBoard) {
-        System.out.println("Scanning for board parameters...");
-        System.out.println("-=- Board length: " + baseBoard.getLength() + "\n-=- Board width: " + baseBoard.getWidth()
+        SystemLogger.INSTANCE.log("", "Scanning for board parameters...");
+        SystemLogger.INSTANCE.log("", "-=- Board length: " + baseBoard.getLength() + "\n-=- Board width: " + baseBoard.getWidth()
                 + "\n-=- Board color: " + baseBoard.getBoardColor() + "\n-=- Board layers: " + baseBoard.getLayers());
-        System.out.println("Machine readjusted to parameters!");
+        SystemLogger.INSTANCE.log("", "Machine readjusted to parameters!");
         super.perform(baseBoard);
     }
 }

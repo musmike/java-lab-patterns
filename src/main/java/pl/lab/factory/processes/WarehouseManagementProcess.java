@@ -118,7 +118,7 @@ public class WarehouseManagementProcess {
 
     private void executeShippingCommands() {
         PackageImplementor cardboardBoxPackaging = createPackaging(PACKAGE_CARDBOARD);
-        PackageImplementor plasticBoxPackaging   = createPackaging(PACKAGE_PLASTIC);
+        PackageImplementor plasticBoxPackaging = createPackaging(PACKAGE_PLASTIC);
 
         ShippingStrategy standardShipping = new StandardShipping(cardboardBoxPackaging);
         ShippingStrategy priorityShipping = new PriorityShipping(plasticBoxPackaging);

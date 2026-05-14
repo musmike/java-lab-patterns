@@ -7,15 +7,15 @@ package pl.lab.factory;
 public enum SystemLogger {
     INSTANCE;
 
-    private static final int CONTEXT_WIDTH = 25;
+    private static final int CONTEXT_WIDTH = 40;
     private static final int TYPE_WIDTH = 10;
-    private static final int ELLIPSIS_LENGTH = 3;
     private static final String ELLIPSIS = "...";
 
     private String padRight(String text, int length) {
         if (text.length() > length) {
-            if (length > ELLIPSIS_LENGTH) {
-                return text.substring(0, length - ELLIPSIS_LENGTH) + ELLIPSIS;
+            int ellipsisLength = ELLIPSIS.length();
+            if (length > ellipsisLength) {
+                return text.substring(0, length - ellipsisLength) + ELLIPSIS;
             } else {
                 return text.substring(0, length);
             }

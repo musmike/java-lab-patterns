@@ -30,7 +30,6 @@ public class WarehouseAdapter implements WarehouseService {
     }
 
     public void removeOrder(ProductionOrder order){
-
         SystemLogger.INSTANCE.logInfo("WAREHOUSE", "Removing order " + order.getId() + " from warehouse");
         mainWarehouse.removeOrder(order.getId());
     }

@@ -15,7 +15,7 @@ public class Main {
             SystemLogger.INSTANCE.logError(APP_CONTEXT, "Process interrupted" + e.getMessage());
             Thread.currentThread().interrupt();
         }
-        
+
         SystemLogger.INSTANCE.logInfo(APP_CONTEXT, "All orders processed. End.");
     }
 
@@ -28,5 +28,7 @@ public class Main {
         new FactoryOperationsProcess(context).execute();
         new WarehouseManagementProcess(context).execute();
         new ReportingAndMetricsProcess(context).execute();
+
+        new FunctionalProgrammingProcess(context).execute();
     }
 }

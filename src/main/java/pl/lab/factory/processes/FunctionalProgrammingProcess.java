@@ -2,6 +2,7 @@ package pl.lab.factory.processes;
 
 import pl.lab.factory.SystemLogger;
 import pl.lab.factory.functional.OrderCostCalculator;
+import pl.lab.factory.functional.OrderDescriptionFormatter;
 import pl.lab.factory.functional.OrderStatusChecker;
 import pl.lab.factory.orders.BaseBoardProductionOrder;
 import pl.lab.factory.orders.OrderStatus;
@@ -41,11 +42,6 @@ public class FunctionalProgrammingProcess {
         if (context.getAllOrders() == null || context.getAllOrders().isEmpty()) {
             throw new IllegalStateException("Order list must not be empty before functional processing.");
         }
-    }
-
-    @FunctionalInterface
-    public interface OrderDescriptionFormatter {
-        String format(ProductionOrder order);
     }
 
     private void demonstrateFunctionalInterfaces() {

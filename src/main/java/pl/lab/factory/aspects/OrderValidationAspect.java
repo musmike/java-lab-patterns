@@ -19,7 +19,7 @@ public class OrderValidationAspect {
     // Rada przed (Before)
     // Przechwytuje storeOrder() we wszystkich klasach implementujących WarehouseService
     @Before("execution(* pl.lab.factory.warehouse.WarehouseService+.storeOrder(..)) && args(order)")
-    public void validateOrderBeforeStorage(JoinPoint joinPoint, ProductionOrder order) {
+    public void validateOrderBeforeStorage(ProductionOrder order) {
         assertOrderIsNotNull(order);
         assertOrderHasValidId(order);
         assertOrderHasPositiveQuantity(order);
